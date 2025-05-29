@@ -6,6 +6,7 @@
                 <img class="h-11 w-auto" src="{{ asset('assets/Logo.png') }}" alt="">
             </a>
         </div>
+        
         <div class="flex lg:hidden">
             <button type="button" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
                 @click="isOpen = !isOpen">
@@ -27,8 +28,12 @@
                 class="font-semibold p-1 border-accent hover:border-b-2 hover:text-primary {{ request()->is('berita') ? 'text-primary' : 'text-text' }}">Berita</a>
             <a href="/panduan"
                 class="font-semibold p-1 border-accent hover:border-b-2 hover:text-primary {{ request()->is('panduan') ? 'text-primary' : 'text-text' }}">Panduan</a>
+            <a href="{{ route('assesor.index') }}"
+                class="font-semibold p-1 border-accent hover:border-b-2 hover:text-primary {{ request()->is('assesor') ? 'text-primary' : 'text-text' }}">Pendaftaran</a>
+
             <a href="/login"
                 class="text-sm/6 font-semibold text-white bg-primary rounded px-7 py-1 hover:opacity-80">Masuk</a>
+
         </div>
     </nav>
     <div class="lg:hidden" role="dialog" aria-modal="true" x-show="isOpen">
@@ -60,6 +65,8 @@
                             class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold hover:bg-gray-50 {{ request()->is('berita') ? 'text-primary' : 'text-text' }}">Berita</a>
                         <a href="/panduan"
                             class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold hover:bg-gray-50 {{ request()->is('panduan') ? 'text-primary' : 'text-text' }}">Panduan</a>
+
+
                     </div>
                     <div class="py-6">
                         <a href="/login"
