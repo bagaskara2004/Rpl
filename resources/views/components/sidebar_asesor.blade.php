@@ -54,7 +54,7 @@
         <form method="POST" action="">
             @csrf
             <button type="submit"
-                class="flex items-center gap-3 text-red-600 hover:bg-red-50 px-4 py-3 rounded-lg w-full transition font-medium text-base">
+                class="flex justify-center items-center gap-3 text-red-600 hover:bg-red-50 px-4 py-3 rounded-lg w-full transition font-medium text-base">
                 <!-- Custom Logout icon -->
                 <svg class="w-5 h-5 sidebar-icon min-w-[20px]" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0,0,255.99538,255.99538">
                     <g fill="#ff0000" fill-rule="nonzero" stroke="#ff0000" stroke-width="2" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal">
