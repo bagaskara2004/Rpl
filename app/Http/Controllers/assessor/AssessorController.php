@@ -10,7 +10,7 @@ class AssessorController extends Controller
 {
     public function index()
     {
-        $dataDiri = DataDiri::with('user')->get();
+        $dataDiri = DataDiri::with(['user', 'pendidikan'])->get();
         return view('Assessor.pendaftar', compact('dataDiri'));
     }
 }

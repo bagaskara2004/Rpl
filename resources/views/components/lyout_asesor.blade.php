@@ -2,7 +2,7 @@
     {{-- Sidebar --}}
     <x-sidebar_asesor />
 
-    <div class="flex-1 flex flex-col md:ml-64">
+    <div id="main-content" class="flex-1 flex flex-col transition-all duration-300 ml-64">
         {{-- Navbar --}}
         <x-navbar_asesor />
 
@@ -12,3 +12,22 @@
         </main>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const sidebar = document.getElementById('sidebar-asesor');
+        const mainContent = document.getElementById('main-content');
+        const logoBtn = document.getElementById('sidebar-logo-btn');
+        logoBtn.addEventListener('click', function () {
+            // Perbaiki logika agar main content membesar saat sidebar kecil
+            setTimeout(function() {
+                if (sidebar.classList.contains('w-16')) {
+                    mainContent.classList.remove('ml-64');
+                    mainContent.classList.add('ml-16');
+                } else {
+                    mainContent.classList.remove('ml-16');
+                    mainContent.classList.add('ml-64');
+                }
+            }, 10); // pastikan class sidebar sudah berubah
+        });
+    });
+</script>

@@ -37,7 +37,7 @@
                 <tr class="border-b">
                     <th class="py-2 px-4 text-left font-semibold text-gray-600">No</th>
                     <th class="py-2 px-4 text-left font-semibold text-gray-600">Nama Lengkap</th>
-                    <th class="py-2 px-4 text-left font-semibold text-gray-600">Email</th>
+                    <th class="py-2 px-4 text-left font-semibold text-gray-600">Prodi</th>
                     <th class="py-2 px-4 text-left font-semibold text-gray-600">Jurusan</th>
                     <th class="py-2 px-4 text-center font-semibold text-gray-600">Aksi</th>
                 </tr>
@@ -47,9 +47,9 @@
                 <tr class="border-b">
                     <td class="py-2 px-4">{{ $i+1 }}</td>
                     <td class="py-2 px-4">{{ $diri->nama_lengkap }}</td>
-                    <td class="py-2 px-4">{{ $diri->email }}</td>
-                    <td class="py-2 px-4">{{ $diri->kab_kota ?? '-' }}</td>
-                    <!-- <td class="py-2 px-4">{{ $diri->jurusan ?? '-' }}</td> -->
+                    <td class="py-2 px-4">{{ $diri->pendidikan->prodi ?? '-' }}</td>
+                    <td class="py-2 px-4">{{ $diri->pendidikan->jurusan ?? '-' }}</td>
+
                     <td class="py-2 px-4 text-center space-x-2">
                         <button class="px-3 py-1 rounded bg-purple-100 text-purple-700 border border-purple-300 text-xs">Detail</button>
                         <button class="px-3 py-1 rounded bg-yellow-100 text-yellow-700 border border-yellow-300 text-xs">Asesmen</button>
