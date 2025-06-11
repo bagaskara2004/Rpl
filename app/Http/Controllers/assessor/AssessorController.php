@@ -10,7 +10,19 @@ class AssessorController extends Controller
 {
     public function index()
     {
+        // Hanya menampilkan halaman, data diambil via AJAX
+        return view('Assessor.pendaftar.index');
+    }
+
+    public function getData()
+    {
         $dataDiri = DataDiri::with(['user', 'pendidikan'])->get();
-        return view('Assessor.pendaftar', compact('dataDiri'));
+        return response()->json($dataDiri);
+    }
+
+    public function getModalData($id)
+    {
+        $diri = DataDiri::with(['user', 'pendidikan', 'pengalamanKerja'])->findOrFail($id);
+        return response()->json($diri);
     }
 }
