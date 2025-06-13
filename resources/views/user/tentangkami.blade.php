@@ -6,7 +6,7 @@
         </div>
         <div class="mx-auto max-w-7xl grid grid-cols-1 gap-20 md:gap-5 md:grid-cols-2 items-center">
             <div class="flex justify-center items-center">
-                <img src="{{ asset('assets/user/ilustrasi2.png') }}" class="h-50 md:h-80 w-auto object-contain">
+                <img src="{{ asset('assets/ilustrasi/ilustrasi2.png') }}" class="h-50 md:h-80 w-auto object-contain">
             </div>
             <div>
                 <p class="font-semibold mb-5">Program Rpl sebagaimana tertuang di dalam Peratiran Mentri Reset,
@@ -74,7 +74,7 @@
         </div>
         <div class="mx-auto max-w-7xl grid grid-cols-1 gap-20 md:gap-5 md:grid-cols-2 items-center">
             <div class="flex justify-center items-center">
-                <img src="{{ asset('assets/user/ilustrasi4.png') }}" class="h-70 md:h-100 w-auto object-contain">
+                <img src="{{ asset('assets/ilustrasi/ilustrasi4.png') }}" class="h-70 md:h-100 w-auto object-contain">
             </div>
             <div class="text-background font-semibold">
                 <div class="bg-primary p-5 md:p-10 rounded mb-5">Pengakuan capaian pembelajaran dari pendidikan formal dengan mengevaluasi ekivalensi mata kuliah dari Perguruan Tinggi sebelumnya dan mata kuliah pada Program Studi yang dituju.</div>

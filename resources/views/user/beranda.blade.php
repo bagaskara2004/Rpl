@@ -14,7 +14,7 @@
                     Sekarang</a>
             </div>
             <div class="hidden md:flex justify-center items-center">
-                <img src="{{ asset('assets/user/ilustrasi1.png') }}" class="h-130 w-auto object-contain">
+                <img src="{{ asset('assets/ilustrasi/ilustrasi1.png') }}" class="h-130 w-auto object-contain">
             </div>
         </div>
     </section>
@@ -26,7 +26,7 @@
         </div>
         <div class="mx-auto max-w-7xl grid grid-cols-1 gap-20 md:gap-5 md:grid-cols-2 items-center">
             <div class="flex justify-center items-center">
-                <img src="{{ asset('assets/user/ilustrasi2.png') }}" class="h-50 md:h-80 w-auto object-contain">
+                <img src="{{ asset('assets/ilustrasi/ilustrasi2.png') }}" class="h-50 md:h-80 w-auto object-contain">
             </div>
             <div>
                 <p class="font-semibold mb-5">Program Rpl sebagaimana tertuang di dalam Peratiran Mentri Reset,
@@ -72,7 +72,7 @@
         </div>
         <div class="mx-auto max-w-7xl grid grid-cols-1 gap-20 md:gap-5 md:grid-cols-2 items-center">
             <div class="flex justify-center items-center">
-                <img src="{{ asset('assets/user/ilustrasi3.png') }}" class="h-80 md:h-100 w-auto object-contain">
+                <img src="{{ asset('assets/ilustrasi/ilustrasi3.png') }}" class="h-80 md:h-100 w-auto object-contain">
             </div>
             <div>
                 <div class="bg-primary p-10 rounded-3xl text-center md:mx-20">
