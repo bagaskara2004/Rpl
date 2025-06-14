@@ -19,18 +19,18 @@
             </button>
         </div>
         <div class="hidden lg:flex lg:gap-x-10 items-center" x-data="{ isclick:false}">
-            <a href="/"
+            <a href="{{ route('user.beranda') }}"
                 class="font-semibold p-1 border-accent hover:border-b-2 hover:text-primary {{ request()->is('/') ? 'text-primary' : 'text-text' }}">Beranda</a>
-            <a href="/tentangkami"
+            <a href="{{ route('user.tentangkami') }}"
                 class="font-semibold p-1 border-accent hover:border-b-2 hover:text-primary {{ request()->is('tentangkami') ? 'text-primary' : 'text-text' }}">Tentang
                 Kami</a>
-            <a href="/berita"
+            <a href="{{ route('user.berita') }}"
                 class="font-semibold p-1 border-accent hover:border-b-2 hover:text-primary {{ request()->is('berita') ? 'text-primary' : 'text-text' }}">Berita</a>
-            <a href="/panduan"
+            <a href="{{ route('user.panduan') }}"
                 class="font-semibold p-1 border-accent hover:border-b-2 hover:text-primary {{ request()->is('panduan') ? 'text-primary' : 'text-text' }}">Panduan</a>
-            {{-- <a href="/rpl"
+            {{-- <a href="{{ route('user.rpl') }}"
                 class="font-semibold p-1 border-accent hover:border-b-2 hover:text-primary {{ request()->is('rpl') ? 'text-primary' : 'text-text' }}">RPL</a> --}}
-            <a href="/login"
+            <a href="{{ route('auth.login') }}"
                 class="text-sm/6 font-semibold text-white bg-primary rounded px-7 py-1 hover:opacity-80" x-show="isclick">Masuk</a>
             <button class=" font-semibold text-white bg-primary rounded px-4 py-2 hover:opacity-80" type="button" @click="isclick = !isclick"><i class="fa-solid fa-user"></i></button>
         </div>
@@ -55,20 +55,20 @@
             <div class="mt-6 flow-root">
                 <div class="-my-6 divide-y divide-gray-500/10">
                     <div class="space-y-2 py-6">
-                        <a href="/"
+                        <a href="{{ route('user.beranda') }}"
                             class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold hover:bg-gray-50 {{ request()->is('/') ? 'text-primary' : 'text-text' }}">Beranda</a>
-                        <a href="/tentangkami"
+                        <a href="{{ route('user.tentangkami') }}"
                             class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold hover:bg-gray-50 {{ request()->is('tentangkami') ? 'text-primary' : 'text-text' }}">Tentang
                             Kami</a>
-                        <a href="/berita"
+                        <a href="{{ route('user.berita') }}"
                             class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold hover:bg-gray-50 {{ request()->is('berita') ? 'text-primary' : 'text-text' }}">Berita</a>
-                        <a href="/panduan"
+                        <a href="{{ route('user.panduan') }}"
                             class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold hover:bg-gray-50 {{ request()->is('panduan') ? 'text-primary' : 'text-text' }}">Panduan</a>
-                        {{-- <a href="/rpl"
+                        {{-- <a href="{{ route('user.rpl') }}"
                             class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold hover:bg-gray-50 {{ request()->is('rpl') ? 'text-primary' : 'text-text' }}">RPL</a> --}}
                     </div>
                     <div class="py-6">
-                        <a href="/login"
+                        <a href="{{ route('auth.login') }}"
                             class="text-sm/6 font-semibold text-white bg-primary rounded px-7 py-2 hover:opacity-80">Masuk</a>
                         {{-- <button class=" font-semibold text-white bg-primary rounded px-4 py-2 hover:opacity-80"
                             type="button"><i class="fa-solid fa-user"></i></button> --}}

@@ -20,7 +20,7 @@
                 <div class="text-2xl font-semibold text-text mb-3"><span class="text-primary">Form</span> Data Diri
                 </div>
                 <p class="font-semibold mb-5">mohon siapkan foto ukuran 3x4 dan CV sebelum mengisi formulir ini</p>
-                <a href="{{ route('form.datadiri') }}"
+                <a href="{{ route('user.form.datadiri') }}"
                     class="text-sm/6 font-semibold text-background bg-primary rounded px-8 py-3 hover:opacity-80">Form
                     Data Diri</a>
             </div>
@@ -29,7 +29,7 @@
                 </div>
                 <p class="font-semibold mb-5">mohon siapkan file ijasah dan transkrip nilai sebelum mengisi formulir ini
                 </p>
-                <a href="{{ route('form.pendidikan') }}"
+                <a href="{{ route('user.form.pendidikan') }}"
                     class="text-sm/6 font-semibold text-background bg-primary rounded px-8 py-3 hover:opacity-80">Form
                     Pendidikan</a>
             </div>
@@ -37,14 +37,14 @@
                 <div class="text-2xl font-semibold text-text mb-3"><span class="text-primary">Form</span> Asesment
                 </div>
                 <p class="font-semibold mb-5">Sesuaikan formulir dengan Transcript Nilai</p>
-                <a href="{{ route('form.asesment') }}"
+                <a href="{{ route('user.form.asesment') }}"
                     class="text-sm/6 font-semibold text-background bg-primary rounded px-8 py-3 hover:opacity-80">Form
                     Asesment</a>
             </div>
             <div>
                 <div class="text-2xl font-semibold text-text mb-5"><span class="text-primary">Form</span> Pekerjaan
                 </div>
-                <a href="{{ route('form.pekerjaan') }}"
+                <a href="{{ route('user.form.pekerjaan') }}"
                     class="text-sm/6 font-semibold text-background bg-primary rounded px-8 py-3 hover:opacity-80">Tambah
                     Pekerjaan</a>
 
@@ -118,7 +118,7 @@
             <div>
                 <div class="text-2xl font-semibold text-text mb-5"><span class="text-primary">Form</span> Pelatihan
                 </div>
-                <a href="{{ route('form.pelatihan') }}"
+                <a href="{{ route('user.form.pelatihan') }}"
                     class="text-sm/6 font-semibold text-background bg-primary rounded px-8 py-3 hover:opacity-80">Tambah
                     Pelatihan</a>
 

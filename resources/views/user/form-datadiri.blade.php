@@ -182,7 +182,7 @@
                 <button
                     class="text-sm/6 font-semibold text-background bg-primary rounded px-8 py-3 hover:opacity-80 w-full"
                     type="submit">Simpan</button>
-                <a href="/rpl"
+                <a href="{{ route('user.rpl') }}"
                     class="text-sm/6 font-semibold text-text bg-background rounded px-8 py-3 hover:opacity-80 text-center block">Kembali</a>
             </div>
         </form>

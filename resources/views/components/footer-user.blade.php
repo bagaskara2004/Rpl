@@ -27,14 +27,14 @@
         <div>
             <div class="text-2xl font-semibold mb-5">Tautan</div>
             <div class="grid grid-cols-1">
-                <a href="/"
+                <a href="{{ route('user.beranda') }}"
                     class="font-semibold text-background py-3 px-5 text-center border-b-3 border-accent w-fit">Beranda</a>
-                <a href="/tentangkami"
+                <a href="{{ route('user.tentangkami') }}"
                     class="font-semibold text-background  py-3 px-5 text-center border-b-3 border-accent w-fit">Tentang
                     Kami</a>
-                <a href="/berita"
+                <a href="{{ route('user.berita') }}"
                     class="font-semibold text-background  py-3 px-5 text-center border-b-3 border-accent w-fit">Berita</a>
-                <a href="/panduan"
+                <a href="{{ route('user.panduan') }}"
                     class="font-semibold text-background  py-3 px-5 text-center border-b-3 border-accent w-fit">Panduan</a>
             </div>
         </div>

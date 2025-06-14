@@ -37,7 +37,7 @@
                     ke
                     dalam Satuan Kredit Semester (SKS) sehingga untuk melanjutkan pendidikan seseorang tidak harus
                     mengambil semua SKS atau mata kuliah.</p>
-                <a href="/tentangkami"
+                <a href="{{ route('user.tentangkami') }}"
                     class="font-semibold py-1 border-accent hover:border-b-2 hover:text-primary text-primary">Pelajari
                     lebih lanjut &rightarrow;</a>
             </div>
@@ -88,42 +88,22 @@
             <div class="text-2xl p-4 inline-block font-semibold text-text border-b-5 border-secondary"><span
                     class="text-primary">Berita</span> Terkini</div>
         </div>
-        <div class="mx-auto max-w-7xl grid grid-cols-1 sm:grid-cols-3 items-center gap-5 mb-20">
+        <div class="mx-auto max-w-7xl grid grid-cols-1 sm:grid-cols-3 gap-5 mb-20">
 
-            <x-article>
-                <x-slot:judul>S3 Bisnis Pariwisata PNB Buka Pendafaran Gelombang 2</x-slot:judul>
-                <x-slot:slug>s3-bisnis-pariwisata-pnb-buka-pendafaran-gelombang-2</x-slot:slug>
-                <x-slot:tanggal>2 day ago</x-slot:tanggal>
-                <x-slot:kategori>kerjasama</x-slot:kategori>
-                <x-slot:image>assets/berita.jpg</x-slot:image>
-                <x-slot:deskripsi>Program Studi Bisnis Pariwisata Program Doktor Terapan (Prodi
-                    D,Bispar) Jurusan Pariwisata Politeknik Negeri Bali membuka pendaftaran calon mahasiswa baru tahun
-                    akademik 2025/2026 Gelombang 2.</x-slot:deskripsi>
-            </x-article>
-            <x-article>
-                <x-slot:judul>S3 Bisnis Pariwisata PNB Buka Pendafaran Gelombang 2</x-slot:judul>
-                <x-slot:slug>s3-bisnis-pariwisata-pnb-buka-pendafaran-gelombang-2</x-slot:slug>
-                <x-slot:tanggal>2 day ago</x-slot:tanggal>
-                <x-slot:kategori>kerjasama</x-slot:kategori>
-                <x-slot:image>assets/berita.jpg</x-slot:image>
-                <x-slot:deskripsi>Program Studi Bisnis Pariwisata Program Doktor Terapan (Prodi
-                    D,Bispar) Jurusan Pariwisata Politeknik Negeri Bali membuka pendaftaran calon mahasiswa baru tahun
-                    akademik 2025/2026 Gelombang 2.</x-slot:deskripsi>
-            </x-article>
-            <x-article>
-                <x-slot:judul>S3 Bisnis Pariwisata PNB Buka Pendafaran Gelombang 2</x-slot:judul>
-                <x-slot:slug>s3-bisnis-pariwisata-pnb-buka-pendafaran-gelombang-2</x-slot:slug>
-                <x-slot:tanggal>2 day ago</x-slot:tanggal>
-                <x-slot:kategori>kerjasama</x-slot:kategori>
-                <x-slot:image>assets/berita.jpg</x-slot:image>
-                <x-slot:deskripsi>Program Studi Bisnis Pariwisata Program Doktor Terapan (Prodi
-                    D,Bispar) Jurusan Pariwisata Politeknik Negeri Bali membuka pendaftaran calon mahasiswa baru tahun
-                    akademik 2025/2026 Gelombang 2.</x-slot:deskripsi>
-            </x-article>
+            @foreach ($berita as $data)
+                <x-article>
+                    <x-slot:judul>{{ Str::limit($data->judul, 50, '...'); }}</x-slot:judul>
+                    <x-slot:slug>{{ $data->slug }}</x-slot:slug>
+                    <x-slot:tanggal>{{ $data->created_at->diffForHumans() }}</x-slot:tanggal>
+                    <x-slot:image>{{ $data->foto }}</x-slot:image>
+                    <x-slot:deskripsi>{{ Str::limit($data->deskripsi, 200, '...');  }}</x-slot:deskripsi>
+                </x-article>
+            @endforeach
+
 
         </div>
         <div class="flex justify-center">
-            <a href="/berita"
+            <a href="{{ route('user.berita') }}"
                 class="text-sm/6 font-semibold text-white bg-primary rounded py-3 px-10 hover:opacity-80">Berita
                 Lainnya</a>
         </div>

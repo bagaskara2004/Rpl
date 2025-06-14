@@ -4,109 +4,21 @@
             <div class="text-2xl p-4 inline-block font-semibold text-text border-b-5 border-secondary"><span
                     class="text-primary">Berita</span> Terkini</div>
         </div>
-        <div class="mx-auto max-w-7xl grid grid-cols-1 sm:grid-cols-3 items-center gap-5">
+        <div class="mx-auto max-w-7xl grid grid-cols-1 sm:grid-cols-3 gap-5 ">
 
-            <x-article>
-                <x-slot:judul>S3 Bisnis Pariwisata PNB Buka Pendafaran Gelombang 2</x-slot:judul>
-                <x-slot:slug>s3-bisnis-pariwisata-pnb-buka-pendafaran-gelombang-2</x-slot:slug>
-                <x-slot:tanggal>2 day ago</x-slot:tanggal>
-                <x-slot:kategori>kerjasama</x-slot:kategori>
-                <x-slot:image>assets/berita.jpg</x-slot:image>
-                <x-slot:deskripsi>Program Studi Bisnis Pariwisata Program Doktor Terapan (Prodi
-                    D,Bispar) Jurusan Pariwisata Politeknik Negeri Bali membuka pendaftaran calon mahasiswa baru tahun
-                    akademik 2025/2026 Gelombang 2.</x-slot:deskripsi>
-            </x-article>
-            <x-article>
-                <x-slot:judul>S3 Bisnis Pariwisata PNB Buka Pendafaran Gelombang 2</x-slot:judul>
-                <x-slot:slug>s3-bisnis-pariwisata-pnb-buka-pendafaran-gelombang-2</x-slot:slug>
-                <x-slot:tanggal>2 day ago</x-slot:tanggal>
-                <x-slot:kategori>kerjasama</x-slot:kategori>
-                <x-slot:image>assets/berita.jpg</x-slot:image>
-                <x-slot:deskripsi>Program Studi Bisnis Pariwisata Program Doktor Terapan (Prodi
-                    D,Bispar) Jurusan Pariwisata Politeknik Negeri Bali membuka pendaftaran calon mahasiswa baru tahun
-                    akademik 2025/2026 Gelombang 2.</x-slot:deskripsi>
-            </x-article>
-            <x-article>
-                <x-slot:judul>S3 Bisnis Pariwisata PNB Buka Pendafaran Gelombang 2</x-slot:judul>
-                <x-slot:slug>s3-bisnis-pariwisata-pnb-buka-pendafaran-gelombang-2</x-slot:slug>
-                <x-slot:tanggal>2 day ago</x-slot:tanggal>
-                <x-slot:kategori>kerjasama</x-slot:kategori>
-                <x-slot:image>assets/berita.jpg</x-slot:image>
-                <x-slot:deskripsi>Program Studi Bisnis Pariwisata Program Doktor Terapan (Prodi
-                    D,Bispar) Jurusan Pariwisata Politeknik Negeri Bali membuka pendaftaran calon mahasiswa baru tahun
-                    akademik 2025/2026 Gelombang 2.</x-slot:deskripsi>
-            </x-article>
-            <x-article>
-                <x-slot:judul>S3 Bisnis Pariwisata PNB Buka Pendafaran Gelombang 2</x-slot:judul>
-                <x-slot:slug>s3-bisnis-pariwisata-pnb-buka-pendafaran-gelombang-2</x-slot:slug>
-                <x-slot:tanggal>2 day ago</x-slot:tanggal>
-                <x-slot:kategori>kerjasama</x-slot:kategori>
-                <x-slot:image>assets/berita.jpg</x-slot:image>
-                <x-slot:deskripsi>Program Studi Bisnis Pariwisata Program Doktor Terapan (Prodi
-                    D,Bispar) Jurusan Pariwisata Politeknik Negeri Bali membuka pendaftaran calon mahasiswa baru tahun
-                    akademik 2025/2026 Gelombang 2.</x-slot:deskripsi>
-            </x-article>
-            <x-article>
-                <x-slot:judul>S3 Bisnis Pariwisata PNB Buka Pendafaran Gelombang 2</x-slot:judul>
-                <x-slot:slug>s3-bisnis-pariwisata-pnb-buka-pendafaran-gelombang-2</x-slot:slug>
-                <x-slot:tanggal>2 day ago</x-slot:tanggal>
-                <x-slot:kategori>kerjasama</x-slot:kategori>
-                <x-slot:image>assets/berita.jpg</x-slot:image>
-                <x-slot:deskripsi>Program Studi Bisnis Pariwisata Program Doktor Terapan (Prodi
-                    D,Bispar) Jurusan Pariwisata Politeknik Negeri Bali membuka pendaftaran calon mahasiswa baru tahun
-                    akademik 2025/2026 Gelombang 2.</x-slot:deskripsi>
-            </x-article>
-            <x-article>
-                <x-slot:judul>S3 Bisnis Pariwisata PNB Buka Pendafaran Gelombang 2</x-slot:judul>
-                <x-slot:slug>s3-bisnis-pariwisata-pnb-buka-pendafaran-gelombang-2</x-slot:slug>
-                <x-slot:tanggal>2 day ago</x-slot:tanggal>
-                <x-slot:kategori>kerjasama</x-slot:kategori>
-                <x-slot:image>assets/berita.jpg</x-slot:image>
-                <x-slot:deskripsi>Program Studi Bisnis Pariwisata Program Doktor Terapan (Prodi
-                    D,Bispar) Jurusan Pariwisata Politeknik Negeri Bali membuka pendaftaran calon mahasiswa baru tahun
-                    akademik 2025/2026 Gelombang 2.</x-slot:deskripsi>
-            </x-article>
-            <x-article>
-                <x-slot:judul>S3 Bisnis Pariwisata PNB Buka Pendafaran Gelombang 2</x-slot:judul>
-                <x-slot:slug>s3-bisnis-pariwisata-pnb-buka-pendafaran-gelombang-2</x-slot:slug>
-                <x-slot:tanggal>2 day ago</x-slot:tanggal>
-                <x-slot:kategori>kerjasama</x-slot:kategori>
-                <x-slot:image>assets/berita.jpg</x-slot:image>
-                <x-slot:deskripsi>Program Studi Bisnis Pariwisata Program Doktor Terapan (Prodi
-                    D,Bispar) Jurusan Pariwisata Politeknik Negeri Bali membuka pendaftaran calon mahasiswa baru tahun
-                    akademik 2025/2026 Gelombang 2.</x-slot:deskripsi>
-            </x-article>
-            <x-article>
-                <x-slot:judul>S3 Bisnis Pariwisata PNB Buka Pendafaran Gelombang 2</x-slot:judul>
-                <x-slot:slug>s3-bisnis-pariwisata-pnb-buka-pendafaran-gelombang-2</x-slot:slug>
-                <x-slot:tanggal>2 day ago</x-slot:tanggal>
-                <x-slot:kategori>kerjasama</x-slot:kategori>
-                <x-slot:image>assets/berita.jpg</x-slot:image>
-                <x-slot:deskripsi>Program Studi Bisnis Pariwisata Program Doktor Terapan (Prodi
-                    D,Bispar) Jurusan Pariwisata Politeknik Negeri Bali membuka pendaftaran calon mahasiswa baru tahun
-                    akademik 2025/2026 Gelombang 2.</x-slot:deskripsi>
-            </x-article>
-            <x-article>
-                <x-slot:judul>S3 Bisnis Pariwisata PNB Buka Pendafaran Gelombang 2</x-slot:judul>
-                <x-slot:slug>s3-bisnis-pariwisata-pnb-buka-pendafaran-gelombang-2</x-slot:slug>
-                <x-slot:tanggal>2 day ago</x-slot:tanggal>
-                <x-slot:kategori>kerjasama</x-slot:kategori>
-                <x-slot:image>assets/berita.jpg</x-slot:image>
-                <x-slot:deskripsi>Program Studi Bisnis Pariwisata Program Doktor Terapan (Prodi
-                    D,Bispar) Jurusan Pariwisata Politeknik Negeri Bali membuka pendaftaran calon mahasiswa baru tahun
-                    akademik 2025/2026 Gelombang 2.</x-slot:deskripsi>
-            </x-article>
-            <x-article>
-                <x-slot:judul>S3 Bisnis Pariwisata PNB Buka Pendafaran Gelombang 2</x-slot:judul>
-                <x-slot:slug>s3-bisnis-pariwisata-pnb-buka-pendafaran-gelombang-2</x-slot:slug>
-                <x-slot:tanggal>2 day ago</x-slot:tanggal>
-                <x-slot:kategori>kerjasama</x-slot:kategori>
-                <x-slot:image>assets/berita.jpg</x-slot:image>
-                <x-slot:deskripsi>Program Studi Bisnis Pariwisata Program Doktor Terapan (Prodi
-                    D,Bispar) Jurusan Pariwisata Politeknik Negeri Bali membuka pendaftaran calon mahasiswa baru tahun
-                    akademik 2025/2026 Gelombang 2.</x-slot:deskripsi>
-            </x-article>
+           @foreach ($berita as $data)
+                <x-article>
+                    <x-slot:judul>{{ Str::limit($data->judul, 50, '...'); }}</x-slot:judul>
+                    <x-slot:slug>{{ $data->slug }}</x-slot:slug>
+                    <x-slot:tanggal>{{ $data->created_at->diffForHumans() }}</x-slot:tanggal>
+                    <x-slot:image>{{ $data->foto }}</x-slot:image>
+                    <x-slot:deskripsi>{{ Str::limit($data->deskripsi, 200, '...');  }}</x-slot:deskripsi>
+                </x-article>
+            @endforeach
 
+        </div>
+        <div class="mx-auto max-w-7xl mt-10">
+            {{ $berita->links() }}
         </div>
     </section>
 </x-layout-user>

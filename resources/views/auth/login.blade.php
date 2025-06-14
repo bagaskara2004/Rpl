@@ -34,7 +34,7 @@
             <div class="grid gap-2">
                 <button
                     class="text-sm/6 font-semibold text-background bg-primary rounded px-8 py-3 hover:opacity-80 w-full" type="submit">MASUK</button>
-                <a href="/"
+                <a href="{{ route('user.beranda') }}"
                     class="text-sm/6 font-semibold text-text bg-background rounded px-8 py-3 hover:opacity-80 text-center block">Beranda</a>
             </div>
         </form>
