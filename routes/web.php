@@ -28,5 +28,7 @@ Route::prefix('assesor')->group(function () {
         Route::get('/dashboard', 'index')->name('assesor.dashboard');
         Route::get('/data/pendaftar', 'getData')->name('assesor.pendaftar.data'); // route untuk AJAX
         Route::get('/modal/pendaftar/{id}', 'getModalData')->name('assesor.pendaftar.modal'); // endpoint modal
+        Route::get('/modal/assessment/{id}', 'getAssessmentModal'); // endpoint modal assessment
+        Route::match(['get', 'post'], '/transfer-nilai/{id}', [App\Http\Controllers\Assessor\AssessorController::class, 'transferNilai'])->name('assesor.transfer-nilai');
     });
 });

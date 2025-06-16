@@ -6,46 +6,41 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class AssessmentSeeder extends Seeder
+class KurikulumSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        DB::table('assessment')->insert([
+        DB::table('kurikulum')->insert([
             [
-                'user_id' => 1,
-                'pertanyaan_id' => 1,
-                'jawaban' => 1,
+                'mata_kuliah_trpl' => 'Pemrograman Web',
+                'sks' => 3,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'user_id' => 1,
-                'pertanyaan_id' => 2,
-                'jawaban' => 0,
+                'mata_kuliah_trpl' => 'Basis Data',
+                'sks' => 3,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'user_id' => 1,
-                'pertanyaan_id' => 3,
-                'jawaban' => 0,
+                'mata_kuliah_trpl' => 'Jaringan Komputer',
+                'sks' => 2,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'user_id' => 1,
-                'pertanyaan_id' => 4,
-                'jawaban' => 1,
+                'mata_kuliah_trpl' => 'Analisis dan Perancangan Sistem',
+                'sks' => 3,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'user_id' => 1,
-                'pertanyaan_id' => 5,
-                'jawaban' => 1,
+                'mata_kuliah_trpl' => 'Kecerdasan Buatan',
+                'sks' => 2,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

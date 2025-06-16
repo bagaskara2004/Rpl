@@ -1,13 +1,13 @@
-<x-lyout_asesor>
+<x-layout_assessor>
     @vite('resources/css/app.css')
     @vite('resources/css/pendaftar-custom.css')
-    <!-- Tambahkan Bootstrap CSS dan JS jika belum ada -->
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Import Inter font from Google Fonts -->
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- CSS custom sudah dipindahkan ke resources/css/pendaftar-custom.css -->
+
 
     <div class="mb-6">
         <h1 class="text-3xl font-bold text-gray-800 mb-4">Pendaftar</h1>
@@ -72,6 +72,10 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const tbody = document.getElementById('pendaftar-tbody');
+            const modalContainer = document.getElementById('modal-container');
+            // Tampilkan loading spinner saat data awal dimuat
+            tbody.innerHTML = `<tr><td colspan="5">@include('components.loading')</td></tr>`;
             fetch("{{ route('assesor.pendaftar.data') }}")
                 .then(response => response.json())
                 .then(data => renderTable(data));
@@ -109,7 +113,7 @@
                 <div class="inline-flex gap-2">
                     <button class="px-4 py-1 rounded border border-primary text-primary bg-white hover:bg-primary hover:text-white text-xs font-semibold" data-bs-toggle="modal" data-bs-target="#modalDataDiri${diri.id}" onclick="loadModalData(${diri.id})">Data</button>
                     <button class="px-4 py-1 rounded border border-yellow-400 text-yellow-700 bg-white hover:bg-yellow-50 text-xs font-semibold" data-bs-toggle="modal" data-bs-target="#modalAsesmen${diri.id}" onclick="loadModalAsesmen(${diri.id})">Asesmen</button>
-                    <button class="px-4 py-1 rounded border border-purple-600 text-purple-700 bg-white hover:bg-purple-50 text-xs font-semibold">Transfer</button>
+                    <button class="px-4 py-1 rounded border border-purple-600 text-purple-700 bg-white hover:bg-purple-50 text-xs font-semibold" onclick="loadTransferNilai(${diri.id})">Transfer</button>
                 </div>
             </td>
         </tr>
@@ -145,6 +149,7 @@
 
         window.loadModalData = function(id) {
             const modalContent = document.getElementById('modal-content-' + id);
+            modalContent.innerHTML = `@include('components.loading')`;
             fetch(`/assesor/modal/pendaftar/${id}`)
                 .then(res => res.json())
                 .then(diri => {
@@ -247,19 +252,102 @@
 
         window.loadModalAsesmen = function(id) {
             const modalContent = document.getElementById('modal-asesmen-content-' + id);
-            // TODO: Ganti dengan AJAX fetch data asesmen jika sudah ada endpointnya
-            modalContent.innerHTML = `
-        <div class="modal-header">
-            <h5 class="modal-title">Asesmen</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <div class="text-center">Form/Detail asesmen untuk user ID <b>${id}</b> tampil di sini.</div>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-        </div>
-    `;
+            modalContent.innerHTML = `@include('components.loading')`;
+            fetch(`/assesor/modal/assessment/${id}`)
+                .then(res => res.json())
+                .then(data => {
+                    // data: { pertanyaan: [...], assessment: [...] }
+                    let rows = '';
+                    data.pertanyaan.forEach((q, idx) => {
+                        // Cari jawaban user untuk pertanyaan ini
+                        const jawabanObj = data.assessment.find(a => a.pertanyaan_id === q.id);
+                        let yesChecked = '',
+                            noChecked = '';
+                        if (jawabanObj) {
+                            yesChecked = jawabanObj.jawaban === 0 ? 'checked' : '';
+                            noChecked = jawabanObj.jawaban === 1 ? 'checked' : '';
+                        }
+                        rows += `
+                            <tr>
+                                <td>${idx+1}.</td>
+                                <td>${q.pertanyaan}</td>
+                                <td class="text-center"><input type="checkbox" disabled ${yesChecked}></td>
+                                <td class="text-center"><input type="checkbox" disabled ${noChecked}></td>
+                            </tr>
+                        `;
+                    });
+                    modalContent.innerHTML = `
+                        <div class="modal-header">
+                            <h5 class="modal-title">Asesmen</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:40px">No.</th>
+                                            <th>Question</th>
+                                            <th colspan="2" class="text-center">Answer</th>
+                                        </tr>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th class="text-center">Yes</th>
+                                            <th class="text-center">No</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${rows}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                        </div>
+                    `;
+                });
         }
+
+        window.loadTransferNilai = function(id) {
+            const mainContent = document.querySelector('#main-content main');
+            if (!mainContent) return;
+
+            mainContent.innerHTML = `@include('components.loading')`;
+
+            fetch(`/assesor/transfer-nilai/${id}?ajax=1`, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(res => res.text())
+                .then(html => {
+                    mainContent.innerHTML = html;
+                    history.pushState({
+                        transferId: id
+                    }, '', `/assesor/transfer-nilai/${id}`);
+                });
+        }
+
+        window.addEventListener('popstate', function(event) {
+            const path = window.location.pathname;
+            const match = path.match(/\/assesor\/transfer-nilai\/(\d+)/);
+            const mainContent = document.querySelector('#main-content main');
+            if (match && mainContent) {
+                mainContent.innerHTML = `@include('components.loading')`;
+                fetch(`/assesor/transfer-nilai/${match[1]}?ajax=1`, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(res => res.text())
+                    .then(html => {
+                        mainContent.innerHTML = html;
+                    });
+            } else if (mainContent) {
+                window.location.reload();
+            }
+        });
     </script>
-</x-lyout_asesor>
+</x-layout_assessor>
