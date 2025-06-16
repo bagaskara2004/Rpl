@@ -8,6 +8,7 @@
     <title>RPL | PNB</title>
     @vite('resources/css/app.css')
     <script src="https://kit.fontawesome.com/e01ab22bb7.js" crossorigin="anonymous"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 
 <body>

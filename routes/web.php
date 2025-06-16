@@ -2,15 +2,25 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Assessor\AssessorController;
+use App\Http\Controllers\auth\LoginController;
 use App\Http\Controllers\user\BerandaController;
 use App\Http\Controllers\user\BeritaController;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', [BerandaController::class, 'index'])->name('user.beranda');
 Route::get('/berita', [BeritaController::class, 'index'])->name('user.berita');
 Route::get('/berita/{berita:slug}', [BeritaController::class, 'detail'])->name('user.berita.detail');
 Route::view('/tentangkami', 'user/tentangkami')->name('user.tentangkami');
 Route::view('/panduan', 'user/panduan')->name('user.panduan');
-Route::view('/login','auth/login')->name('auth.login');
+
+Route::get('/login',[LoginController::class,'index'])->name('auth.index');
+Route::post('/login',[LoginController::class,'login'])->name('auth.login');
+
+Route::get('/logout', function () {
+    Auth::logout();
+    return redirect('/login');
+});
+
 Route::view('/rpl','user/rpl')->name('user.rpl');
 Route::view('/rpl/diproses','user/diproses');
 Route::view('/rpl/diterima','user/diterima');
