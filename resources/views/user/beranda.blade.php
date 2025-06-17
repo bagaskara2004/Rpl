@@ -9,7 +9,7 @@
                     pengakuan dan penilaian terhadap pengalaman belajar yang telah dilakukan oleh individu di luar
                     sistem pendidikan formal. RPL bertujuan untuk memberikan pengakuan terhadap kompetensi yang telah
                     diperoleh melalui pengalaman kerja, pelatihan, atau kegiatan non-formal lainnya.</div>
-                <a href="#"
+                <a href="{{ route('user.rpl') }}"
                     class="text-sm/6 font-semibold text-background bg-primary rounded px-8 py-3 hover:opacity-80">Ajukan
                     Sekarang</a>
             </div>

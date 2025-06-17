@@ -32,19 +32,19 @@ class LoginController extends Controller
 
             $user = Auth::user();
             if ($user->role_id == 1) {
-                return redirect()->intended('/');
+                return redirect()->to('/')->with('sukses','Kamu Berhasil Login');
             }
             if ($user->role_id == 2) {
-                return redirect()->intended('/assesor');
+                return redirect()->to('/assesor');
             }
             if ($user->role_id == 3) {
-                return redirect()->intended('/');
+                return redirect()->to('/admin');
             }
             if ($user->role_id == 4) {
-                return redirect()->intended('/');
+                return redirect()->to('/dosen');
             }
             if ($user->role_id == 5) {
-                return redirect()->intended('/');
+                return redirect()->to('/superadmin');
             }
         }
 

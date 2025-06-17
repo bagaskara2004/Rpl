@@ -18,7 +18,7 @@
                 </svg>
             </button>
         </div>
-        <div class="hidden lg:flex lg:gap-x-10 items-center" x-data="{ isclick:false}">
+        <div class="hidden lg:flex lg:gap-x-10 items-center">
             <a href="{{ route('user.beranda') }}"
                 class="font-semibold p-1 border-accent hover:border-b-2 hover:text-primary {{ request()->is('/') ? 'text-primary' : 'text-text' }}">Beranda</a>
             <a href="{{ route('user.tentangkami') }}"
@@ -28,11 +28,19 @@
                 class="font-semibold p-1 border-accent hover:border-b-2 hover:text-primary {{ request()->is('berita') ? 'text-primary' : 'text-text' }}">Berita</a>
             <a href="{{ route('user.panduan') }}"
                 class="font-semibold p-1 border-accent hover:border-b-2 hover:text-primary {{ request()->is('panduan') ? 'text-primary' : 'text-text' }}">Panduan</a>
-            {{-- <a href="{{ route('user.rpl') }}"
-                class="font-semibold p-1 border-accent hover:border-b-2 hover:text-primary {{ request()->is('rpl') ? 'text-primary' : 'text-text' }}">RPL</a> --}}
+
+            @auth
+                @if (Auth::user()->role_id === 1)
+                    <a href="{{ route('user.rpl') }}"
+                        class="font-semibold p-1 border-accent hover:border-b-2 hover:text-primary {{ request()->is('rpl') ? 'text-primary' : 'text-text' }}">RPL</a>
+                    <button class=" font-semibold text-white bg-primary rounded px-4 py-2 hover:opacity-80"
+                        type="button"><i class="fa-solid fa-user"></i></button>
+                @endif
+            @endauth
+            @guest
             <a href="{{ route('auth.login') }}"
-                class="text-sm/6 font-semibold text-white bg-primary rounded px-7 py-1 hover:opacity-80" x-show="isclick">Masuk</a>
-            <button class=" font-semibold text-white bg-primary rounded px-4 py-2 hover:opacity-80" type="button" @click="isclick = !isclick"><i class="fa-solid fa-user"></i></button>
+                class="text-sm/6 font-semibold text-white bg-primary rounded px-7 py-1 hover:opacity-80">Masuk</a>
+            @endguest
         </div>
     </nav>
     <div class="lg:hidden" role="dialog" aria-modal="true" x-show="isOpen">
