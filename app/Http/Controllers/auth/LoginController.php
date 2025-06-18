@@ -32,7 +32,7 @@ class LoginController extends Controller
 
             $user = Auth::user();
             if ($user->role_id == 1) {
-                return redirect()->to('/')->with('sukses','Kamu Berhasil Login');
+                return redirect()->to('/')->with('sukses', 'Kamu Berhasil Login');
             }
             if ($user->role_id == 2) {
                 return redirect()->to('/assesor');
@@ -64,5 +64,15 @@ class LoginController extends Controller
             return true;
         }
         return false;
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/login')->with('sukses', 'Berhasil logout');
     }
 }

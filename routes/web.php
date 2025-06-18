@@ -30,12 +30,7 @@ Route::middleware([UserOnly::class])->group(function () {
     Route::view('/form/pelatihan', 'user/form-pelatihan')->name('user.form.pelatihan');
 });
 
-Route::get('/logout', function () {
-    Auth::logout();
-    return redirect('/login');
-});
-
-
+Route::post('/logout', [LoginController::class, 'logout'])->name('auth.logout');
 
 Route::prefix('assesor')->group(function () {
     Route::controller(App\Http\Controllers\Assessor\AssessorController::class)->group(function () {
