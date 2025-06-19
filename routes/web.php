@@ -5,6 +5,7 @@ use App\Http\Controllers\Assessor\AssessorController;
 use App\Http\Controllers\auth\LoginController;
 use App\Http\Controllers\user\BerandaController;
 use App\Http\Controllers\user\BeritaController;
+use App\Http\Controllers\user\RplController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Middleware\UserOnly;
 
@@ -19,7 +20,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [LoginController::class, 'login'])->name('auth.login');
 });
 Route::middleware([UserOnly::class])->group(function () {
-    Route::view('/rpl', 'user/rpl')->name('user.rpl');
+    Route::get('/rpl', [RplController::class, 'index'])->name('user.rpl');
     Route::view('/rpl/diproses', 'user/diproses');
     Route::view('/rpl/diterima', 'user/diterima');
     Route::view('/rpl/ditolak', 'user/ditolak');

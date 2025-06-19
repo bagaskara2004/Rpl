@@ -44,31 +44,34 @@
         </div>
     </nav>
     @auth
-        <div class="fixed top-20 right-5 rounded z-11 p-5 w-75 bg-background border-2" x-show="profile">
-            {{-- <img src="https://i.pravatar.cc/300" alt="Profile Picture" class="rounded-full w-28 h-28 mx-auto mb-4 border-4 border-primary dark:border-primary transition-transform duration-300 hover:scale-105"> --}}
-            <div class="mb-4 w-full">
-                <label class="block text-text font-semibold mb-2" for="username">
-                    Username
-                </label>
-                <input
-                    class="shadow appearance-none border-b-2 w-full py-3 px-3 text-gray-500 leading-tight focus:outline-none focus:shadow-outline"
-                    id="username" type="text" name="username" value="{{ Auth::user()->user_name }}" disabled>
-            </div>
-            <div class="mb-4 w-full">
-                <label class="block text-text font-semibold mb-2" for="email">
-                    Email
-                </label>
-                <input
-                    class="shadow appearance-none border-b-2 w-full py-3 px-3 text-gray-500 leading-tight focus:outline-none focus:shadow-outline"
-                    id="email" type="text" name="email" value="{{ Auth::user()->email }}" disabled>
-            </div>
-            <form method="POST" action="{{ route('auth.logout') }}">
-                @csrf
-                <button class="text-sm/6 font-semibold text-background bg-red-500 rounded px-8 py-3 hover:opacity-80 w-full"
-                    type="submit">Logout</button>
-            </form>
+        @if (Auth::user()->role_id === 1)
+            <div class="fixed top-20 right-5 rounded z-11 p-5 w-75 bg-background border-2" x-show="profile">
+                {{-- <img src="https://i.pravatar.cc/300" alt="Profile Picture" class="rounded-full w-28 h-28 mx-auto mb-4 border-4 border-primary dark:border-primary transition-transform duration-300 hover:scale-105"> --}}
+                <div class="mb-4 w-full">
+                    <label class="block text-text font-semibold mb-2" for="username">
+                        Username
+                    </label>
+                    <input
+                        class="shadow appearance-none border-b-2 w-full py-3 px-3 text-gray-500 leading-tight focus:outline-none focus:shadow-outline"
+                        id="username" type="text" name="username" value="{{ Auth::user()->user_name }}" disabled>
+                </div>
+                <div class="mb-4 w-full">
+                    <label class="block text-text font-semibold mb-2" for="email">
+                        Email
+                    </label>
+                    <input
+                        class="shadow appearance-none border-b-2 w-full py-3 px-3 text-gray-500 leading-tight focus:outline-none focus:shadow-outline"
+                        id="email" type="text" name="email" value="{{ Auth::user()->email }}" disabled>
+                </div>
+                <form method="POST" action="{{ route('auth.logout') }}">
+                    @csrf
+                    <button
+                        class="text-sm/6 font-semibold text-background bg-red-500 rounded px-8 py-3 hover:opacity-80 w-full"
+                        type="submit">Logout</button>
+                </form>
 
-        </div>
+            </div>
+        @endif
     @endauth
     <div class="lg:hidden" role="dialog" aria-modal="true" x-show="isOpen">
         <div class="fixed inset-0 z-10"></div>

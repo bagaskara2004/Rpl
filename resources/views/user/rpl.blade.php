@@ -1,5 +1,5 @@
 <x-layout-user>
-    <section id="rpl" class="bg-background pb-20 pt-30 px-5 lg:px-8">
+    <section id="rpl" class="bg-background pb-20 pt-30 px-5 lg:px-8" x-data="{ konfirmf: false, konfirm: false }">
         <div class="mx-auto max-w-7xl grid grid-cols-1 gap-20 md:gap-5 md:grid-cols-2 items-center">
             <div class="flex justify-center items-center">
                 <img src="{{ asset('assets/ilustrasi/ilustrasi7.png') }}" class="h-50 md:h-120 w-auto object-contain">
@@ -8,9 +8,102 @@
                 <p class="font-semibold mb-5 bg-primary text-background p-10 rounded">Sebelum mengisi mengajukan RPL
                     calon
                     mahasiswa harus melengkapi formulir dibawah ini !</p>
-                <button
-                    class="text-sm/6 font-semibold text-background bg-primary rounded px-8 py-3 hover:opacity-80">Ajukan
-                    RPL</button>
+
+
+                @if ($konfirmasi == false)
+                    <button @click="konfirmf = !konfirmf"
+                        class="text-sm/6 font-semibold text-background bg-primary rounded px-8 py-3 hover:opacity-80">Ajukan
+                        RPL</button>
+                @else
+                    <button @click="konfirm = !konfirm"
+                        class="text-sm/6 font-semibold text-background bg-primary rounded px-8 py-3 hover:opacity-80">Ajukan
+                        RPL</button>
+                @endif
+            </div>
+        </div>
+        {{-- konfirmasi --}}
+        <div x-show="konfirm"
+            class="fixed bg-background overflow-auto md:top-10 md:left-20 md:right-20 md:bottom-10 top-5 left-5 right-5 bottom-5 z-10 md:p-5 border-1 rounded">
+            <div class="flex justify-center items-center mb-10">
+                <div class="text-2xl p-4 inline-block font-semibold text-text border-b-5 border-secondary"><span
+                        class="text-primary">Konfirmasi</span> RPL</div>
+            </div>
+            <form class="flex flex-col justify-between px-5" action="#" method="POST">
+                <div>
+                    <div>
+                        <label class="block text-text font-semibold mb-5">
+                            Pertanyaan
+                        </label>
+                        <div class="mb-4">
+                            <label class="block text-text font-semibold mb-2" for="q1">
+                                Apakah kamu sudah pernah membuat aplikasi dengan laravel ?
+                            </label>
+                            <input
+                                class="shadow appearance-none border-2 rounded w-full py-3 px-3 text-gray-500 leading-tight focus:outline-none focus:shadow-outline"
+                                id="q1" type="text" name="q1">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-text font-semibold mb-2" for="q2">
+                                Apakah kamu menguasai laravel ?
+                            </label>
+                            <input
+                                class="shadow appearance-none border-2 rounded w-full py-3 px-3 text-gray-500 leading-tight focus:outline-none focus:shadow-outline"
+                                id="q2" type="text" name="q2">
+                        </div>
+
+                    </div>
+                </div>
+                <div class="flex items-start gap-3 mb-5">
+                    <input type="checkbox" name="konformasi" class="size-5">
+                    <div>
+                        <p class="block text-text font-semibold  text-xs">
+                            SAYA TELAH MEMBACA DAN MENGISI FORMULIR PENDAFTARAN UNTUK MENGIKUTI PERKULIAHAN MELALUI
+                            PROGRAM
+                            RPL DI POLITEKNIK NEGERI BALI DENGAN BAIK, DAN SAYA MENYATAKAN:
+                        </p>
+                        <ul class="list-decimal text-xs ms-5">
+                            <li>Semua informasi yang saya tuliskan adalah sepenuhnya benar dan saya bertanggungjawab
+                                atas
+                                seluruh data dalam formulir ini.</li>
+                            <li>Saya memberikan ijin kepada pihak pengelola program RPL, untuk melakukan pemeriksaan
+                                kebenaran informasi yang saya berikan dalam formulir aplikasi ini kepada seluruh pihak
+                                yang
+                                terkait dengan jenjang akademik sebelumnya dan kepada perusahaan tempat saya bekerja
+                                sebelumnya dan atau saat ini saya bekerja.</li>
+                            <li>Saya bersedia melengkapi berkas yang dibutuhkan untuk pelaksanaan proses credit transfer
+                                dan
+                                atau asesmen pengalaman kerja.</li>
+                            <li>Saya akan mengikuti proses asesmen sesuai dengan kesepakatan waktu yang ditetapkan dan
+                                saya
+                                akan melunasi biaya pendaftaran setelah pengisian aplikasi ini selesai.</li>
+                            <li>Saya akan mentaati seluruh hal yang tercantum dalam peraturan akademik dan hal-hal
+                                terkait
+                                administrasi selama saya mengikuti perkuliahan di PNB.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="grid gap-2">
+                    <button
+                        class="text-sm/6 font-semibold text-background bg-primary rounded px-8 py-3 hover:opacity-80 w-full"
+                        type="submit">Kirim</button>
+                    <button @click="konfirm = !konfirm" type="button"
+                        class="text-sm/6 font-semibold text-text bg-background rounded px-8 py-3 hover:opacity-80 text-center block">Batal</button>
+                </div>
+            </form>
+        </div>
+
+        {{-- gagal --}}
+        <div class="fixed top-0 bottom-0 left-0 right-0 flex justify-center items-center" x-show="konfirmf">
+            <div
+                class="bg-background border-2 py-5 px-10 flex flex-col gap-4 justify-center items-center md:w-1/3 rounded">
+                <div class="bg-red-600 py-5 px-6 rounded-full w-fit"><i
+                        class="fa-solid fa-xmark text-5xl text-background"></i>
+                </div>
+                <p class="text-text text-2xl font-semibold">Gagal</p>
+                <p class="text-gray-500 font-semibold">Lengkapi Formulir terlebih bahulu</p>
+                <button class="text-sm/6 font-semibold text-background bg-primary rounded px-8 py-2 hover:opacity-80"
+                    @click="konfirmf = !konfirmf">OK
+                </button>
             </div>
         </div>
     </section>
@@ -21,7 +114,7 @@
                 </div>
                 <p class="font-semibold mb-5">mohon siapkan foto ukuran 3x4 dan CV sebelum mengisi formulir ini</p>
                 <a href="{{ route('user.form.datadiri') }}"
-                    class="text-sm/6 font-semibold text-background bg-primary rounded px-8 py-3 hover:opacity-80">Form
+                    class="text-sm/6 font-semibold text-background rounded px-8 py-3 hover:opacity-80 {{ $datadiri == true?'bg-green-700' : 'bg-primary' }}">Form
                     Data Diri</a>
             </div>
             <div>
@@ -30,7 +123,7 @@
                 <p class="font-semibold mb-5">mohon siapkan file ijasah dan transkrip nilai sebelum mengisi formulir ini
                 </p>
                 <a href="{{ route('user.form.pendidikan') }}"
-                    class="text-sm/6 font-semibold text-background bg-primary rounded px-8 py-3 hover:opacity-80">Form
+                    class="text-sm/6 font-semibold text-background rounded px-8 py-3 hover:opacity-80 {{ $pendidikan == true?'bg-green-700' : 'bg-primary' }}">Form
                     Pendidikan</a>
             </div>
             <div>
@@ -38,7 +131,7 @@
                 </div>
                 <p class="font-semibold mb-5">Sesuaikan formulir dengan Transcript Nilai</p>
                 <a href="{{ route('user.form.asesment') }}"
-                    class="text-sm/6 font-semibold text-background bg-primary rounded px-8 py-3 hover:opacity-80">Form
+                    class="text-sm/6 font-semibold text-background rounded px-8 py-3 hover:opacity-80 {{ $asesment == true?'bg-green-700' : 'bg-primary' }}">Form
                     Asesment</a>
             </div>
             <div>
@@ -192,67 +285,5 @@
         </div>
     </section>
 
-    {{-- konfirmasi --}}
-    {{-- <div class="fixed bg-background overflow-auto md:top-20 md:left-20 md:right-20 md:bottom-20 top-5 left-5 right-5 bottom-5 z-10 md:p-5 border-1 rounded">
-        <div class="flex justify-center items-center mb-10">
-            <div class="text-2xl p-4 inline-block font-semibold text-text border-b-5 border-secondary"><span
-                    class="text-primary">Konfirmasi</span> RPL</div>
-        </div>
-        <form class="flex flex-col justify-between px-5" action="#" method="POST">
-            <div>
-                <div>
-                    <label class="block text-text font-semibold mb-5">
-                        Pertanyaan
-                    </label>
-                    <div class="mb-4">
-                        <label class="block text-text font-semibold mb-2" for="q1">
-                            Apakah kamu sudah pernah membuat aplikasi dengan laravel ?
-                        </label>
-                        <input
-                            class="shadow appearance-none border-2 rounded w-full py-3 px-3 text-gray-500 leading-tight focus:outline-none focus:shadow-outline"
-                            id="q1" type="text" name="q1">
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-text font-semibold mb-2" for="q2">
-                            Apakah kamu menguasai laravel ?
-                        </label>
-                        <input
-                            class="shadow appearance-none border-2 rounded w-full py-3 px-3 text-gray-500 leading-tight focus:outline-none focus:shadow-outline"
-                            id="q2" type="text" name="q2">
-                    </div>
 
-                </div>
-            </div>
-            <div class="flex items-start gap-3 mb-5">
-                <input type="checkbox" name="konformasi" class="size-5">
-                <div>
-                    <p class="block text-text font-semibold  text-xs">
-                        SAYA TELAH MEMBACA DAN MENGISI FORMULIR PENDAFTARAN UNTUK MENGIKUTI PERKULIAHAN MELALUI PROGRAM
-                        RPL DI POLITEKNIK NEGERI BALI DENGAN BAIK, DAN SAYA MENYATAKAN:
-                    </p>
-                    <ul class="list-decimal text-xs ms-5">
-                        <li>Semua informasi yang saya tuliskan adalah sepenuhnya benar dan saya bertanggungjawab atas
-                            seluruh data dalam formulir ini.</li>
-                        <li>Saya memberikan ijin kepada pihak pengelola program RPL, untuk melakukan pemeriksaan
-                            kebenaran informasi yang saya berikan dalam formulir aplikasi ini kepada seluruh pihak yang
-                            terkait dengan jenjang akademik sebelumnya dan kepada perusahaan tempat saya bekerja
-                            sebelumnya dan atau saat ini saya bekerja.</li>
-                        <li>Saya bersedia melengkapi berkas yang dibutuhkan untuk pelaksanaan proses credit transfer dan
-                            atau asesmen pengalaman kerja.</li>
-                        <li>Saya akan mengikuti proses asesmen sesuai dengan kesepakatan waktu yang ditetapkan dan saya
-                            akan melunasi biaya pendaftaran setelah pengisian aplikasi ini selesai.</li>
-                        <li>Saya akan mentaati seluruh hal yang tercantum dalam peraturan akademik dan hal-hal terkait
-                            administrasi selama saya mengikuti perkuliahan di PNB.</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="grid gap-2">
-                <button
-                    class="text-sm/6 font-semibold text-background bg-primary rounded px-8 py-3 hover:opacity-80 w-full"
-                    type="submit">Kirim</button>
-                <a href="#"
-                    class="text-sm/6 font-semibold text-text bg-background rounded px-8 py-3 hover:opacity-80 text-center block">Batal</a>
-            </div>
-        </form>
-    </div> --}}
 </x-layout-user>
