@@ -17,7 +17,8 @@ return new class extends Migration
             $table->foreignId('user_id')->unique()->constrained('users')->onDelete('cascade');
             $table->string('nama_lengkap');
             $table->date('tgl_lahir')->nullable();
-            $table->string('jenis_kelamin', 15)->nullable();
+            $table->string('tempat_lahir')->nullable();
+            $table->enum('jenis_kelamin', ['laki-laki', 'perempuan'])->default('laki-laki');
             $table->string('email', 100)->unique();
             $table->string('hp', 20)->nullable();
             $table->string('tlp', 20)->nullable();
@@ -26,12 +27,13 @@ return new class extends Migration
             $table->string('provinsi', 100)->nullable();
             $table->string('kode_pos', 10)->nullable();
             $table->string('foto')->nullable();
-            $table->string('sumber_biaya_pen', 100)->nullable();
+            $table->string('cv')->nullable();
+            $table->string('sumber_biaya_pendidikan', 100)->nullable();
             $table->string('nama_ibu')->nullable();
             $table->string('pekerjaan_ibu', 100)->nullable();
             $table->string('nama_ayah')->nullable();
             $table->string('pekerjaan_ayah', 100)->nullable();
-            $table->integer('status')->nullable();
+            $table->enum('status', ['prosess', 'sukses','pending','gagal'])->default('pending');
             $table->timestamps();
         });
     }

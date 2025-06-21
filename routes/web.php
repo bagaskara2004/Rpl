@@ -21,10 +21,11 @@ Route::middleware('guest')->group(function () {
 });
 Route::middleware([UserOnly::class])->group(function () {
     Route::get('/rpl', [RplController::class, 'index'])->name('user.rpl');
+    Route::match(['get', 'post','put'], '/form/datadiri', [RplController::class, 'datadiri'])->name('user.form.datadiri');
+    
     Route::view('/rpl/diproses', 'user/diproses');
     Route::view('/rpl/diterima', 'user/diterima');
     Route::view('/rpl/ditolak', 'user/ditolak');
-    Route::view('/form/datadiri', 'user/form-datadiri')->name('user.form.datadiri');
     Route::view('/form/pendidikan', 'user/form-pendidikan')->name('user.form.pendidikan');
     Route::view('/form/asesment', 'user/form-asesment')->name('user.form.asesment');
     Route::view('/form/pekerjaan', 'user/form-pekerjaan')->name('user.form.pekerjaan');
