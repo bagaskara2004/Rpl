@@ -72,7 +72,7 @@ class RplController extends Controller
         if ($request->isMethod('put')) {
             $data = $request->validate([
                 'nama_lengkap' => 'required|string|max:255',
-                'email' => 'required|email|unique:users,email',
+                'email' => 'required|email|unique:users,email,' . Auth::id(),
                 'alamat' => 'required|min:5|max:255',
                 'provinsi' => 'required|min:3|max:255',
                 'kab_kota' => 'required|min:3|max:255',
@@ -116,5 +116,76 @@ class RplController extends Controller
             return redirect()->to('/rpl')->with('sukses', 'Form datadiri berhasil disimpan');
         }
         return redirect()->to('/rpl')->with('gagal', 'Form datadiri gagal disimpan');
+    }
+
+    public function pendidikan(Request $request)
+    {
+        if ($request->isMethod('get')) {
+            return view(
+                'user.form-pendidikan',
+                [
+                    'data' => Pendidikan::where('user_id', Auth::id())->first()
+                ]
+            );
+        }
+
+        if ($request->isMethod('post')) {
+            $data = $request->validate([
+                'nama_perguruan' => 'required|string|max:255',
+                'pembimbing1' => 'required|string|max:255',
+                'prodi' => 'required|string|max:255',
+                'judul_ta' => 'required|string|max:255',
+                'tahun_lulus' => 'required',
+                'tahun_masuk' => 'required',
+                'ipk' => 'required|numeric',
+                'nim' => 'required|min_digits:10|max_digits:11|numeric',
+                'jurusan' => 'required|string|max:255',
+                'jenjang_pendidikan' => 'required|string|max:255',
+                'ijasah' => 'required|mimes:pdf',
+                'transkrip' => 'required|mimes:pdf',
+            ]);
+        }
+        if ($request->isMethod('put')) {
+            $data = $request->validate([
+                'nama_perguruan' => 'required|string|max:255',
+                'pembimbing1' => 'required|string|max:255',
+                'prodi' => 'required|string|max:255',
+                'judul_ta' => 'required|string|max:255',
+                'tahun_lulus' => 'required',
+                'tahun_masuk' => 'required',
+                'ipk' => 'required|numeric',
+                'nim' => 'required|min_digits:10|max_digits:11|numeric',
+                'jurusan' => 'required|string|max:255',
+                'jenjang_pendidikan' => 'required|string|max:255',
+                'ijasah' => 'mimes:pdf',
+                'transkrip' => 'mimes:pdf',
+            ]);
+            if ($request->file('ijasah')) {
+                $pathIjasah = Pendidikan::where('user_id', Auth::id())->value('ijasah');
+                Storage::disk('public')->delete($pathIjasah);
+            }
+            if ($request->file('transkrip')) {
+                $pathTranskrip = Pendidikan::where('user_id', Auth::id())->value('transkrip');
+                Storage::disk('public')->delete($pathTranskrip);
+            }
+        }
+        $data['user_id'] = Auth::id();
+
+        if ($request->file('ijasah')) {
+            $ijasah = $request->file('ijasah');
+            $pathIjasah = $ijasah->store('ijasah', 'public');
+            $data['ijasah'] = $pathIjasah;
+        }
+        if ($request->file('transkrip')) {
+            $transkrip = $request->file('transkrip');
+            $pathTranskrip = $transkrip->store('transkrip', 'public');
+            $data['transkrip'] = $pathTranskrip;
+        }
+
+        $save = Pendidikan::updateOrCreate(['user_id' => $data['user_id']], $data);
+        if ($save) {
+            return redirect()->to('/rpl')->with('sukses', 'Form pendidikan berhasil disimpan');
+        }
+        return redirect()->to('/rpl')->with('gagal', 'Form pendidikan gagal disimpan');
     }
 }

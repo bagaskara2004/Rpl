@@ -14,14 +14,18 @@ return new class extends Migration
         Schema::create('pendidikan', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->unique()->constrained('users')->onDelete('cascade');
-            $table->string('pembimbing1')->nullable();
-            $table->string('prodi', 100)->nullable();
-            $table->text('judul_ta')->nullable();
-            $table->year('tahun_lulus')->nullable();
-            $table->decimal('ipk', 3, 2)->nullable();
+            $table->string('nama_perguruan')->nullable();
             $table->string('nim', 20)->unique()->nullable();
-            $table->string('jurusan', 100)->nullable();
             $table->string('jenjang_pendidikan', 50)->nullable();
+            $table->string('jurusan', 100)->nullable();
+            $table->string('prodi', 100)->nullable();
+            $table->date('tahun_masuk')->nullable();
+            $table->date('tahun_lulus')->nullable();
+            $table->decimal('ipk', 3, 2)->nullable();
+            $table->text('judul_ta')->nullable();
+            $table->string('pembimbing1')->nullable();
+            $table->string('ijasah')->nullable();
+            $table->string('transkrip')->nullable();
             $table->timestamps();
         });
     }
