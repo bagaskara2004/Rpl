@@ -35,10 +35,10 @@ class LoginController extends Controller
                 return redirect()->to('/')->with('sukses', 'Kamu Berhasil Login');
             }
             if ($user->role_id == 2) {
-                return redirect()->to('/assesor');
+                return redirect()->to('/assesor/dashboard')->with('sukses', 'Selamat datang Assessor!');
             }
             if ($user->role_id == 3) {
-                return redirect()->to('/admin');
+                return redirect()->to('/admin/dashboard')->with('sukses', 'Selamat datang Admin!');
             }
             if ($user->role_id == 4) {
                 return redirect()->to('/dosen');

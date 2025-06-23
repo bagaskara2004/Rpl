@@ -45,7 +45,7 @@
     </div>
     <!-- Menu -->
     <nav class="flex-1 flex flex-col gap-1 px-4">
-        <a href="{}"
+        <a href="{{ route('assesor.dashboard') }}"
             class="flex items-center gap-3 px-4 py-3 rounded-lg transition font-semibold text-sm font-nunito hover:bg-indigo-50 text-gray-700">
             <!-- Dashboard icon from icons8 -->
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 50 50">
@@ -53,19 +53,19 @@
             </svg>
             <span class="sidebar-label">Dashboard</span>
         </a>
-        <a href="{{ route('assesor.index') }}"
+        <a href="{{ route('assesor.pendaftar') }}"
             class="flex items-center gap-3 px-4 py-3 rounded-lg transition font-semibold text-sm font-nunito hover:bg-indigo-50 text-gray-700">
             <!-- Registration icon from icons8 -->
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 64 64">
                 <path stroke="#000" stroke-miterlimit="10" stroke-width="2" d="M 33 7 C 26.074181 7 21.060547 11.765239 21.060547 18.048828 C 21.060547 27.768298 25.091401 33.02136 29.759766 35.857422 C 27.530237 36.656039 25.17395 37.385277 22.556641 38.029297 C 19.308768 38.828621 16.229176 40.285356 13.90625 42.304688 C 11.583324 44.324019 10 46.967322 10 50 L 10 56 A 1.0001 1.0001 0 0 0 11 57 L 48.125 57 A 1.0001 1.0001 0 1 0 48.125 55 L 12 55 L 12 50 C 12 47.657678 13.199473 45.568122 15.216797 43.814453 C 17.23412 42.060784 20.052076 40.704379 23.033203 39.970703 C 26.355504 39.153212 29.442682 38.24694 32.234375 37.109375 C 36.566042 38.994639 40.945772 39.435384 42.716797 39.958984 C 45.386254 40.747818 47.983027 42.123804 49.878906 44.103516 C 51.774786 46.083227 53 48.637519 53 52 L 53 56 A 1.0001 1.0001 0 1 0 55 56 L 55 52 C 55 48.139481 53.527339 45.021242 51.324219 42.720703 C 49.121098 40.420165 46.217746 38.908182 43.283203 38.041016 C 41.305925 37.456436 38.036406 37.142011 34.675781 35.996094 C 36.081433 35.283807 37.413518 34.506214 38.587891 33.578125 C 42.576044 30.426346 45 25.787643 45 19 C 45 19 45.013788 16.041248 43.519531 13.052734 C 42.025274 10.06422 38.833333 7 33 7 z M 33 9 C 38.166667 9 40.474726 11.43578 41.730469 13.947266 C 42.986212 16.458752 43 19 43 19 C 43 25.329357 40.915003 29.190544 37.347656 32.009766 C 35.901639 33.152531 34.134119 34.078421 32.208984 34.916016 C 31.894499 34.762762 31.571556 34.671986 31.261719 34.498047 C 26.861206 32.027654 23.060547 27.593013 23.060547 18.048828 C 23.060547 12.794418 26.953819 9 33 9 z">
                     </pathc>
             </svg>
-            <span class="sidebar-label">Applicant</span>
+            <span class="sidebar-label">Pendaftar</span>
         </a>
-    </nav>
+        
     <!-- Logout -->
-    <div class="mt-auto px-4 py-6">
-        <form method="POST" action="">
+    <div class="mt-auto px-4 py-6 flex justify-center">
+        <form method="POST" action="{{ route('auth.logout') }}" class="w-full">
             @csrf
             <button type="submit"
                 class="flex justify-center items-center gap-3 text-red-600 hover:bg-red-50 px-4 py-3 rounded-lg w-full transition font-medium text-base">

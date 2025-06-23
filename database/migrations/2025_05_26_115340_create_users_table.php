@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('user_name')->unique();
             $table->string('email')->unique();
             $table->string('password');
+            $table->boolean('block')->default(false);
             $table->string('foto')->nullable();
             $table->rememberToken();
             $table->timestamps();
