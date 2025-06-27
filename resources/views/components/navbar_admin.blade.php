@@ -10,7 +10,7 @@
 
         <!-- Logo/Title (optional) -->
         <div class="hidden sm:block">
-            <span class="text-sm font-medium text-gray-700">Assessor Panel</span>
+            <span class="text-sm font-medium text-gray-700">Admin Panel</span>
         </div>
     </div>
 
@@ -18,25 +18,25 @@
     <div class="flex items-center space-x-2 md:space-x-3">
         <!-- Online Status -->
         <div class="hidden sm:block">
-            <div class="flex items-center space-x-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-purple-50 rounded-lg">
+            <div class="flex items-center space-x-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-blue-50 rounded-lg">
                 <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                <span class="text-xs sm:text-sm text-purple-700 font-medium">Online</span>
+                <span class="text-xs sm:text-sm text-blue-700 font-medium">Online</span>
             </div>
         </div>
 
         <!-- Profile Photo -->
         @if(Auth::user()->foto)
-        <img src="{{ asset('storage/profile_photos/' . Auth::user()->foto) }}" alt="Profile" class="w-8 h-8 md:w-10 md:h-10 rounded-full object-cover border-2 border-purple-200 shadow-sm">
+        <img src="{{ asset('storage/profile_photos/' . Auth::user()->foto) }}" alt="Profile" class="w-8 h-8 md:w-10 md:h-10 rounded-full object-cover border-2 border-blue-200 shadow-sm">
         @else
-        <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gradient-to-r from-purple-400 to-purple-600 flex items-center justify-center border-2 border-purple-200 shadow-sm">
-            <span class="text-white font-semibold text-xs sm:text-sm">{{ strtoupper(substr(Auth::user()->user_name, 0, 1)) }}</span>
+        <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gradient-to-r from-blue-400 to-blue-600 flex items-center justify-center border-2 border-blue-200 shadow-sm">
+            <span class="text-white font-semibold text-xs sm:text-sm">{{ strtoupper(substr(Auth::user()->user_name ?? Auth::user()->name ?? 'A', 0, 1)) }}</span>
         </div>
         @endif
 
         <!-- Profile Info -->
         <div class="flex flex-col min-w-0">
-            <a href="{{ route('assesor.profile') }}" class="font-semibold text-gray-800 hover:text-purple-600 transition text-xs sm:text-[14px] font-nunito truncate max-w-20 sm:max-w-32 md:max-w-none">{{ Auth::user()->user_name ?? 'Assessor' }}</a>
-            <span class="transition font-normal text-[10px] sm:text-[10px] font-nunito text-gray-500">Assessor</span>
+            <a href="{{ route('admin.profile') }}" class="font-semibold text-gray-800 hover:text-blue-600 transition text-xs sm:text-[14px] font-nunito truncate max-w-20 sm:max-w-32 md:max-w-none">{{ Auth::user()->user_name ?? Auth::user()->name ?? 'Admin' }}</a>
+            <span class="transition font-normal text-[10px] sm:text-[10px] font-nunito text-gray-500">Administrator</span>
         </div>
     </div>
 </nav>
