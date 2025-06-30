@@ -16,8 +16,38 @@ class UserSeeder extends Seeder
     {
          DB::table('users')->insert([
             [
-                'user_name' => 'Test User',
-                'email' => 'test@example.com',
+                'user_name' => 'Test User1',
+                'email' => 'test1@example.com',
+                'password' => bcrypt('password'),
+                'role_id' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
+        DB::table('users')->insert([
+            [
+                'user_name' => 'Test User2',
+                'email' => 'test2@example.com',
+                'password' => bcrypt('password'),
+                'role_id' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
+        DB::table('users')->insert([
+            [
+                'user_name' => 'Test User3',
+                'email' => 'test3@example.com',
+                'password' => bcrypt('password'),
+                'role_id' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
+        DB::table('users')->insert([
+            [
+                'user_name' => 'Test User4',
+                'email' => 'test4@example.com',
                 'password' => bcrypt('password'),
                 'role_id' => 1,
                 'created_at' => now(),

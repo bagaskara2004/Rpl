@@ -52,4 +52,25 @@ class User extends Authenticatable
     {
         return $this->hasOne(DataDiri::class, 'user_id');
     }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function transkripNilai()
+    {
+        return $this->hasMany(TranskripNilai::class);
+    }
+
+    public function assessments()
+    {
+        return $this->hasMany(Assessment::class);
+    }
+
+    // Accessor for name attribute to maintain compatibility
+    public function getNameAttribute()
+    {
+        return $this->user_name;
+    }
 }

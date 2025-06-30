@@ -26,8 +26,9 @@ class DatabaseSeeder extends Seeder
         $this->call(AssessmentSeeder::class);
         $this->call(KurikulumSeeder::class);
         $this->call(TranskripNilaiSeeder::class);
-
-
-
+        $this->call(KelasSeeder::class);
+        $this->call(MataKuliahSeeder::class);
+        $this->call(PertemuanSeeder::class);
+        $this->call(AbsensiSeeder::class);
     }
 }

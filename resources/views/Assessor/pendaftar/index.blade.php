@@ -2,9 +2,9 @@
     @vite('resources/css/app.css')
     @vite('resources/css/pendaftar-custom.css')
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
+ -->
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
@@ -54,15 +54,15 @@
             <thead>
                 <tr class="bg-gray-50">
                     <th class="py-3 px-4 text-left font-bold text-gray-700 border-b">No</th>
-                    <th class="py-3 px-4 text-left font-bold text-gray-700 border-b">NAME</th>
-                    <th class="py-3 px-4 text-left font-bold text-gray-700 border-b">MAJOR</th>
-                    <th class="py-3 px-4 text-center font-bold text-gray-700 border-b">ACTION</th>
-                    <th class="py-3 px-4 text-center font-bold text-gray-700 border-b">ACTION</th>
+                    <th class="py-3 px-4 text-left font-bold text-gray-700 border-b">NAMA</th>
+                    <th class="py-3 px-4 text-left font-bold text-gray-700 border-b">PENDIDIKAN</th>
+                    <th class="py-3 px-4 text-center font-bold text-gray-700 border-b">EVALUASI</th>
+                    <th class="py-3 px-4 text-center font-bold text-gray-700 border-b">AKSI</th>
                 </tr>
             </thead>
             <tbody id="pendaftar-tbody">
                 <tr>
-                    <td colspan="5" class="text-center py-4">Loading...</td>
+                    <td colspan="7" class="text-center py-4">Loading...</td>
                 </tr>
             </tbody>
         </table>
@@ -70,273 +70,157 @@
 
     <div id="modal-container"></div>
 
+    <!-- Add missing search input for the filter functionality -->
+    <style>
+        /* Hide the search input that doesn't have a corresponding element */
+        .hidden-search {
+            display: none;
+        }
+    </style>
+    <input type="text" id="search-input" class="hidden-search">
+    <select id="filter-status" class="hidden-search">
+        <option value="">Semua</option>
+        <option value="pending">Menunggu</option>
+    </select>
+    <button id="reset-filter" class="hidden-search">Reset</button>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const tbody = document.getElementById('pendaftar-tbody');
-            const modalContainer = document.getElementById('modal-container');
-            // Tampilkan loading spinner saat data awal dimuat
-            tbody.innerHTML = `<tr><td colspan="5">@include('components.loading')</td></tr>`;
-            fetch("{{ route('assesor.pendaftar.data') }}")
-                .then(response => response.json())
-                .then(data => renderTable(data));
+            let allPendaftar = [];
+            let filteredPendaftar = [];
 
-            function renderTable(data) {
-                const tbody = document.getElementById('pendaftar-tbody');
-                const modalContainer = document.getElementById('modal-container');
-                tbody.innerHTML = '';
-                modalContainer.innerHTML = '';
-                if (!data.length) {
-                    tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4">Tidak ada data</td></tr>';
-                    return;
-                }
-                data.forEach((diri, i) => {
-                    tbody.innerHTML += `
-        <tr class="border-b hover:bg-gray-50 transition">
-            <td class="py-3 px-4">${i+1}</td>
-            <td class="py-3 px-4">${diri.nama_lengkap}</td>
-            <td class="py-3 px-4">Jurusan ${diri.pendidikan?.jurusan ?? '-'}</td>
-            <td class="py-3 px-4 text-center">
-                <div class="inline-flex gap-2">
-                    <button class="w-8 h-8 flex items-center justify-center rounded bg-gray-100 border border-gray-200">
-                        <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path d="M5 13l4 4L19 7" />
-                        </svg>
-                    </button>
-                    <button class="w-8 h-8 flex items-center justify-center rounded bg-gray-100 border border-gray-200">
-                        <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-            </td>
-            <td class="py-3 px-4 text-center">
-                <div class="inline-flex gap-2">
-                    <button class="px-4 py-1 rounded border border-primary text-primary bg-white hover:bg-primary hover:text-white text-xs font-semibold" data-bs-toggle="modal" data-bs-target="#modalDataDiri${diri.id}" onclick="loadModalData(${diri.id})">Data</button>
-                    <button class="px-4 py-1 rounded border border-yellow-400 text-yellow-700 bg-white hover:bg-yellow-50 text-xs font-semibold" data-bs-toggle="modal" data-bs-target="#modalAsesmen${diri.id}" onclick="loadModalAsesmen(${diri.id})">Asesmen</button>
-                    <button class="px-4 py-1 rounded border border-purple-600 text-purple-700 bg-white hover:bg-purple-50 text-xs font-semibold" onclick="loadTransferNilai(${diri.id})">Transfer</button>
-                </div>
-            </td>
-        </tr>
-        `;
-                    // Modal skeleton (akan diisi AJAX saat tombol Data diklik)
-                    modalContainer.innerHTML += `
-    <div class="modal fade" id="modalDataDiri${diri.id}" tabindex="-1" aria-labelledby="modalDataDiriLabel${diri.id}" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content" id="modal-content-${diri.id}">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalDataDiriLabel${diri.id}">Detail Data Diri</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center text-muted">Loading...</div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="modalAsesmen${diri.id}" tabindex="-1" aria-labelledby="modalAsesmenLabel${diri.id}" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content" id="modal-asesmen-content-${diri.id}">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalAsesmenLabel${diri.id}">Asesmen</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center text-muted">Loading...</div>
-            </div>
-        </div>
-    </div>
-`;
+            // Setup event listeners
+            setupEventListeners();
+
+            // Load initial data
+            loadPendaftarData();
+
+            function setupEventListeners() {
+                // Search functionality
+                document.getElementById('search-input').addEventListener('input', filterData);
+
+                // Filter functionality
+                document.getElementById('filter-status').addEventListener('change', filterData);
+
+                // Reset filter
+                document.getElementById('reset-filter').addEventListener('click', function() {
+                    document.getElementById('search-input').value = '';
+                    document.getElementById('filter-status').value = '';
+                    filterData();
                 });
             }
-        });
 
-        window.loadModalData = function(id) {
-            const modalContent = document.getElementById('modal-content-' + id);
-            modalContent.innerHTML = `@include('components.loading')`;
-            fetch(`/assesor/modal/pendaftar/${id}`)
-                .then(res => res.json())
-                .then(diri => {
-                    modalContent.innerHTML = `
-                <div class="modal-header position-relative align-items-start flex-wrap">
-                    <div class="flex-grow-1">
-                        <h5 class="modal-title" id="modalDataDiriLabel${diri.id}">Detail Data Diri</h5>
+            function loadPendaftarData() {
+                tbody.innerHTML = `<tr><td colspan="7" class="px-6 py-12 text-center">
+                    <div class="flex items-center justify-center">
+                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+                        <span class="ml-2 text-gray-500">Memuat data...</span>
                     </div>
-                    ${diri.foto ? `<div class='d-none d-md-block' style='margin-left:auto;'><img src='/assets/${diri.foto}' alt='Foto' style='width:80px;height:80px;object-fit:cover;border-radius:50%;border:3px solid #eee;background:#fff;'/></div>` : ''}
-                    <button type="button" class="btn-close ms-2" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row mb-2">
-                        ${diri.foto ? `<div class='col-12 d-block d-md-none text-center mb-3'><img src='/assets/${diri.foto}' alt='Foto' style='width:80px;height:80px;object-fit:cover;border-radius:50%;border:3px solid #eee;background:#fff;'/></div>` : ''}
-                        <div class="col-md-6 mb-2"><strong>Nama Lengkap:</strong> ${diri.nama_lengkap ?? '-'}</div>
-                        <div class="col-md-6 mb-2"><strong>Email:</strong> ${diri.email ?? '-'}</div>
-                        <div class="col-md-6 mb-2"><strong>NIK:</strong> ${diri.nik ?? '-'}</div>
-                        <div class="col-md-6 mb-2"><strong>Tempat Lahir:</strong> ${diri.tempat_lahir ?? '-'}</div>
-                        <div class="col-md-6 mb-2"><strong>Tanggal Lahir:</strong> ${diri.tgl_lahir ?? '-'}</div>
-                        <div class="col-md-6 mb-2"><strong>Jenis Kelamin:</strong> ${diri.jenis_kelamin ?? '-'}</div>
-                        <div class="col-md-6 mb-2"><strong>No HP:</strong> ${diri.hp ?? '-'}</div>
-                        <div class="col-md-6 mb-2"><strong>No Telepon:</strong> ${diri.tlp ?? '-'}</div>
-                        <div class="col-md-6 mb-2"><strong>Alamat:</strong> ${diri.alamat ?? '-'}</div>
-                        <div class="col-md-6 mb-2"><strong>Kab/Kota:</strong> ${diri.kab_kota ?? '-'}</div>
-                        <div class="col-md-6 mb-2"><strong>Provinsi:</strong> ${diri.provinsi ?? '-'}</div>
-                        <div class="col-md-6 mb-2"><strong>Kode Pos:</strong> ${diri.kode_pos ?? '-'}</div>
-                        <div class="col-md-6 mb-2"><strong>Sumber Biaya Pendidikan:</strong> ${diri.sumber_biaya_pen ?? '-'}</div>
-                        <div class="col-md-6 mb-2"><strong>Nama Ibu:</strong> ${diri.nama_ibu ?? '-'}</div>
-                        <div class="col-md-6 mb-2"><strong>Pekerjaan Ibu:</strong> ${diri.pekerjaan_ibu ?? '-'}</div>
-                        <div class="col-md-6 mb-2"><strong>Nama Ayah:</strong> ${diri.nama_ayah ?? '-'}</div>
-                        <div class="col-md-6 mb-2"><strong>Pekerjaan Ayah:</strong> ${diri.pekerjaan_ayah ?? '-'}</div>
-                    </div>
-                    <hr>
-                    <h6 class="fw-bold mt-3">Pendidikan</h6>
-                    <div class="row mb-2">
-                        <div class="col-md-6 mb-2"><strong>Prodi:</strong> ${diri.pendidikan?.prodi ?? '-'}</div>
-                        <div class="col-md-6 mb-2"><strong>Jurusan:</strong> ${diri.pendidikan?.jurusan ?? '-'}</div>
-                        <div class="col-md-6 mb-2"><strong>Pembimbing 1:</strong> ${diri.pendidikan?.pembimbing1 ?? '-'}</div>
-                        <div class="col-md-6 mb-2"><strong>Judul TA:</strong> ${diri.pendidikan?.judul_ta ?? '-'}</div>
-                        <div class="col-md-6 mb-2"><strong>Tahun Lulus:</strong> ${diri.pendidikan?.tahun_lulus ?? '-'}</div>
-                        <div class="col-md-6 mb-2"><strong>IPK:</strong> ${diri.pendidikan?.ipk ?? '-'}</div>
-                        <div class="col-md-6 mb-2"><strong>NIM:</strong> ${diri.pendidikan?.nim ?? '-'}</div>
-                        <div class="col-md-6 mb-2"><strong>Jenjang Pendidikan:</strong> ${diri.pendidikan?.jenjang_pendidikan ?? '-'}</div>
-                    </div>
-                    <hr>
-                    <h6 class="fw-bold mt-3">Pengalaman Kerja</h6>
-                    <div>
-                        ${(diri.pengalaman_kerja && diri.pengalaman_kerja.length > 0) ? `
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-sm align-middle">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Nama Perusahaan</th>
-                                            <th>Alamat</th>
-                                            <th>Kota/Kab</th>
-                                            <th>Provinsi</th>
-                                            <th>Negara</th>
-                                            <th>Sejak</th>
-                                            <th>Sampai</th>
-                                            <th>Nama Staf</th>
-                                            <th>Posisi Staf</th>
-                                            <th>Telp Staf</th>
-                                            <th>Email Staf</th>
-                                            <th>Fax Staf</th>
-                                            <th>Dokumen</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        ${diri.pengalaman_kerja.map((kerja, idx) => `
-                                            <tr>
-                                                <td>${idx+1}</td>
-                                                <td>${kerja.nama_perusahaan ?? '-'}</td>
-                                                <td>${kerja.alamat_perusahaan ?? '-'}</td>
-                                                <td>${kerja.kota_kab_perusahaan ?? '-'}</td>
-                                                <td>${kerja.provinsi_perusahaan ?? '-'}</td>
-                                                <td>${kerja.negara_perusahaan ?? '-'}</td>
-                                                <td>${kerja.sejak ?? '-'}</td>
-                                                <td>${kerja.sampai ?? '-'}</td>
-                                                <td>${kerja.nama_staf ?? '-'}</td>
-                                                <td>${kerja.posisi_staf ?? '-'}</td>
-                                                <td>${kerja.tlp_staf ?? '-'}</td>
-                                                <td>${kerja.email_staf ?? '-'}</td>
-                                                <td>${kerja.fax_staf ?? '-'}</td>
-                                                <td>${kerja.dokumen_pendukung ? `<a href="/assets/${kerja.dokumen_pendukung}" target="_blank">Lihat</a>` : '-'}</td>
-                                            </tr>
-                                        `).join('')}
-                                    </tbody>
-                                </table>
-                            </div>
-                        ` : '<div class="text-muted">Tidak ada pengalaman kerja</div>'}
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                </div>
-            `;
-                });
-        }
+                </td></tr>`;
 
-        window.loadModalAsesmen = function(id) {
-            const modalContent = document.getElementById('modal-asesmen-content-' + id);
-            modalContent.innerHTML = `@include('components.loading')`;
-            fetch(`/assesor/modal/assessment/${id}`)
-                .then(res => res.json())
-                .then(data => {
-                    // data: { pertanyaan: [...], assessment: [...] }
-                    let rows = '';
-                    data.pertanyaan.forEach((q, idx) => {
-                        // Cari jawaban user untuk pertanyaan ini
-                        const jawabanObj = data.assessment.find(a => a.pertanyaan_id === q.id);
-                        let yesChecked = '',
-                            noChecked = '';
-                        if (jawabanObj) {
-                            yesChecked = jawabanObj.jawaban === 0 ? 'checked' : '';
-                            noChecked = jawabanObj.jawaban === 1 ? 'checked' : '';
-                        }
-                        rows += `
-                            <tr>
-                                <td>${idx+1}.</td>
-                                <td>${q.pertanyaan}</td>
-                                <td class="text-center"><input type="checkbox" disabled ${yesChecked}></td>
-                                <td class="text-center"><input type="checkbox" disabled ${noChecked}></td>
-                            </tr>
-                        `;
+                fetch("{{ route('assesor.pendaftar.data') }}")
+                    .then(response => response.json()).then(data => {
+                        allPendaftar = data;
+                        filteredPendaftar = data;
+                        // updateStatistics(); // Remove this since we don't have statistics cards in this view
+                        renderTable();
+                    })
+                    .catch(error => {
+                        console.error('Error loading data:', error);
+                        tbody.innerHTML = '<tr><td colspan="7" class="px-6 py-12 text-center text-red-500">Error memuat data</td></tr>';
                     });
-                    modalContent.innerHTML = `
-                        <div class="modal-header">
-                            <h5 class="modal-title">Asesmen</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th style="width:40px">No.</th>
-                                            <th>Question</th>
-                                            <th colspan="2" class="text-center">Answer</th>
-                                        </tr>
-                                        <tr>
-                                            <th></th>
-                                            <th></th>
-                                            <th class="text-center">Yes</th>
-                                            <th class="text-center">No</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        ${rows}
-                                    </tbody>
-                                </table>
+            }
+
+            function filterData() {
+                const searchTerm = document.getElementById('search-input').value.toLowerCase();
+                const statusFilter = document.getElementById('filter-status').value;
+
+                filteredPendaftar = allPendaftar.filter(pendaftar => {
+                    const matchesSearch = pendaftar.nama_lengkap.toLowerCase().includes(searchTerm) ||
+                        (pendaftar.pendidikan?.jurusan || '').toLowerCase().includes(searchTerm);
+
+                    // For now, all are pending since no keputusan exists yet
+                    const matchesStatus = statusFilter === '' || statusFilter === 'pending';
+
+                    return matchesSearch && matchesStatus;
+                });
+
+                renderTable();
+            }
+
+            function renderTable() {
+                if (!filteredPendaftar.length) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="px-6 py-12 text-center text-gray-500">Tidak ada data pendaftar</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = filteredPendaftar.map((diri, i) => `
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${i + 1}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 bg-gradient-to-r from-purple-400 to-purple-600 rounded-full flex items-center justify-center">
+                                    <span class="text-white font-semibold text-sm">${diri.nama_lengkap.charAt(0).toUpperCase()}</span>
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900">${diri.nama_lengkap}</div>
+                                    <div class="text-sm text-gray-500">${diri.user?.email || diri.email || 'Email tidak tersedia'}</div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                        </div>
-                    `;
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">${diri.pendidikan?.prodi || 'Belum diisi'}</div>
+                            <div class="text-sm text-gray-500">${diri.pendidikan?.jurusan || 'Jurusan belum diisi'}</div>
+                        </td>
+
+                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                            <div class="flex items-center justify-center space-x-2">
+                                <button class="w-8 h-8 flex items-center justify-center rounded-full bg-green-100 hover:bg-green-200 transition btn-approve" data-userid="${diri.user_id}" title="Setujui">
+                                    <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </button>
+                                <button class="w-8 h-8 flex items-center justify-center rounded-full bg-red-100 hover:bg-red-200 transition btn-reject" data-userid="${diri.user_id}" title="Tolak">
+                                    <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                            <div class="flex items-center justify-center space-x-1">
+                                <a href="/assesor/datadiri/${diri.id}" class="px-3 py-1 bg-purple-600 text-white rounded-md text-xs font-medium hover:bg-purple-700 transition">Data</a>
+                                <a href="/assesor/asesmen/${diri.user_id}" class="px-3 py-1 bg-blue-600 text-white rounded-md text-xs font-medium hover:bg-blue-700 transition">Asesmen</a>
+                                <button onclick="loadTransferNilai(${diri.user_id})" class="px-3 py-1 bg-green-600 text-white rounded-md text-xs font-medium hover:bg-green-700 transition">Transfer</button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            function formatDate(dateString) {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('id-ID', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric'
                 });
-        }
+            }
 
-        window.loadTransferNilai = function(id) {
-            const mainContent = document.querySelector('#main-content main');
-            if (!mainContent) return;
+            // Function untuk Transfer Nilai tetap menggunakan AJAX
+            window.loadTransferNilai = function(id) {
+                const mainContent = document.querySelector('#main-content main');
+                if (!mainContent) return;
 
-            mainContent.innerHTML = `@include('components.loading')`;
+                mainContent.innerHTML = `<div class="flex items-center justify-center min-h-64">
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+                    <span class="ml-3 text-gray-500">Memuat halaman transfer nilai...</span>
+                </div>`;
 
-            fetch(`/assesor/transfer-nilai/${id}?ajax=1`, {
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                })
-                .then(res => res.text())
-                .then(html => {
-                    mainContent.innerHTML = html;
-                    history.pushState({
-                        transferId: id
-                    }, '', `/assesor/transfer-nilai/${id}`);
-                });
-        }
-
-        window.addEventListener('popstate', function(event) {
-            const path = window.location.pathname;
-            const match = path.match(/\/assesor\/transfer-nilai\/(\d+)/);
-            const mainContent = document.querySelector('#main-content main');
-            if (match && mainContent) {
-                mainContent.innerHTML = `@include('components.loading')`;
-                fetch(`/assesor/transfer-nilai/${match[1]}?ajax=1`, {
+                fetch(`/assesor/transfer-nilai/${id}?ajax=1`, {
                         headers: {
                             'X-Requested-With': 'XMLHttpRequest'
                         }
@@ -344,10 +228,150 @@
                     .then(res => res.text())
                     .then(html => {
                         mainContent.innerHTML = html;
+                        history.pushState({
+                            transferId: id
+                        }, '', `/assesor/transfer-nilai/${id}`);
+                    })
+                    .catch(error => {
+                        console.error('Error loading transfer nilai:', error);
+                        mainContent.innerHTML = '<div class="text-center text-red-500 py-8">Error memuat halaman transfer nilai</div>';
                     });
-            } else if (mainContent) {
-                window.location.reload();
             }
+
+            window.addEventListener('popstate', function(event) {
+                const path = window.location.pathname;
+                const match = path.match(/\/assesor\/transfer-nilai\/(\d+)/);
+                const mainContent = document.querySelector('#main-content main');
+                if (match && mainContent) {
+                    mainContent.innerHTML = `<div class="flex items-center justify-center min-h-64">
+                        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+                        <span class="ml-3 text-gray-500">Memuat halaman transfer nilai...</span>
+                    </div>`;
+                    fetch(`/assesor/transfer-nilai/${match[1]}?ajax=1`, {
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
+                            }
+                        })
+                        .then(res => res.text())
+                        .then(html => {
+                            mainContent.innerHTML = html;
+                        });
+                } else if (mainContent) {
+                    window.location.reload();
+                }
+            });
+
+            // Event delegation untuk tombol evaluasi
+            document.addEventListener('click', function(e) {
+                // Approve (centang)
+                if (e.target.closest('.btn-approve')) {
+                    const btn = e.target.closest('.btn-approve');
+                    const userId = btn.dataset.userid;
+                    Swal.fire({
+                        title: 'Setujui Pendaftar?',
+                        text: 'Apakah Anda yakin ingin menyetujui pendaftar ini?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Ya, Setujui',
+                        cancelButtonText: 'Batal',
+                        confirmButtonColor: '#10B981',
+                        cancelButtonColor: '#6B7280'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            fetch('/assesor/keputusan', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                                        'X-Requested-With': 'XMLHttpRequest'
+                                    },
+                                    body: JSON.stringify({
+                                        user_id: userId,
+                                        status: 1,
+                                        catatan: null
+                                    })
+                                })
+                                .then(res => res.json())
+                                .then(data => {
+                                    Swal.fire({
+                                        title: 'Berhasil!',
+                                        text: 'Pendaftar berhasil disetujui.',
+                                        icon: 'success',
+                                        confirmButtonColor: '#10B981'
+                                    }).then(() => window.location.reload());
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                    Swal.fire({
+                                        title: 'Error!',
+                                        text: 'Terjadi kesalahan saat menyetujui pendaftar.',
+                                        icon: 'error',
+                                        confirmButtonColor: '#EF4444'
+                                    });
+                                });
+                        }
+                    });
+                }
+
+                // Reject (silang)
+                if (e.target.closest('.btn-reject')) {
+                    const btn = e.target.closest('.btn-reject');
+                    const userId = btn.dataset.userid;
+                    Swal.fire({
+                        title: 'Tolak Pendaftar',
+                        input: 'textarea',
+                        inputLabel: 'Catatan Penolakan',
+                        inputPlaceholder: 'Masukkan alasan penolakan...',
+                        inputAttributes: {
+                            'aria-label': 'Masukkan alasan penolakan'
+                        },
+                        showCancelButton: true,
+                        confirmButtonText: 'Tolak',
+                        cancelButtonText: 'Batal',
+                        confirmButtonColor: '#EF4444',
+                        cancelButtonColor: '#6B7280',
+                        inputValidator: (value) => {
+                            if (!value) {
+                                return 'Catatan wajib diisi!';
+                            }
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            fetch('/assesor/keputusan', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                                        'X-Requested-With': 'XMLHttpRequest'
+                                    },
+                                    body: JSON.stringify({
+                                        user_id: userId,
+                                        status: 0,
+                                        catatan: result.value
+                                    })
+                                })
+                                .then(res => res.json())
+                                .then(data => {
+                                    Swal.fire({
+                                        title: 'Berhasil!',
+                                        text: 'Pendaftar berhasil ditolak.',
+                                        icon: 'success',
+                                        confirmButtonColor: '#10B981'
+                                    }).then(() => window.location.reload());
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                    Swal.fire({
+                                        title: 'Error!',
+                                        text: 'Terjadi kesalahan saat menolak pendaftar.',
+                                        icon: 'error',
+                                        confirmButtonColor: '#EF4444'
+                                    });
+                                });
+                        }
+                    });
+                }
+            });
         });
     </script>
 </x-layout_assessor>
