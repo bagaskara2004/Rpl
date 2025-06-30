@@ -14,6 +14,14 @@
 
     {{ $slot }}
 
+    @if (session('sukses'))
+        <x-popup-sukses>{{ session('sukses') }}</x-popup-sukses>
+    @endif
+    
+    @if (session('gagal'))
+        <x-popup-gagal>{{ session('gagal') }}</x-popup-gagal>
+    @endif
+
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
 </body>
 

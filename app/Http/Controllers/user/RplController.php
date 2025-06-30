@@ -188,4 +188,37 @@ class RplController extends Controller
         }
         return redirect()->to('/rpl')->with('gagal', 'Form pendidikan gagal disimpan');
     }
+
+    public function asesment(Request $request)
+    {
+        if ($request->isMethod('get')) {
+            return view(
+                'user.form-asesment',
+                [
+                    'asesments' => TranskripNilai::where('user_id', Auth::id())->get()
+                ]
+            );
+        }
+
+        if ($request->isMethod('post')) {
+            $data = $request->validate([
+                'mata_kuliah' => 'required|string|min:3|max:100',
+                'sks' => 'required|numeric|max_digits:3',
+                'nilai_angka' => 'required|numeric',
+                'nilai_huruf' => 'required|string|max:2'
+            ]);
+            $data['user_id'] = Auth::id();
+            TranskripNilai::create($data);
+            return back()->with('sukses','Data berhasil ditambahkan');
+        }
+
+        if ($request->isMethod('delete')) {
+            $data = TranskripNilai::find($request->input('id'));
+            if (!$data || $data->user_id != Auth::id()) {
+                return back()->with('gagal','Data gagal dihapus');
+            }
+            TranskripNilai::destroy($request->input('id'));
+            return back()->with('sukses','Data berhasil dihapus');
+        }
+    }
 }
