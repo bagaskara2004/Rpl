@@ -16,7 +16,7 @@ class MataKuliahSeeder extends Seeder
     {
         // Ambil data dosen (user dengan role_id yang sesuai untuk dosen)
         $dosens = User::whereHas('role', function ($query) {
-            $query->where('role_name', 'LIKE', '%dosen%');
+            $query->where('role', 'LIKE', '%dosen%');
         })->get();
 
         // Jika tidak ada dosen, gunakan user admin sebagai fallback

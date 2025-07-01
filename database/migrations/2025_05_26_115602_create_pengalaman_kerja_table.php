@@ -15,18 +15,19 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('nama_perusahaan');
-            $table->text('alamat_perusahaan')->nullable();
-            $table->string('kota_kab_perusahaan', 100)->nullable();
-            $table->string('provinsi_perusahaan', 100)->nullable();
-            $table->string('negara_perusahaan', 100)->nullable();
+            $table->text('alamat_perusahaan');
+            $table->string('kota_kab_perusahaan', 100);
+            $table->string('provinsi_perusahaan', 100);
+            $table->string('negara_perusahaan', 100);
             $table->date('sejak');
             $table->date('sampai')->nullable();
-            $table->string('dokumen_pendukung')->nullable();
             $table->string('nama_staf', 255)->nullable();
             $table->string('posisi_staf', 100)->nullable();
             $table->string('tlp_staf', 20)->nullable();
             $table->string('email_staf', 100)->nullable();
-            $table->string('fax_staf', 20)->nullable();
+            $table->string('posisi');
+            $table->string('prestasi');
+            $table->integer('durasi')->comment('Durasi dalam bulan')->nullable();
             $table->timestamps();
         });
     }
