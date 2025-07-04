@@ -8,21 +8,13 @@
             </svg>
         </button>
 
-        <!-- Logo/Title (optional) -->
-        <div class="hidden sm:block">
-            <span class="text-sm font-medium text-gray-700">Admin Panel</span>
-        </div>
+       
     </div>
 
     <!-- Right side - Profile Section -->
     <div class="flex items-center space-x-2 md:space-x-3">
         <!-- Online Status -->
-        <div class="hidden sm:block">
-            <div class="flex items-center space-x-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-blue-50 rounded-lg">
-                <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                <span class="text-xs sm:text-sm text-blue-700 font-medium">Online</span>
-            </div>
-        </div>
+        
 
         <!-- Profile Photo -->
         @if(Auth::user()->foto)

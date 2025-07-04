@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('admin_id');
             $table->string('judul', 255)->nullable();
-            $table->string('slug', 255)->nullable();
+            $table->string('slug', 255)->unique();
             $table->text('deskripsi')->nullable();
             $table->string('foto', 255)->nullable();
             $table->timestamps();

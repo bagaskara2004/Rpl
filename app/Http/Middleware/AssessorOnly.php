@@ -16,13 +16,13 @@ class AssessorOnly
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Cek apakah user sudah login
+       
         if (!Auth::check()) {
             return redirect('/login')->with('error', 'Silakan login terlebih dahulu');
         }
 
-        // Cek apakah user adalah assessor (role_id = 2 berdasarkan LoginController)
-        if (Auth::user()->role_id != 2) {
+        
+        if (Auth::user()->role_id != 2 && Auth::user()->role_id != 5) {
             return redirect('/login')->with('error', 'Akses ditolak. Anda tidak memiliki izin assessor');
         }
 

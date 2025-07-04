@@ -112,6 +112,17 @@ class AssessorController extends Controller
         $kurikulum = Kurikulum::all();
         $transkrip = TranskripNilai::where('user_id', $id)->get();
 
+        // Get existing transfer nilai for this user to prevent duplicates
+        $existingTransfers = \App\Models\TransferNilai::whereHas('transkripNilai', function ($query) use ($id) {
+            $query->where('user_id', $id);
+        })->with('kurikulum')->get();
+
+        // Calculate SKS totals
+        $totalSksTrpl = $kurikulum->sum('sks');
+        $transferredSks = $existingTransfers->sum(function ($transfer) {
+            return $transfer->kurikulum->sks ?? 0;
+        });
+        $remainingSks = $totalSksTrpl - $transferredSks;
 
         if ($request->isMethod('post')) {
             $asesor_id = Auth::check() ? Auth::user()->id : 2;
@@ -120,23 +131,37 @@ class AssessorController extends Controller
             $keterangan = $request->input('keterangan', []);
             $transkrip_ids = $request->input('transkrip_id', []);
 
+            $savedCount = 0;
             foreach ($kurikulum_ids as $i => $kurikulum_id) {
-                \App\Models\TransferNilai::create([
-                    'asesor_id' => $asesor_id,
-                    'kurikulum_id' => $kurikulum_id,
-                    'transkrip_id' => $transkrip_ids[$i] ?? null,
-                    'nilai' => $nilai_trpl[$i] ?? null,
-                    'catatan' => $keterangan[$i] ?? null,
-                    'status' => 1,
-                ]);
+                // Only save if kurikulum_id is not null or empty
+                if (!empty($kurikulum_id)) {
+                    \App\Models\TransferNilai::create([
+                        'asesor_id' => $asesor_id,
+                        'kurikulum_id' => $kurikulum_id,
+                        'transkrip_id' => $transkrip_ids[$i] ?? null,
+                        'nilai' => $nilai_trpl[$i] ?? null,
+                        'catatan' => $keterangan[$i] ?? null,
+                        'status' => 1,
+                    ]);
+                    $savedCount++;
+                }
             }
-            return redirect()->route('assesor.index')->with('success', 'Data transfer nilai berhasil disimpan!');
+
+            $message = $savedCount > 0
+                ? "Data transfer nilai berhasil disimpan! ($savedCount mata kuliah ditransfer)"
+                : "Tidak ada mata kuliah yang dipilih untuk ditransfer.";
+
+            return redirect()->route('assesor.index')->with('success', $message);
         }
 
         return view('Assessor.pendaftar.transfer_nilai', [
             'id' => $id,
             'kurikulum' => $kurikulum,
             'transkrip' => $transkrip,
+            'existingTransfers' => $existingTransfers,
+            'totalSksTrpl' => $totalSksTrpl,
+            'transferredSks' => $transferredSks,
+            'remainingSks' => $remainingSks,
         ]);
     }
 

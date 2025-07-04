@@ -5,8 +5,8 @@
     <!-- Header Section -->
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <div>
-            <h1 class="text-2xl font-bold text-gray-900 mb-1">Transcript Results</h1>
-            <p class="text-gray-600 text-sm">Kelola data transkrip nilai mahasiswa</p>
+            <h1 class="text-2xl font-bold text-gray-900 mb-1">Data Pribadi</h1>
+            <p class="text-gray-600 text-sm">Kelola data pribadi mahasiswa</p>
         </div>
     </div>
 
@@ -21,7 +21,7 @@
                 </div>
                 <input type="text" id="searchInput"
                     class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                    placeholder="Cari data transkrip...">
+                    placeholder="Cari data pribadi...">
             </div>
         </div>
         <div class="text-sm text-gray-600 flex items-center">
@@ -31,14 +31,14 @@
 
     <!-- Table Section -->
     <div class="overflow-x-auto">
-        <table id="transkrip-table" class="min-w-full divide-y divide-gray-200">
+        <table id="data-table" class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
                 <tr>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Major</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Program Study</th>
-                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Total SKS</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jurusan</th>
+                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                     <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                 </tr>
             </thead>
@@ -79,7 +79,7 @@
 
     // Functions
     function renderTable() {
-        const tbody = document.querySelector('#transkrip-table tbody');
+        const tbody = document.querySelector('#data-table tbody');
         const startIndex = (currentPage - 1) * usersPerPage;
         const endIndex = startIndex + usersPerPage;
         const usersToShow = filteredUsers.slice(startIndex, endIndex);
@@ -90,9 +90,12 @@
                     <td colspan="6" class="px-6 py-12 text-center text-gray-500">
                         <div class="flex flex-col items-center">
                             <svg class="w-12 h-12 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                             </svg>
-                            <p class="text-sm">Belum ada data transkrip</p>
+                            <p class="text-sm">Belum ada data pribadi</p>
                         </div>
                     </td>
                 </tr>
@@ -103,11 +106,28 @@
         tbody.innerHTML = '';
         usersToShow.forEach((user, index) => {
             const globalIndex = startIndex + index + 1;
-            const totalSks = user.transkrip_nilai ? user.transkrip_nilai.reduce((sum, transkrip) => sum + parseInt(transkrip.sks || 0), 0) : 0;
             const namaLengkap = user.data_diri ? user.data_diri.nama_lengkap : (user.name || user.user_name || 'User');
             const jurusan = user.pendidikan ? user.pendidikan.jurusan : '-';
-            const prodi = user.pendidikan ? user.pendidikan.prodi : '-';
+            const status = user.data_diri ? (user.data_diri.status || 'pending') : 'pending';
             const initial = namaLengkap.charAt(0).toUpperCase();
+
+            // Status badge styling
+            let statusClass = '';
+            let statusText = '';
+            switch(status) {
+                case 'approved':
+                    statusClass = 'bg-green-100 text-green-800';
+                    statusText = 'Disetujui';
+                    break;
+                case 'rejected':
+                    statusClass = 'bg-red-100 text-red-800';
+                    statusText = 'Ditolak';
+                    break;
+                default:
+                    statusClass = 'bg-yellow-100 text-yellow-800';
+                    statusText = 'Pending';
+                    break;
+            }
 
             tbody.innerHTML += `
                 <tr class="hover:bg-gray-50 transition-colors duration-200">
@@ -125,15 +145,15 @@
                             </div>
                         </div>
                     </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${user.email}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${jurusan}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${prodi}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-center">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                            ${totalSks} SKS
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusClass}">
+                            ${statusText}
                         </span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                        <a href="/admin/transkrip/${user.id}" 
+                        <a href="/admin/data-diri/${user.id}" 
                            class="inline-flex items-center px-3 py-1.5 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors duration-200 shadow-sm hover:shadow-md">
                             <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -175,12 +195,10 @@
                 const namaLengkap = user.data_diri ? user.data_diri.nama_lengkap : (user.name || user.user_name || '');
                 const email = user.email || '';
                 const jurusan = user.pendidikan ? user.pendidikan.jurusan : '';
-                const prodi = user.pendidikan ? user.pendidikan.prodi : '';
 
                 return namaLengkap.toLowerCase().includes(searchTerm) ||
                     email.toLowerCase().includes(searchTerm) ||
-                    jurusan.toLowerCase().includes(searchTerm) ||
-                    prodi.toLowerCase().includes(searchTerm);
+                    jurusan.toLowerCase().includes(searchTerm);
             });
             currentPage = 1;
             renderTable();

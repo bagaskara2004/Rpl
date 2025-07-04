@@ -7,6 +7,8 @@ use App\Http\Controllers\user\BerandaController;
 use App\Http\Controllers\user\BeritaController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\user\UserControler;
+use App\Http\Controllers\Admin\user\DosenController;
+use App\Http\Controllers\Admin\berita\BeritaController as AdminBeritaController;
 use App\Http\Controllers\Admin\transkrip\TranskripControler;
 use App\Http\Controllers\Admin\datadiri\DataDiriController;
 use App\Http\Controllers\user\RplController;
@@ -16,6 +18,12 @@ use App\Http\Middleware\AdminOnly;
 use App\Http\Middleware\AssessorOnly;
 
 Route::get('/', [BerandaController::class, 'index'])->name('user.beranda');
+
+// Test route for Flowbite
+Route::get('/flowbite-test', function () {
+    return view('flowbite-test');
+})->name('flowbite.test');
+
 Route::get('/berita', [BeritaController::class, 'index'])->name('user.berita');
 Route::get('/berita/{berita:slug}', [BeritaController::class, 'detail'])->name('user.berita.detail');
 Route::view('/tentangkami', 'user/tentangkami')->name('user.tentangkami');
@@ -87,12 +95,34 @@ Route::prefix('admin')->middleware('admin.only')->group(function () {
     Route::post('/profile/upload-photo', [AdminController::class, 'uploadPhoto'])->name('admin.profile.upload-photo');
     Route::post('/profile/change-password', [AdminController::class, 'changePassword'])->name('admin.profile.change-password');
 
+    // Export Data Routes
+    Route::get('/export/all-data', [AdminController::class, 'exportAllData'])->name('admin.export.all-data');
+    Route::get('/export/statistics', [AdminController::class, 'exportStatistics'])->name('admin.export.statistics');
+    Route::get('/export/transkrip', [AdminController::class, 'exportTranskrip'])->name('admin.export.transkrip');
+    Route::get('/export/assessment', [AdminController::class, 'exportAssessment'])->name('admin.export.assessment');
+
     // User Routes
     Route::get('/user', [UserControler::class, 'index'])->name('admin.user.index');
     Route::get('/user/assessor', [UserControler::class, 'assessor'])->name('admin.user.assessor');
     Route::get('/user/data/assessor', [UserControler::class, 'dataAssessor'])->name('admin.user.data.assessor');
     Route::get('/user/data', [UserControler::class, 'data'])->name('admin.user.data');
     Route::post('/user/block', [UserControler::class, 'block'])->name('admin.user.block');
+
+    // Dosen Routes
+    Route::get('/dosen', [DosenController::class, 'index'])->name('admin.dosen.index');
+    Route::get('/dosen/data', [DosenController::class, 'data'])->name('admin.dosen.data');
+    Route::post('/dosen/block', [DosenController::class, 'block'])->name('admin.dosen.block');
+    Route::post('/dosen/unblock', [DosenController::class, 'unblock'])->name('admin.dosen.unblock');
+
+    // Berita Routes
+    Route::get('/berita', [AdminBeritaController::class, 'index'])->name('admin.berita.index');
+    Route::get('/berita/data', [AdminBeritaController::class, 'data'])->name('admin.berita.data');
+    Route::get('/berita/create', [AdminBeritaController::class, 'create'])->name('admin.berita.create');
+    Route::post('/berita', [AdminBeritaController::class, 'store'])->name('admin.berita.store');
+    Route::get('/berita/{id}', [AdminBeritaController::class, 'show'])->name('admin.berita.show');
+    Route::get('/berita/{id}/edit', [AdminBeritaController::class, 'edit'])->name('admin.berita.edit');
+    Route::put('/berita/{id}', [AdminBeritaController::class, 'update'])->name('admin.berita.update');
+    Route::delete('/berita/{id}', [AdminBeritaController::class, 'destroy'])->name('admin.berita.destroy');
 
     // Transkrip Routes
     Route::get('/transkrip', [TranskripControler::class, 'index'])->name('admin.transkrip.index');

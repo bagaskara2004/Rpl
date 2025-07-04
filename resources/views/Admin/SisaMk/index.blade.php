@@ -5,8 +5,8 @@
     <!-- Header Section -->
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <div>
-            <h1 class="text-2xl font-bold text-gray-900 mb-1">Transcript Results</h1>
-            <p class="text-gray-600 text-sm">Kelola data transkrip nilai mahasiswa</p>
+            <h1 class="text-2xl font-bold text-gray-900 mb-1">Sisa Mata Kuliah</h1>
+            <p class="text-gray-600 text-sm">Kelola data sisa mata kuliah mahasiswa</p>
         </div>
     </div>
 
@@ -21,7 +21,7 @@
                 </div>
                 <input type="text" id="searchInput"
                     class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                    placeholder="Cari data transkrip...">
+                    placeholder="Cari data sisa mata kuliah...">
             </div>
         </div>
         <div class="text-sm text-gray-600 flex items-center">
@@ -31,14 +31,14 @@
 
     <!-- Table Section -->
     <div class="overflow-x-auto">
-        <table id="transkrip-table" class="min-w-full divide-y divide-gray-200">
+        <table id="sisamk-table" class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
                 <tr>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Major</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Program Study</th>
-                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Total SKS</th>
+                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Total Sisa MK</th>
                     <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                 </tr>
             </thead>
@@ -79,7 +79,7 @@
 
     // Functions
     function renderTable() {
-        const tbody = document.querySelector('#transkrip-table tbody');
+        const tbody = document.querySelector('#sisamk-table tbody');
         const startIndex = (currentPage - 1) * usersPerPage;
         const endIndex = startIndex + usersPerPage;
         const usersToShow = filteredUsers.slice(startIndex, endIndex);
@@ -90,9 +90,9 @@
                     <td colspan="6" class="px-6 py-12 text-center text-gray-500">
                         <div class="flex flex-col items-center">
                             <svg class="w-12 h-12 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
                             </svg>
-                            <p class="text-sm">Belum ada data transkrip</p>
+                            <p class="text-sm">Belum ada data sisa mata kuliah</p>
                         </div>
                     </td>
                 </tr>
@@ -103,7 +103,7 @@
         tbody.innerHTML = '';
         usersToShow.forEach((user, index) => {
             const globalIndex = startIndex + index + 1;
-            const totalSks = user.transkrip_nilai ? user.transkrip_nilai.reduce((sum, transkrip) => sum + parseInt(transkrip.sks || 0), 0) : 0;
+            const totalSisaMk = user.sisa_mk ? user.sisa_mk.length : 0;
             const namaLengkap = user.data_diri ? user.data_diri.nama_lengkap : (user.name || user.user_name || 'User');
             const jurusan = user.pendidikan ? user.pendidikan.jurusan : '-';
             const prodi = user.pendidikan ? user.pendidikan.prodi : '-';
@@ -115,8 +115,8 @@
                     <td class="px-6 py-4 whitespace-nowrap">
                         <div class="flex items-center">
                             <div class="flex-shrink-0 h-10 w-10">
-                                <div class="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
-                                    <span class="text-sm font-medium text-indigo-800">${initial}</span>
+                                <div class="h-10 w-10 rounded-full bg-orange-100 flex items-center justify-center">
+                                    <span class="text-sm font-medium text-orange-800">${initial}</span>
                                 </div>
                             </div>
                             <div class="ml-4">
@@ -128,13 +128,13 @@
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${jurusan}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${prodi}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-center">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                            ${totalSks} SKS
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                            ${totalSisaMk} MK
                         </span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                        <a href="/admin/transkrip/${user.id}" 
-                           class="inline-flex items-center px-3 py-1.5 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors duration-200 shadow-sm hover:shadow-md">
+                        <a href="/admin/sisa-mk/${user.id}" 
+                           class="inline-flex items-center px-3 py-1.5 bg-orange-600 text-white text-sm font-medium rounded-lg hover:bg-orange-700 transition-colors duration-200 shadow-sm hover:shadow-md">
                             <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>

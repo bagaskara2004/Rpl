@@ -22,7 +22,7 @@ class AdminOnly
         }
 
         // Cek apakah user adalah admin (role_id = 3 berdasarkan LoginController)
-        if (Auth::user()->role_id != 3) {
+        if (Auth::user()->role_id != 3 && Auth::user()->role_id != 5) {
             return redirect('/login')->with('error', 'Akses ditolak. Anda tidak memiliki izin admin');
         }
 

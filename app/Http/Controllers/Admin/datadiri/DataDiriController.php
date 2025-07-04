@@ -14,7 +14,18 @@ class DataDiriController extends Controller
      */
     public function index()
     {
-        return view('Admin.DataDiri.index');
+        $users = User::with(['dataDiri', 'pendidikan', 'pengalamanKerja'])
+            ->where('role_id', 1)
+            ->whereHas('dataDiri')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // Pastikan $users tidak null
+        if ($users === null) {
+            $users = collect([]);
+        }
+
+        return view('Admin.DataDiri.index', compact('users'));
     }
 
     /**
@@ -52,22 +63,13 @@ class DataDiriController extends Controller
     public function show($id)
     {
         try {
-            $dataDiri = DataDiri::with(['user', 'pendidikan', 'pengalamanKerja'])
+            $user = User::with(['dataDiri', 'pendidikan', 'pengalamanKerja'])
                 ->findOrFail($id);
 
-            return response()->json([
-                'success' => true,
-                'data' => [
-                    'data_diri' => $dataDiri,
-                    'pendidikan' => $dataDiri->pendidikan,
-                    'pengalaman_kerja' => $dataDiri->pengalamanKerja
-                ]
-            ]);
+            return view('Admin.DataDiri.show', compact('user'));
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Data tidak ditemukan'
-            ], 404);
+            return redirect()->route('admin.datadiri.index')
+                ->with('error', 'Data tidak ditemukan');
         }
     }
 
