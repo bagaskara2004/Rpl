@@ -33,7 +33,7 @@ return new class extends Migration
             $table->string('pekerjaan_ibu', 100)->nullable();
             $table->string('nama_ayah')->nullable();
             $table->string('pekerjaan_ayah', 100)->nullable();
-            $table->enum('status', ['prosess', 'sukses','pending','gagal'])->default('pending');
+            $table->enum('status', ['prosess', 'sukses','pending','gagal'])->default('prosess');
             $table->timestamps();
         });
     }

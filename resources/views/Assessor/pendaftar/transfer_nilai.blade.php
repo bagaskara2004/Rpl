@@ -2,134 +2,73 @@
 @vite('resources/css/pendaftar-custom.css')
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link href="{{ asset('css/transfer-nilai.css') }}" rel="stylesheet" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<style>
-    .select2-container--default .select2-selection--single {
-        height: 44px !important;
-        border: 2px solid #e5e7eb !important;
-        border-radius: 12px !important;
-        padding: 8px 16px !important;
-        background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%) !important;
-        transition: all 0.3s ease !important;
-    }
 
-    .select2-container--default .select2-selection--single:hover {
-        border-color: #d1d5db !important;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
-    }
-
-    .select2-container--default .select2-selection--single .select2-selection__rendered {
-        line-height: 28px !important;
-        padding-left: 0 !important;
-        font-weight: 500 !important;
-        color: #374151 !important;
-    }
-
-    .select2-container--default .select2-selection--single .select2-selection__arrow {
-        height: 42px !important;
-        right: 12px !important;
-    }
-
-    .select2-dropdown {
-        border: 2px solid #e5e7eb !important;
-        border-radius: 12px !important;
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
-        background: white !important;
-    }
-
-    .select2-container--default.select2-container--focus .select2-selection--single,
-    .select2-container--default.select2-container--open .select2-selection--single {
-        border-color: #3b82f6 !important;
-        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
-    }
-
-    .select2-results__option {
-        padding: 12px 16px !important;
-        font-weight: 500 !important;
-    }
-
-    .select2-results__option--highlighted {
-        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important;
-    }
-
-    .transfer-card {
-        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-        border: 1px solid #e2e8f0;
-    }
-
-    .table-header {
-        background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-    }
-
-    .grade-badge {
-        background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-        border: 1px solid #93c5fd;
-    }
-
-    .btn-primary {
-        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-        border: none;
-        box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);
-    }
-
-    .btn-primary:hover {
-        background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
-        box-shadow: 0 6px 8px -1px rgba(59, 130, 246, 0.4);
-        transform: translateY(-1px);
-    }
-
-    .btn-secondary {
-        background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-        border: 1px solid #d1d5db;
-    }
-
-    .btn-secondary:hover {
-        background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
-        transform: translateY(-1px);
-    }
-
-    .form-input-enhanced {
-        border: 2px solid #e5e7eb;
-        border-radius: 12px;
-        padding: 12px 16px;
-        background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
-        transition: all 0.3s ease;
-        font-weight: 500;
-    }
-
-    .form-input-enhanced:focus {
-        border-color: #3b82f6;
-        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        background: white;
-    }
-
-    .form-input-enhanced:hover {
-        border-color: #d1d5db;
-        box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    }
-
-    .table-row:hover {
-        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-        transform: translateY(-1px);
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    }
-
-    .header-title {
-        background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }
-</style>
+{{-- Cek apakah user sudah memiliki data transfer nilai --}}
+@if(isset($hasTransferNilai) && $hasTransferNilai)
+{{-- Jika sudah ada transfer nilai, tampilkan hasil statis --}}
+@include('Assessor.pendaftar.transfer_nilai_statis')
+@else
+{{-- Jika belum ada transfer nilai, tampilkan form input --}}
 
 @if(request()->ajax())
-{{-- Hanya tampilkan form --}}
+{{-- AJAX Request - Hanya tampilkan form --}}
 <div class="mb-8">
     <div class="text-center mb-6">
         <h1 class="header-title text-4xl font-bold mb-2">Transfer Nilai</h1>
         <p class="text-gray-600 text-lg">Kelola transfer nilai mata kuliah dengan mudah</p>
     </div>
+
+    <!-- Search and Summary Section -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
+        <div class="flex flex-col lg:flex-row gap-6">
+            <!-- Search Bar -->
+            <div class="flex-1">
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                    <input type="text" id="searchInput"
+                        class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                        placeholder="Cari mata kuliah...">
+                </div>
+            </div>
+
+            <!-- SKS Summary -->
+            <div class="lg:w-80">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-4 border border-blue-200">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-blue-700" id="totalSks">{{ $transkrip->sum('sks') ?? 0 }}</div>
+                            <div class="text-xs text-blue-600 font-medium">Total SKS</div>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-4 border border-green-200">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-green-700" id="convertedSks">0</div>
+                            <div class="text-xs text-green-600 font-medium">SKS Dikonversi</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="mt-4">
+            <div class="flex justify-between text-sm text-gray-600 mb-2">
+                <span>Progress Konversi</span>
+                <span id="progressPercent">0%</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2">
+                <div class="bg-gradient-to-r from-blue-500 to-indigo-600 h-2 rounded-full transition-all duration-500" style="width: 0%" id="progressBar"></div>
+            </div>
+        </div>
+    </div>
+
     <form method="POST" action="">
         @csrf
         <div class="transfer-card rounded-3xl shadow-xl p-8">
@@ -205,7 +144,6 @@
                             </td>
                             <td class="py-5 px-6">
                                 <div class="font-semibold text-gray-800">{{ $row->mata_kuliah }}</div>
-                                <div class="text-xs text-gray-500 mt-1">Mata Kuliah Sebelumnya</div>
                             </td>
                             <td class="py-5 px-6">
                                 <span class="grade-badge inline-flex items-center px-3 py-1.5 rounded-full text-sm font-bold text-blue-800">
@@ -257,68 +195,8 @@
     </form>
 </div>
 
-<script>
-    $(document).ready(function() {
-        // Store all available options
-        const allOptions = [];
-        $('.kurikulum-select option').each(function() {
-            if ($(this).val() !== '') {
-                allOptions.push({
-                    id: $(this).val(),
-                    text: $(this).text()
-                });
-            }
-        });
-
-        // Initialize Select2 for all kurikulum dropdowns
-        $('.kurikulum-select').select2({
-            placeholder: 'Pilih Mata Kuliah TRPL',
-            allowClear: true,
-            width: '100%'
-        });
-
-        // Function to update dropdown options
-        function updateDropdownOptions() {
-            const selectedValues = [];
-            $('.kurikulum-select').each(function() {
-                const val = $(this).val();
-                if (val) {
-                    selectedValues.push(val);
-                }
-            });
-
-            $('.kurikulum-select').each(function() {
-                const currentSelect = $(this);
-                const currentValue = currentSelect.val();
-
-                // Clear and rebuild options
-                currentSelect.empty();
-                currentSelect.append('<option value="">Pilih Mata Kuliah TRPL</option>');
-
-                allOptions.forEach(function(option) {
-                    // Include option if it's not selected elsewhere or if it's the current selection
-                    if (!selectedValues.includes(option.id) || option.id === currentValue) {
-                        currentSelect.append('<option value="' + option.id + '">' + option.text + '</option>');
-                    }
-                });
-
-                // Restore current value
-                currentSelect.val(currentValue);
-                currentSelect.trigger('change.select2');
-            });
-        }
-
-        // Handle selection change
-        $('.kurikulum-select').on('change', function() {
-            updateDropdownOptions();
-        });
-
-        // Initial update
-        updateDropdownOptions();
-    });
-</script>
-
 @else
+{{-- Normal Request - Tampilkan dengan layout assessor --}}
 <x-layout_assessor>
     <div class="mb-8">
         <div class="flex items-center gap-6 mb-6">
@@ -332,6 +210,54 @@
         <div class="text-center mb-6">
             <h1 class="header-title text-4xl font-bold mb-2">Transfer Nilai</h1>
             <p class="text-gray-600 text-lg">Kelola transfer nilai mata kuliah dengan mudah</p>
+        </div>
+
+        <!-- Search and Summary Section -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
+            <div class="flex flex-col lg:flex-row gap-6">
+                <!-- Search Bar -->
+                <div class="flex-1">
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </div>
+                        <input type="text" id="searchInput"
+                            class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                            placeholder="Cari mata kuliah...">
+                    </div>
+                </div>
+
+                <!-- SKS Summary -->
+                <div class="lg:w-80">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-4 border border-blue-200">
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-blue-700" id="totalSks">{{ $transkrip->sum('sks') ?? 0 }}</div>
+                                <div class="text-xs text-blue-600 font-medium">Total SKS</div>
+                            </div>
+                        </div>
+                        <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-4 border border-green-200">
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-green-700" id="convertedSks">0</div>
+                                <div class="text-xs text-green-600 font-medium">SKS Dikonversi</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="mt-4">
+                <div class="flex justify-between text-sm text-gray-600 mb-2">
+                    <span>Progress Konversi</span>
+                    <span id="progressPercent">0%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-gradient-to-r from-blue-500 to-indigo-600 h-2 rounded-full transition-all duration-500" style="width: 0%" id="progressBar"></div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -410,7 +336,6 @@
                             </td>
                             <td class="py-5 px-6">
                                 <div class="font-semibold text-gray-800">{{ $row->mata_kuliah }}</div>
-                                <div class="text-xs text-gray-500 mt-1">Mata Kuliah Sebelumnya</div>
                             </td>
                             <td class="py-5 px-6">
                                 <span class="grade-badge inline-flex items-center px-3 py-1.5 rounded-full text-sm font-bold text-blue-800">
@@ -461,65 +386,276 @@
         </div>
     </form>
 
-    <script>
-        $(document).ready(function() {
-            // Store all available options
-            const allOptions = [];
-            $('.kurikulum-select option').each(function() {
-                if ($(this).val() !== '') {
-                    allOptions.push({
-                        id: $(this).val(),
-                        text: $(this).text()
-                    });
+</x-layout_assessor>
+@endif
+
+<script>
+    $(document).ready(function() {
+        // Prevent multiple initialization
+        if (window.transferNilaiInitialized) {
+            return;
+        }
+        window.transferNilaiInitialized = true;
+
+        // Store all available options globally
+        const allOptions = [];
+        $('.kurikulum-select option').each(function() {
+            if ($(this).val() !== '') {
+                allOptions.push({
+                    id: $(this).val(),
+                    text: $(this).text()
+                });
+            }
+        });
+
+        // Master Select2 configuration with guaranteed search functionality
+        const select2Config = {
+            placeholder: 'Pilih Mata Kuliah TRPL',
+            allowClear: true,
+            width: '100%',
+            minimumInputLength: 0,
+            minimumResultsForSearch: 0, // Force search to always show
+            searchInputPlaceholder: 'Cari mata kuliah...',
+            language: {
+                noResults: function() {
+                    return "Tidak ada hasil ditemukan";
+                },
+                searching: function() {
+                    return "Mencari...";
+                }
+            },
+            dropdownCssClass: 'select2-dropdown-force-search',
+            escapeMarkup: function(markup) {
+                return markup;
+            }
+        };
+
+        // Function to safely initialize/reinitialize Select2
+        function initializeSelect2Element($element) {
+            try {
+                // Destroy existing instance if exists
+                if ($element.hasClass('select2-hidden-accessible')) {
+                    $element.select2('destroy');
+                }
+
+                // Initialize with our config
+                $element.select2(select2Config);
+
+                // Force enable search after initialization
+                setTimeout(function() {
+                    var select2Instance = $element.data('select2');
+                    if (select2Instance && select2Instance.options && select2Instance.options.options) {
+                        select2Instance.options.options.minimumResultsForSearch = 0;
+                        select2Instance.options.options.minimumInputLength = 0;
+                    }
+                }, 50);
+
+            } catch (error) {
+                console.log('Select2 initialization error:', error);
+            }
+        }
+
+        // Function to update dropdown options and maintain Select2 functionality
+        function updateDropdownOptions() {
+            const selectedValues = [];
+
+            // Collect all selected values
+            $('.kurikulum-select').each(function() {
+                const val = $(this).val();
+                if (val) {
+                    selectedValues.push(val);
                 }
             });
 
-            // Initialize Select2 for all kurikulum dropdowns
-            $('.kurikulum-select').select2({
-                placeholder: 'Pilih Mata Kuliah TRPL',
-                allowClear: true,
-                width: '100%'
-            });
+            // Update each dropdown
+            $('.kurikulum-select').each(function() {
+                const $currentSelect = $(this);
+                const currentValue = $currentSelect.val();
 
-            // Function to update dropdown options
-            function updateDropdownOptions() {
-                const selectedValues = [];
-                $('.kurikulum-select').each(function() {
-                    const val = $(this).val();
-                    if (val) {
-                        selectedValues.push(val);
+                // Store reference to Select2 instance before destroying
+                let wasOpen = false;
+                if ($currentSelect.hasClass('select2-hidden-accessible')) {
+                    wasOpen = $currentSelect.data('select2')?.isOpen() || false;
+                    $currentSelect.select2('destroy');
+                }
+
+                // Rebuild options
+                $currentSelect.empty();
+                $currentSelect.append('<option value="">Pilih Mata Kuliah TRPL</option>');
+
+                allOptions.forEach(function(option) {
+                    // Show option if not selected elsewhere, or if it's current selection
+                    if (!selectedValues.includes(option.id) || option.id === currentValue) {
+                        $currentSelect.append('<option value="' + option.id + '">' + option.text + '</option>');
                     }
                 });
 
-                $('.kurikulum-select').each(function() {
-                    const currentSelect = $(this);
-                    const currentValue = currentSelect.val();
+                // Restore current value
+                $currentSelect.val(currentValue);
 
-                    // Clear and rebuild options
-                    currentSelect.empty();
-                    currentSelect.append('<option value="">Pilih Mata Kuliah TRPL</option>');
+                // Reinitialize Select2
+                initializeSelect2Element($currentSelect);
 
-                    allOptions.forEach(function(option) {
-                        // Include option if it's not selected elsewhere or if it's the current selection
-                        if (!selectedValues.includes(option.id) || option.id === currentValue) {
-                            currentSelect.append('<option value="' + option.id + '">' + option.text + '</option>');
-                        }
-                    });
+                // Reopen if it was open before
+                if (wasOpen) {
+                    setTimeout(function() {
+                        $currentSelect.select2('open');
+                    }, 100);
+                }
+            });
+        }
 
-                    // Restore current value
-                    currentSelect.val(currentValue);
-                    currentSelect.trigger('change.select2');
-                });
-            }
+        // Initialize all Select2 elements on page load
+        $('.kurikulum-select').each(function() {
+            initializeSelect2Element($(this));
+        });
 
-            // Handle selection change
-            $('.kurikulum-select').on('change', function() {
+        // Remove existing event handlers before adding new ones
+        $(document).off('change', '.kurikulum-select');
+        $(document).off('select2:open', '.kurikulum-select');
+        $(document).off('select2:opening', '.kurikulum-select');
+
+        // Handle selection changes
+        $(document).on('change', '.kurikulum-select', function() {
+            const $this = $(this);
+
+            // Delay to allow Select2 to process the change
+            setTimeout(function() {
                 updateDropdownOptions();
+                calculateSKS();
+            }, 150);
+        });
+
+        // Force search functionality on dropdown open
+        $(document).on('select2:open', '.kurikulum-select', function(e) {
+            const $select = $(this);
+
+            // Multiple attempts to ensure search field is available
+            const forceSearchField = function(attempt = 0) {
+                if (attempt > 10) return; // Prevent infinite loop
+
+                setTimeout(function() {
+                    const $dropdown = $('.select2-dropdown');
+                    const $search = $('.select2-search--dropdown');
+                    const $searchField = $('.select2-search__field');
+
+                    if ($searchField.length > 0) {
+                        // Make search visible and functional
+                        $search.show().css('display', 'block !important');
+                        $searchField.show()
+                            .prop('disabled', false)
+                            .prop('readonly', false)
+                            .attr('readonly', false)
+                            .css({
+                                'display': 'block !important',
+                                'visibility': 'visible !important'
+                            });
+
+                        // Focus the search field
+                        $searchField.focus();
+
+                        // Add placeholder if missing
+                        if (!$searchField.attr('placeholder')) {
+                            $searchField.attr('placeholder', 'Cari mata kuliah...');
+                        }
+                    } else {
+                        // Try again if search field not found
+                        forceSearchField(attempt + 1);
+                    }
+                }, 10);
+            };
+
+            forceSearchField();
+        });
+
+        // Handle opening event to ensure search is enabled
+        $(document).on('select2:opening', '.kurikulum-select', function(e) {
+            const $select = $(this);
+            const select2Instance = $select.data('select2');
+
+            if (select2Instance && select2Instance.options && select2Instance.options.options) {
+                select2Instance.options.options.minimumResultsForSearch = 0;
+                select2Instance.options.options.minimumInputLength = 0;
+            }
+        });
+
+        // Fallback: Monitor and fix disabled search fields
+        const searchFieldMonitor = setInterval(function() {
+            $('.select2-search__field').each(function() {
+                const $field = $(this);
+                if ($field.prop('disabled') || $field.attr('readonly') === 'readonly') {
+                    $field.prop('disabled', false)
+                        .attr('readonly', false)
+                        .css('display', 'block');
+                }
+            });
+        }, 1000);
+
+        // Initial update after everything is loaded
+        setTimeout(function() {
+            updateDropdownOptions();
+        }, 500);
+
+        // Clean up interval on page unload
+        $(window).on('beforeunload', function() {
+            clearInterval(searchFieldMonitor);
+        });
+
+        // Search functionality
+        $('#searchInput').off('keyup').on('keyup', function() {
+            const searchValue = $(this).val().toLowerCase();
+            let visibleRows = 0;
+
+            $('.table-row').each(function() {
+                const mataKuliah = $(this).find('td:nth-child(2) .font-semibold').text().toLowerCase();
+
+                if (mataKuliah.includes(searchValue)) {
+                    $(this).show();
+                    visibleRows++;
+                } else {
+                    $(this).hide();
+                }
             });
 
-            // Initial update
-            updateDropdownOptions();
+            // Update row numbers for visible rows
+            updateRowNumbers();
         });
-    </script>
-</x-layout_assessor>
-@endif
+
+        // Function to update row numbers
+        function updateRowNumbers() {
+            let counter = 1;
+            $('.table-row:visible').each(function() {
+                $(this).find('td:first-child .bg-gradient-to-r').text(counter);
+                counter++;
+            });
+        }
+
+        // SKS calculation functionality
+        function calculateSKS() {
+            let convertedSKS = 0;
+            const totalSKS = parseInt($('#totalSks').text()) || 0;
+
+            $('.kurikulum-select').each(function() {
+                const selectedValue = $(this).val();
+                if (selectedValue) {
+                    // Assuming each converted subject has 2 SKS (you can adjust this based on your data)
+                    convertedSKS += 2;
+                }
+            });
+
+            $('#convertedSks').text(convertedSKS);
+
+            // Update progress bar
+            const percentage = totalSKS > 0 ? Math.round((convertedSKS / totalSKS) * 100) : 0;
+            $('#progressPercent').text(percentage + '%');
+            $('#progressBar').css('width', percentage + '%');
+        }
+
+        // Initial SKS calculation
+        setTimeout(function() {
+            calculateSKS();
+        }, 1000);
+    });
+</script>
+
+@endif {{-- End of hasTransferNilai check --}}

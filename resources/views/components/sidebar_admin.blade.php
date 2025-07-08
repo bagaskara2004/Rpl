@@ -282,7 +282,7 @@
         </div>
         @endif
 
-        @if(Auth::user()->role_id == 2 || Auth::user()->role_id == 5)
+        @if(Auth::user()->role_id == 3 || Auth::user()->role_id == 5)
         <!-- Assessment Section -->
         <div class="space-y-1 mt-4">
             <div class="px-3 sm:px-4 py-1">

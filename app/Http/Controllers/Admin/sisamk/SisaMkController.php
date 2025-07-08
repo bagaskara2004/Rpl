@@ -18,11 +18,42 @@ class SisaMkController extends Controller
     }
 
     /**
+     * Get data for DataTables
+     */
+    public function getData()
+    {
+        $users = \App\Models\User::with(['dataDiri', 'pendidikan', 'sisaMk.kurikulum'])->has('sisaMk')->get();
+
+        return response()->json([
+            'data' => $users->map(function ($user) {
+                return [
+                    'id' => $user->id,
+                    'nama' => $user->dataDiri->nama_lengkap ?? $user->user_name,
+                    'email' => $user->email,
+                    'total_sisa_mk' => $user->sisaMk->count(),
+                    'created_at' => $user->created_at->format('d/m/Y H:i'),
+                    'action' => $user->id
+                ];
+            })
+        ]);
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'kurikulum_id' => 'required|exists:kurikulum,id'
+        ]);
+
+        SisaMk::create([
+            'user_id' => $request->user_id,
+            'kurikulum_id' => $request->kurikulum_id
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'Sisa MK berhasil ditambahkan']);
     }
 
     /**
@@ -39,7 +70,17 @@ class SisaMkController extends Controller
      */
     public function update(Request $request, SisaMk $sisaMk)
     {
-        //
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'kurikulum_id' => 'required|exists:kurikulum,id'
+        ]);
+
+        $sisaMk->update([
+            'user_id' => $request->user_id,
+            'kurikulum_id' => $request->kurikulum_id
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'Sisa MK berhasil diperbarui']);
     }
 
     /**
@@ -47,6 +88,8 @@ class SisaMkController extends Controller
      */
     public function destroy(SisaMk $sisaMk)
     {
-        //
+        $sisaMk->delete();
+
+        return response()->json(['success' => true, 'message' => 'Sisa MK berhasil dihapus']);
     }
 }

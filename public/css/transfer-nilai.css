@@ -1,0 +1,370 @@
+/* Transfer Nilai CSS Styles */
+
+/* Search and Summary Section */
+.search-summary-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+#searchInput {
+    background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+    transition: all 0.3s ease;
+}
+
+#searchInput:focus {
+    background: #ffffff;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* SKS Summary Cards */
+.sks-card {
+    transition: all 0.3s ease;
+}
+
+.sks-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* Progress Bar */
+#progressBar {
+    background: linear-gradient(90deg, #3b82f6 0%, #6366f1 100%);
+    transition: width 0.5s ease-in-out;
+}
+
+/* Header Styling */
+.header-title {
+    background: linear-gradient(135deg, #1e40af 0%, #7c3aed 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Select2 Dropdown Styling */
+.select2-container--default .select2-selection--single {
+    height: 44px !important;
+    border: 2px solid #e5e7eb !important;
+    border-radius: 12px !important;
+    padding: 8px 16px !important;
+    background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%) !important;
+    transition: all 0.3s ease !important;
+}
+
+.select2-container--default .select2-selection--single:hover {
+    border-color: #d1d5db !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+}
+
+.select2-container--default
+    .select2-selection--single
+    .select2-selection__rendered {
+    line-height: 28px !important;
+    padding-left: 0 !important;
+    font-weight: 500 !important;
+    color: #374151 !important;
+}
+
+.select2-container--default
+    .select2-selection--single
+    .select2-selection__arrow {
+    height: 42px !important;
+    right: 12px !important;
+}
+
+.select2-dropdown {
+    border: 2px solid #e5e7eb !important;
+    border-radius: 12px !important;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+        0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+    background: white !important;
+    z-index: 9999 !important;
+}
+
+.select2-search--dropdown {
+    display: block !important;
+    padding: 8px !important;
+}
+
+.select2-search--dropdown .select2-search__field {
+    display: block !important;
+    width: 100% !important;
+    border: 2px solid #e5e7eb !important;
+    border-radius: 8px !important;
+    padding: 8px 12px !important;
+    font-size: 14px !important;
+    background: white !important;
+}
+
+.select2-search--dropdown .select2-search__field:focus {
+    border-color: #3b82f6 !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+.select2-dropdown-custom {
+    z-index: 9999 !important;
+}
+
+.select2-dropdown-custom .select2-search--dropdown {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.select2-dropdown-custom .select2-search__field {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Force search to always show regardless of options count */
+.select2-dropdown-force-search .select2-search--dropdown {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    min-height: 50px !important;
+}
+
+.select2-dropdown-force-search .select2-search__field {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: calc(100% - 16px) !important;
+    margin: 8px !important;
+    border: 2px solid #e5e7eb !important;
+    border-radius: 8px !important;
+    padding: 8px 12px !important;
+    font-size: 14px !important;
+    background: white !important;
+    box-sizing: border-box !important;
+}
+
+/* Table Styling */
+.transfer-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.table-header {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.table-row {
+    transition: all 0.3s ease;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.table-row:hover {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.grade-badge {
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+}
+
+/* Button Styling */
+.btn-primary {
+    background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+    box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.4);
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #5b21b6 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px 0 rgba(59, 130, 246, 0.5);
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    color: #64748b;
+    border: 2px solid #e2e8f0;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+    border-color: #cbd5e1;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Input Styling */
+.form-input-enhanced {
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.form-input-enhanced:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    background: #ffffff;
+}
+
+.form-input-enhanced:hover {
+    border-color: #d1d5db;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Animation for page load */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.transfer-card {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.search-summary-card {
+    animation: fadeInUp 0.4s ease-out;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header-title {
+        font-size: 2rem;
+    }
+
+    .transfer-card {
+        padding: 1rem;
+    }
+
+    .table-header th {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.75rem;
+    }
+
+    .table-row td {
+        padding: 0.75rem 0.5rem;
+    }
+}
+
+/* Override any CSS that might hide the search */
+.select2-search--dropdown {
+    display: block !important;
+    padding: 8px !important;
+}
+
+.select2-search__field {
+    display: block !important;
+    width: 100% !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Force show search even when there are few options */
+.select2-dropdown .select2-search--dropdown {
+    display: block !important;
+}
+
+.select2-container .select2-search--dropdown {
+    display: block !important;
+}
+
+.select2-container--default.select2-container--focus .select2-selection--single,
+.select2-container--default.select2-container--open .select2-selection--single {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+.select2-results__option {
+    padding: 12px 16px !important;
+    font-weight: 500 !important;
+}
+
+.select2-results__option--highlighted {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important;
+}
+
+/* Card and Layout Styling */
+.transfer-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border: 1px solid #e2e8f0;
+}
+
+.table-header {
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+}
+
+.grade-badge {
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    border: 1px solid #93c5fd;
+}
+
+/* Button Styling */
+.btn-primary {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    border: none;
+    box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+    box-shadow: 0 6px 8px -1px rgba(59, 130, 246, 0.4);
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    border: 1px solid #d1d5db;
+}
+
+.btn-secondary:hover {
+    background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+    transform: translateY(-1px);
+}
+
+/* Form Input Styling */
+.form-input-enhanced {
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.form-input-enhanced:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    background: white;
+}
+
+.form-input-enhanced:hover {
+    border-color: #d1d5db;
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Table and Row Styling */
+.table-row:hover {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Header Styling */
+.header-title {
+    background: linear-gradient(135deg, #1e40af 0%, #7c3aed 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}

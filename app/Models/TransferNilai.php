@@ -31,6 +31,12 @@ class TransferNilai extends Model
         return $this->belongsTo(TranskripNilai::class, 'transkrip_id');
     }
 
+    // Alternative alias for consistency
+    public function transkrip()
+    {
+        return $this->belongsTo(TranskripNilai::class, 'transkrip_id');
+    }
+
     // Get user through transkrip_nilai relationship
     public function user()
     {

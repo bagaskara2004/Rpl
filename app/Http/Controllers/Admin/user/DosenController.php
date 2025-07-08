@@ -91,7 +91,42 @@ class DosenController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $request->validate([
+                'user_name' => 'required|string|max:255|unique:users',
+                'email' => 'required|string|email|max:255|unique:users',
+                'password' => 'required|string|min:8',
+                'role_id' => 'required|integer|in:4', // 4 = dosen
+            ]);
+
+            // Set foto default
+            $fotoPath = '/assets/User.svg';
+
+            $user = User::create([
+                'user_name' => $request->user_name,
+                'email' => $request->email,
+                'password' => bcrypt($request->password),
+                'role_id' => $request->role_id ?? 4, // Default role sebagai Dosen
+                'foto' => $fotoPath,
+                'block' => 0
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Dosen berhasil ditambahkan',
+                'data' => $user->load('role')
+            ])->header('Content-Type', 'application/json');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data tidak valid: ' . implode(', ', $e->validator->errors()->all())
+            ], 422)->header('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menambahkan dosen: ' . $e->getMessage()
+            ], 500)->header('Content-Type', 'application/json');
+        }
     }
 
     /**

@@ -82,7 +82,87 @@ class UserControler extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $request->validate([
+                'user_name' => 'required|string|max:255|unique:users',
+                'email' => 'required|string|email|max:255|unique:users',
+                'password' => 'required|string|min:8',
+                'role_id' => 'required|integer|in:1,2', // 1 = user, 2 = assessor
+            ]);
+
+            // Set foto default
+            $fotoPath = '/assets/User.svg';
+
+            $user = User::create([
+                'user_name' => $request->user_name,
+                'email' => $request->email,
+                'password' => bcrypt($request->password),
+                'role_id' => $request->role_id ?? 1, // Default role sebagai User
+                'foto' => $fotoPath,
+                'block' => 0
+            ]);
+
+            $roleText = $request->role_id == 1 ? 'User' : 'Assessor';
+
+            return response()->json([
+                'success' => true,
+                'message' => $roleText . ' berhasil ditambahkan',
+                'data' => $user->load('role')
+            ])->header('Content-Type', 'application/json');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data tidak valid: ' . implode(', ', $e->validator->errors()->all())
+            ], 422)->header('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menambahkan pengguna: ' . $e->getMessage()
+            ], 500)->header('Content-Type', 'application/json');
+        }
+    }
+
+    /**
+     * Store a newly created assessor in storage.
+     */
+    public function storeAssessor(Request $request)
+    {
+        try {
+            $request->validate([
+                'user_name' => 'required|string|max:255|unique:users',
+                'email' => 'required|string|email|max:255|unique:users',
+                'password' => 'required|string|min:8',
+                'role_id' => 'required|integer|in:2', // 2 = assessor
+            ]);
+
+            // Set foto default
+            $fotoPath = '/assets/User.svg';
+
+            $user = User::create([
+                'user_name' => $request->user_name,
+                'email' => $request->email,
+                'password' => bcrypt($request->password),
+                'role_id' => $request->role_id ?? 2, // Default role sebagai Assessor
+                'foto' => $fotoPath,
+                'block' => 0
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Assessor berhasil ditambahkan',
+                'data' => $user->load('role')
+            ])->header('Content-Type', 'application/json');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data tidak valid: ' . implode(', ', $e->validator->errors()->all())
+            ], 422)->header('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menambahkan assessor: ' . $e->getMessage()
+            ], 500)->header('Content-Type', 'application/json');
+        }
     }
 
     /**

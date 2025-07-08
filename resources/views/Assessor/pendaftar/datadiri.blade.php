@@ -13,6 +13,41 @@
         <h1 class="text-3xl font-bold text-gray-800">Detail Data Diri</h1>
     </div>
 
+    <!-- Flash Messages -->
+    @if(session('success'))
+    <div class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg flex items-center">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        {{ session('success') }}
+    </div>
+    @endif
+
+    @if(session('error'))
+    <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-center">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+        </svg>
+        {{ session('error') }}
+    </div>
+    @endif
+
+    @if($errors->any())
+    <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+        <div class="flex items-center mb-2">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+            </svg>
+            <strong>Terjadi kesalahan:</strong>
+        </div>
+        <ul class="list-disc pl-7">
+            @foreach($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+
     <div class="bg-white rounded-2xl shadow p-6">
         <!-- Header dengan foto -->
         <div class="flex flex-col md:flex-row gap-6 mb-6">
@@ -211,12 +246,106 @@
         </div>
         @endif
 
-        <!-- Tombol Kembali -->
-        <div class="flex justify-end">
-            <a href="{{ route('assesor.index') }}"
-                class="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition">
-                Kembali ke Daftar Pendaftar
-            </a>
+        <!-- Status dan Tombol -->
+        <div class="border-t border-gray-200 pt-6">
+            <form action="{{ route('assesor.pendaftar.update-status', $dataDiri->id) }}" method="POST" class="flex flex-col md:flex-row gap-4 items-end justify-between">
+                @csrf
+                @method('PATCH')
+
+                <div class="flex-1 max-w-md">
+                    <label for="status" class="block text-sm font-medium text-gray-600 mb-2">Status Pendaftar</label>
+                    <select name="status" id="status" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="prosess" {{ $dataDiri->status == 'prosess' ? 'selected' : '' }}>
+                            🔄 Proses
+                        </option>
+                        <option value="sukses" {{ $dataDiri->status == 'sukses' ? 'selected' : '' }}>
+                            ✅ Sukses
+                        </option>
+                        <option value="pending" {{ $dataDiri->status == 'pending' ? 'selected' : '' }}>
+                            ⏳ Pending
+                        </option>
+                        <option value="gagal" {{ $dataDiri->status == 'gagal' ? 'selected' : '' }}>
+                            ❌ Gagal
+                        </option>
+                    </select>
+
+                    <!-- Status Badge Display -->
+                    <div class="mt-2">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                            @if($dataDiri->status == 'sukses') bg-green-100 text-green-800
+                            @elseif($dataDiri->status == 'pending') bg-yellow-100 text-yellow-800
+                            @elseif($dataDiri->status == 'gagal') bg-red-100 text-red-800
+                            @else bg-blue-100 text-blue-800 @endif">
+                            @if($dataDiri->status == 'sukses') ✅ Sukses
+                            @elseif($dataDiri->status == 'pending') ⏳ Pending
+                            @elseif($dataDiri->status == 'gagal') ❌ Gagal
+                            @else 🔄 Proses @endif
+                        </span>
+                    </div>
+                </div>
+
+                <div class="flex gap-3">
+                    <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200 flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                        Simpan Status
+                    </button>
+
+                    <a href="{{ route('assesor.pendaftar') }}"
+                        class="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition duration-200 flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                        Kembali ke Daftar Pendaftar
+                    </a>
+                </div>
+            </form>
         </div>
     </div>
+
+    <script>
+        // Update status badge when dropdown changes
+        document.getElementById('status').addEventListener('change', function() {
+            const selectedValue = this.value;
+            const badge = document.querySelector('.inline-flex.items-center.px-2\\.5');
+
+            // Remove all existing classes
+            badge.className = badge.className.replace(/bg-\w+-100|text-\w+-800/g, '');
+
+            // Add new classes based on selected value
+            switch (selectedValue) {
+                case 'sukses':
+                    badge.className += ' bg-green-100 text-green-800';
+                    badge.textContent = '✅ Sukses';
+                    break;
+                case 'pending':
+                    badge.className += ' bg-yellow-100 text-yellow-800';
+                    badge.textContent = '⏳ Pending';
+                    break;
+                case 'gagal':
+                    badge.className += ' bg-red-100 text-red-800';
+                    badge.textContent = '❌ Gagal';
+                    break;
+                default:
+                    badge.className += ' bg-blue-100 text-blue-800';
+                    badge.textContent = '🔄 Proses';
+            }
+        });
+
+        // Form submission confirmation
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const selectedStatus = document.getElementById('status').value;
+            const statusLabels = {
+                'prosess': 'Proses',
+                'sukses': 'Sukses',
+                'pending': 'Pending',
+                'gagal': 'Gagal'
+            };
+
+            if (!confirm(`Apakah Anda yakin ingin mengubah status menjadi "${statusLabels[selectedStatus]}"?`)) {
+                e.preventDefault();
+            }
+        });
+    </script>
 </x-layout_assessor>
