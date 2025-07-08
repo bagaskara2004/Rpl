@@ -126,6 +126,7 @@ Route::prefix('admin')->middleware('admin.only')->group(function () {
 
     // Berita Routes
     Route::get('/berita', [AdminBeritaController::class, 'index'])->name('admin.berita.index');
+    Route::get('/berita/debug', [AdminBeritaController::class, 'debug'])->name('admin.berita.debug');
     Route::get('/berita/data', [AdminBeritaController::class, 'data'])->name('admin.berita.data');
     Route::get('/berita/create', [AdminBeritaController::class, 'create'])->name('admin.berita.create');
     Route::post('/berita', [AdminBeritaController::class, 'store'])->name('admin.berita.store');
@@ -225,4 +226,19 @@ Route::prefix('admin')->middleware('admin.only')->group(function () {
     Route::post('/mata-kuliah', [App\Http\Controllers\Admin\matakuliah\MataKuliahController::class, 'store'])->name('admin.matakuliah.store');
     Route::put('/mata-kuliah/{id}', [App\Http\Controllers\Admin\matakuliah\MataKuliahController::class, 'update'])->name('admin.matakuliah.update');
     Route::delete('/mata-kuliah/{id}', [App\Http\Controllers\Admin\matakuliah\MataKuliahController::class, 'destroy'])->name('admin.matakuliah.destroy');
+
+    // Admin Pendaftar Routes
+    Route::get('/pendaftar', [App\Http\Controllers\Admin\pendaftar\AssessorController::class, 'index'])->name('admin.pendaftar.index');
+    Route::get('/pendaftar/data', [App\Http\Controllers\Admin\pendaftar\AssessorController::class, 'getData'])->name('admin.pendaftar.data');
+    Route::get('/pendaftar/modal/{id}', [App\Http\Controllers\Admin\pendaftar\AssessorController::class, 'getModalData'])->name('admin.pendaftar.modal');
+    Route::match(['get', 'post'], '/pendaftar/transfer-nilai/{id}', [App\Http\Controllers\Admin\pendaftar\AssessorController::class, 'transferNilai'])->name('admin.pendaftar.transfer-nilai');
+    Route::post('/pendaftar/transfer/update-status/{userId}', [App\Http\Controllers\Admin\pendaftar\AssessorController::class, 'updateTransferStatus'])->name('admin.pendaftar.transfer.update-status');
+    Route::post('/pendaftar/keputusan', [App\Http\Controllers\Admin\pendaftar\AssessorController::class, 'storeKeputusan'])->name('admin.pendaftar.keputusan');
+    Route::get('/pendaftar/datadiri/{id}', [App\Http\Controllers\Admin\pendaftar\AssessorController::class, 'datadiri'])->name('admin.pendaftar.datadiri');
+    Route::patch('/pendaftar/{id}/status', [App\Http\Controllers\Admin\pendaftar\AssessorController::class, 'updateStatus'])->name('admin.pendaftar.update-status');
+
+    // Assessment Routes for Admin
+    Route::get('/pendaftar/modal/assessment/{id}', [App\Http\Controllers\Admin\assessment\AssessmentController::class, 'getAssessmentModal'])->name('admin.assessment.modal');
+    Route::get('/pendaftar/asesmen/{id}', [App\Http\Controllers\Admin\assessment\AssessmentController::class, 'showAsesmen'])->name('admin.asesmen.show');
+    Route::post('/pendaftar/assessment/update-status/{userId}', [App\Http\Controllers\Admin\assessment\AssessmentController::class, 'updateStatus'])->name('admin.assessment.update-status');
 });

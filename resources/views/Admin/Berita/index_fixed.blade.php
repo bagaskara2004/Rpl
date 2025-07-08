@@ -142,9 +142,22 @@
         emptyState.classList.add('hidden');
 
         fetch(`{{ route('admin.berita.data') }}?page=${currentPage}&search=${encodeURIComponent(searchValue)}`)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
                 loadingState.classList.add('hidden');
+
+                // Check if response contains error
+                if (data.error) {
+                    console.error('Server error:', data.error);
+                    console.error('Error trace:', data.trace);
+                    Swal.fire('Error', 'Error dari server: ' + data.error, 'error');
+                    return;
+                }
 
                 // Debug: Log the data structure to console
                 console.log('Data received:', data);
@@ -152,21 +165,31 @@
                     console.log('First item structure:', data.data[0]);
                 }
 
-                if (data.data.length === 0) {
+                if (data.data && data.data.length === 0) {
                     emptyState.classList.remove('hidden');
                     paginationContainer.classList.add('hidden');
-                } else {
+                } else if (data.data) {
                     renderTable(data.data);
                     updatePagination(data);
                     paginationContainer.classList.remove('hidden');
+                } else {
+                    console.error('Invalid data structure:', data);
+                    Swal.fire('Error', 'Format data tidak valid', 'error');
                 }
 
-                document.getElementById('totalCount').textContent = data.total;
+                document.getElementById('totalCount').textContent = data.total || 0;
             })
             .catch(error => {
                 console.error('Error:', error);
                 loadingState.classList.add('hidden');
-                Swal.fire('Error', 'Gagal memuat data berita', 'error');
+
+                // Show more detailed error message
+                let errorMessage = 'Gagal memuat data berita';
+                if (error.message) {
+                    errorMessage += ': ' + error.message;
+                }
+
+                Swal.fire('Error', errorMessage, 'error');
             });
     }
 

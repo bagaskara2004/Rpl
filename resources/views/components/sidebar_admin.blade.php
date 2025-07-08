@@ -212,7 +212,7 @@
         </a>
 
         @if(Auth::user()->role_id == 5)
-        <a href="{{ route('assesor.pendaftar') }}"
+        <a href="{{ route('admin.pendaftar.index') }}"
             class="flex items-center gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg transition font-semibold text-sm font-nunito hover:bg-indigo-50 text-gray-700">
             <!-- Registration icon from icons8 -->
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 64 64" class="sm:w-5 sm:h-5 flex-shrink-0">

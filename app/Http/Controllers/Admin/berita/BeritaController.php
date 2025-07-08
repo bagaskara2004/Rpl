@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Berita;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class BeritaController extends Controller
@@ -23,29 +24,42 @@ class BeritaController extends Controller
      */
     public function data(Request $request)
     {
-        $search = $request->input('search');
-        $page = $request->input('page', 1);
-        $perPage = 9;
+        try {
+            $search = $request->input('search');
+            $page = $request->input('page', 1);
+            $perPage = 9;
 
-        $query = Berita::with('admin')->orderBy('created_at', 'desc');
+            // Simple query first - remove with clause temporarily
+            $query = Berita::orderBy('created_at', 'desc');
 
-        if ($search) {
-            $query->search($search);
+            if ($search) {
+                $query->search($search);
+            }
+
+            $total = $query->count();
+            $berita = $query->skip(($page - 1) * $perPage)
+                ->take($perPage)
+                ->get();
+
+            // Load admin relation separately to avoid issues
+            $berita->load(['admin' => function ($query) {
+                $query->select('id', 'user_name', 'email'); // Hanya ambil kolom yang pasti ada
+            }]);
+
+            $totalPages = ceil($total / $perPage);
+
+            return response()->json([
+                'data' => $berita,
+                'current_page' => $page,
+                'total_pages' => $totalPages,
+                'total' => $total
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Terjadi kesalahan: ' . $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ], 500);
         }
-
-        $total = $query->count();
-        $berita = $query->skip(($page - 1) * $perPage)
-            ->take($perPage)
-            ->get();
-
-        $totalPages = ceil($total / $perPage);
-
-        return response()->json([
-            'data' => $berita,
-            'current_page' => $page,
-            'total_pages' => $totalPages,
-            'total' => $total
-        ]);
     }
 
     /**
@@ -68,7 +82,7 @@ class BeritaController extends Controller
         ]);
 
         $data = [
-            'admin_id' => auth()->id(),
+            'admin_id' => Auth::id(),
             'judul' => $request->judul,
             'slug' => Str::slug($request->judul),
             'deskripsi' => $request->deskripsi
@@ -92,7 +106,9 @@ class BeritaController extends Controller
      */
     public function show($id)
     {
-        $berita = Berita::with('admin')->findOrFail($id);
+        $berita = Berita::with(['admin' => function ($query) {
+            $query->select('id', 'user_name', 'name', 'email');
+        }])->findOrFail($id);
         return view('Admin.Berita.show', compact('berita'));
     }
 
@@ -165,6 +181,29 @@ class BeritaController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal menghapus berita'
+            ], 500);
+        }
+    }
+
+    /**
+     * Debug method untuk testing
+     */
+    public function debug()
+    {
+        try {
+            // Test basic query
+            $count = Berita::count();
+            $users = \App\Models\User::count();
+
+            return response()->json([
+                'berita_count' => $count,
+                'users_count' => $users,
+                'message' => 'Debug berhasil'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
             ], 500);
         }
     }
