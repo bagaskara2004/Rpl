@@ -44,7 +44,7 @@ class LoginController extends Controller
                 return redirect()->to('/dosen');
             }
             if ($user->role_id == 5) {
-                return redirect()->to('/superadmin');
+                return redirect()->to('admin/dashboard');
             }
         }
 

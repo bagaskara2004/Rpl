@@ -23,6 +23,7 @@ class User extends Authenticatable
         'password',
         'role_id',
         'foto',
+        'block',
     ];
 
     /**
@@ -66,6 +67,21 @@ class User extends Authenticatable
     public function assessments()
     {
         return $this->hasMany(Assessment::class);
+    }
+
+    public function pendidikan()
+    {
+        return $this->hasOne(\App\Models\Pendidikan::class, 'user_id');
+    }
+
+    public function sisaMk()
+    {
+        return $this->hasMany(SisaMk::class);
+    }
+
+    public function pengalamanKerja()
+    {
+        return $this->hasMany(\App\Models\PengalamanKerja::class, 'user_id');
     }
 
     // Accessor for name attribute to maintain compatibility

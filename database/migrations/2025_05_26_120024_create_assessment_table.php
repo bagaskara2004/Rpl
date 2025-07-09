@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('pertanyaan_id')->constrained('pertanyaan');
             $table->integer('jawaban')->nullable();
-            $table->integer('status')->nullable();
+            $table->enum('status', ['prosess', 'sukses','pending','gagal'])->default('prosess');
             $table->timestamps();
         });
     }

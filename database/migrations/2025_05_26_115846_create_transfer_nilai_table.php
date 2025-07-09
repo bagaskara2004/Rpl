@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('transkrip_id')->constrained('transkrip_nilai');
             $table->string('nilai', 5)->nullable();
             $table->text('catatan')->nullable();
-            $table->integer('status')->nullable();
+            $table->enum('status', ['prosess', 'sukses','pending','gagal'])->default('prosess');
             $table->timestamps();
         });
     }

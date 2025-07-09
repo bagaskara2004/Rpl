@@ -82,10 +82,42 @@ class AssessorController extends Controller
     {
         // Ambil semua user_id yang sudah ada di keputusan
         $userSudahDiputuskan = \App\Models\Keputusan::pluck('user_id')->toArray();
+
         // Ambil data diri yang user_id-nya belum ada di keputusan
         $dataDiri = DataDiri::with(['user', 'pendidikan'])
             ->whereNotIn('user_id', $userSudahDiputuskan)
             ->get();
+
+        // Add status information for each user
+        $dataDiri->each(function ($diri) {
+            // Get DataDiri status
+            $diri->data_diri_status = $diri->status;
+
+            // Get Assessment status
+            $assessment = \App\Models\Assessment::where('user_id', $diri->user_id)->first();
+            $diri->assessment_status = $assessment ? $assessment->status : null;
+
+            // Get TransferNilai status - check if all transfer nilai for this user have 'sukses' status
+            $transferNilai = \App\Models\TransferNilai::whereHas('transkripNilai', function ($query) use ($diri) {
+                $query->where('user_id', $diri->user_id);
+            })->get();
+
+            if ($transferNilai->count() > 0) {
+                // If all transfer nilai have status 'sukses', then it's sukses, otherwise not
+                $allSukses = $transferNilai->every(function ($transfer) {
+                    return $transfer->status === 'sukses';
+                });
+                $diri->transfer_nilai_status = $allSukses ? 'sukses' : 'pending';
+            } else {
+                $diri->transfer_nilai_status = null;
+            }
+
+            // Determine if evaluation buttons should be enabled
+            $diri->can_evaluate = ($diri->data_diri_status === 'sukses' &&
+                $diri->assessment_status === 'sukses' &&
+                $diri->transfer_nilai_status === 'sukses');
+        });
+
         return response()->json($dataDiri);
     }
 
@@ -95,23 +127,25 @@ class AssessorController extends Controller
         return response()->json($diri);
     }
 
-    public function getAssessmentModal($id)
-    {
-
-        $pertanyaan = Pertanyaan::all();
-
-        $assessment = Assessment::where('user_id', $id)->get();
-        return response()->json([
-            'pertanyaan' => $pertanyaan,
-            'assessment' => $assessment,
-        ]);
-    }
-
     public function transferNilai($id, Request $request)
     {
         $kurikulum = Kurikulum::all();
         $transkrip = TranskripNilai::where('user_id', $id)->get();
 
+        // Get existing transfer nilai for this user to prevent duplicates
+        $existingTransfers = \App\Models\TransferNilai::whereHas('transkripNilai', function ($query) use ($id) {
+            $query->where('user_id', $id);
+        })->with(['kurikulum', 'transkripNilai'])->get();
+
+        // Check if user already has transfer nilai data
+        $hasTransferNilai = $existingTransfers->count() > 0;
+
+        // Calculate SKS totals
+        $totalSksTrpl = $kurikulum->sum('sks');
+        $transferredSks = $existingTransfers->sum(function ($transfer) {
+            return $transfer->kurikulum->sks ?? 0;
+        });
+        $remainingSks = $totalSksTrpl - $transferredSks;
 
         if ($request->isMethod('post')) {
             $asesor_id = Auth::check() ? Auth::user()->id : 2;
@@ -120,47 +154,40 @@ class AssessorController extends Controller
             $keterangan = $request->input('keterangan', []);
             $transkrip_ids = $request->input('transkrip_id', []);
 
+            $savedCount = 0;
             foreach ($kurikulum_ids as $i => $kurikulum_id) {
-                \App\Models\TransferNilai::create([
-                    'asesor_id' => $asesor_id,
-                    'kurikulum_id' => $kurikulum_id,
-                    'transkrip_id' => $transkrip_ids[$i] ?? null,
-                    'nilai' => $nilai_trpl[$i] ?? null,
-                    'catatan' => $keterangan[$i] ?? null,
-                    'status' => 1,
-                ]);
+                // Only save if kurikulum_id is not null or empty
+                if (!empty($kurikulum_id)) {
+                    \App\Models\TransferNilai::create([
+                        'asesor_id' => $asesor_id,
+                        'kurikulum_id' => $kurikulum_id,
+                        'transkrip_id' => $transkrip_ids[$i] ?? null,
+                        'nilai' => $nilai_trpl[$i] ?? null,
+                        'catatan' => $keterangan[$i] ?? null,
+                        'status' => 1,
+                    ]);
+                    $savedCount++;
+                }
             }
-            return redirect()->route('assesor.index')->with('success', 'Data transfer nilai berhasil disimpan!');
+
+            $message = $savedCount > 0
+                ? "Data transfer nilai berhasil disimpan! ($savedCount mata kuliah ditransfer)"
+                : "Tidak ada mata kuliah yang dipilih untuk ditransfer.";
+
+            return redirect()->route('assesor.index')->with('success', $message);
         }
 
         return view('Assessor.pendaftar.transfer_nilai', [
             'id' => $id,
             'kurikulum' => $kurikulum,
             'transkrip' => $transkrip,
+            'existingTransfers' => $existingTransfers,
+            'totalSksTrpl' => $totalSksTrpl,
+            'transferredSks' => $transferredSks,
+            'remainingSks' => $remainingSks,
+            'hasTransferNilai' => $hasTransferNilai,
+            'transferNilai' => $existingTransfers, // Data untuk tampilan statis
         ]);
-    }
-
-    public function showAsesmen($id)
-    {
-        // Validasi ID
-        if (!$id || !is_numeric($id)) {
-            return redirect()->route('assesor.index')->with('error', 'ID tidak valid');
-        }
-
-        // Ambil data pendaftar
-        $dataDiri = DataDiri::with(['user', 'pendidikan'])->find($id);
-
-        if (!$dataDiri) {
-            return redirect()->route('assesor.index')->with('error', 'Data pendaftar tidak ditemukan');
-        }
-
-        // Ambil semua pertanyaan
-        $pertanyaan = Pertanyaan::all();
-
-        // Ambil assessment yang sudah dijawab user
-        $assessment = Assessment::where('user_id', $id)->get();
-
-        return view('Assessor.pendaftar.asesment', compact('dataDiri', 'pertanyaan', 'assessment'));
     }
 
     public function storeKeputusan(Request $request)
@@ -287,6 +314,46 @@ class AssessorController extends Controller
                 'success' => false,
                 'message' => 'Terjadi kesalahan saat mengubah password.'
             ], 500);
+        }
+    }
+
+    /**
+     * Update status for all transfer nilai of a specific user.
+     */
+    public function updateTransferStatus(Request $request, $userId)
+    {
+        $request->validate([
+            'status' => 'required|in:prosess,sukses,pending,gagal'
+        ]);
+
+        try {
+            // Get all transfer nilai for this user through transkrip_nilai relationship
+            $updated = \App\Models\TransferNilai::whereHas('transkripNilai', function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            })->update(['status' => $request->status]);
+
+            // If AJAX request, return JSON
+            if ($request->ajax() || $request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Status transfer nilai berhasil diperbarui',
+                    'updated_count' => $updated
+                ]);
+            }
+
+            // For regular form submission, redirect back with success message
+            return redirect()->back()->with('success', 'Status transfer nilai berhasil diperbarui');
+        } catch (\Exception $e) {
+            // If AJAX request, return JSON error
+            if ($request->ajax() || $request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Gagal memperbarui status transfer nilai: ' . $e->getMessage()
+                ], 500);
+            }
+
+            // For regular form submission, redirect back with error message
+            return redirect()->back()->with('error', 'Gagal memperbarui status transfer nilai: ' . $e->getMessage());
         }
     }
 }

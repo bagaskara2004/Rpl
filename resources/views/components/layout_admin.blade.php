@@ -5,8 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Admin Panel</title>
+    <title></title>
     @vite('resources/css/app.css')
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.2.1/dist/flowbite.min.js"></script>
 </head>
 
 <body>
@@ -38,67 +39,61 @@
                 @yield('content')
             </main>
         </div>
-    </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const sidebar = document.getElementById('sidebar-asesor');
-            const mainContent = document.getElementById('main-content');
-            const logoBtn = document.getElementById('sidebar-logo-btn');
-            const overlay = document.getElementById('sidebar-overlay');
-            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const sidebar = document.getElementById('sidebar-asesor');
+                const mainContent = document.getElementById('main-content');
+                const logoBtn = document.getElementById('sidebar-logo-btn');
+                const overlay = document.getElementById('sidebar-overlay');
+                const mobileMenuBtn = document.getElementById('mobile-menu-btn');
 
-            // Desktop sidebar toggle
-            if (logoBtn) {
-                logoBtn.addEventListener('click', function() {
-                    // Only toggle on desktop
-                    if (window.innerWidth >= 1024) {
-                        setTimeout(function() {
-                            if (sidebar.classList.contains('w-16')) {
-                                mainContent.classList.remove('lg:ml-64');
-                                mainContent.classList.add('lg:ml-16');
-                            } else {
-                                mainContent.classList.remove('lg:ml-16');
-                                mainContent.classList.add('lg:ml-64');
-                            }
-                        }, 10);
-                    }
-                });
-            }
-
-            // Mobile menu toggle
-            if (mobileMenuBtn) {
-                mobileMenuBtn.addEventListener('click', function() {
-                    sidebar.classList.toggle('-translate-x-full');
-                    overlay.classList.toggle('hidden');
-                });
-            }
-
-            // Close mobile menu when clicking overlay
-            if (overlay) {
-                overlay.addEventListener('click', function() {
-                    sidebar.classList.add('-translate-x-full');
-                    overlay.classList.add('hidden');
-                });
-            }
-
-            // Handle window resize
-            window.addEventListener('resize', function() {
-                if (window.innerWidth >= 1024) {
-                    sidebar.classList.remove('-translate-x-full');
-                    overlay.classList.add('hidden');
-                    mainContent.classList.remove('ml-0');
-                    if (!sidebar.classList.contains('w-16')) {
-                        mainContent.classList.add('lg:ml-64');
-                    } else {
-                        mainContent.classList.add('lg:ml-16');
-                    }
-                } else {
-                    mainContent.classList.remove('lg:ml-64', 'lg:ml-16');
-                    mainContent.classList.add('ml-0');
+                // Desktop sidebar toggle
+                if (logoBtn) {
+                    logoBtn.addEventListener('click', function() {
+                        // Only toggle on desktop
+                        if (window.innerWidth >= 1024) {
+                            sidebar.classList.toggle('collapsed');
+                            mainContent.classList.toggle('lg:ml-64');
+                            mainContent.classList.toggle('lg:ml-16');
+                        }
+                    });
                 }
+
+                // Mobile menu toggle
+                if (mobileMenuBtn) {
+                    mobileMenuBtn.addEventListener('click', function() {
+                        sidebar.classList.toggle('-translate-x-full');
+                        overlay.classList.toggle('hidden');
+                    });
+                }
+
+                // Close mobile menu when clicking overlay
+                if (overlay) {
+                    overlay.addEventListener('click', function() {
+                        sidebar.classList.add('-translate-x-full');
+                        overlay.classList.add('hidden');
+                    });
+                }
+
+                // Handle window resize
+                window.addEventListener('resize', function() {
+                    if (window.innerWidth >= 1024) {
+                        sidebar.classList.remove('-translate-x-full');
+                        overlay.classList.add('hidden');
+                        mainContent.classList.remove('ml-0');
+                        if (!sidebar.classList.contains('w-16')) {
+                            mainContent.classList.add('lg:ml-64');
+                        } else {
+                            mainContent.classList.add('lg:ml-16');
+                        }
+                    } else {
+                        mainContent.classList.remove('lg:ml-64', 'lg:ml-16');
+                        mainContent.classList.add('ml-0');
+                    }
+                });
             });
-        });
-    </script>
+        </script>
+    </div>
 </body>
 
 </html>

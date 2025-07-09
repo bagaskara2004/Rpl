@@ -24,6 +24,7 @@ class MataKuliahSeeder extends Seeder
             $dosens = User::limit(3)->get();
         }
 
+        
         // Ambil semua kelas
         $kelasList = Kelas::all();
 
@@ -55,19 +56,6 @@ class MataKuliahSeeder extends Seeder
             ],
         ];
 
-        foreach ($kelasList as $kelas) {
-            foreach ($mataKuliahData as $index => $mata_kuliah) {
-                // Assign dosen secara round-robin
-                $dosen = $dosens[$index % $dosens->count()];
-
-                MataKuliah::create([
-                    'kelas_id' => $kelas->id,
-                    'dosen_id' => $dosen->id,
-                    'mata_kuliah' => $mata_kuliah['mata_kuliah'],
-                    'semester' => $mata_kuliah['semester'],
-                    'tahun' => $mata_kuliah['tahun']
-                ]);
-            }
-        }
+      
     }
 }

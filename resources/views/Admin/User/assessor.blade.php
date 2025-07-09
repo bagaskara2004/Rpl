@@ -76,18 +76,26 @@
 </style>
 
 <div class="container-mobile p-3 sm:p-4 md:p-6 lg:p-8">
-    <!-- Header dengan Search -->
+    <!-- Header dengan Search dan Add Button -->
     <div class="header-mobile flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-4">
         <h1 class="header-title text-xl sm:text-2xl font-bold text-gray-800">Daftar Assessor</h1>
-        <div class="mobile-search flex items-center bg-white border border-gray-300 rounded-lg px-3 sm:px-4 py-2 w-full sm:w-80 lg:w-96">
-            <svg class="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 mr-2 sm:mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-            <input
-                type="text"
-                id="search-input"
-                placeholder="Cari assessor..."
-                class="w-full outline-none text-gray-700 placeholder-gray-400 text-sm sm:text-base search-input">
+        <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+            <div class="mobile-search flex items-center bg-white border border-gray-300 rounded-lg px-3 sm:px-4 py-2 w-full sm:w-80 lg:w-96">
+                <svg class="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 mr-2 sm:mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input
+                    type="text"
+                    id="search-input"
+                    placeholder="Cari assessor..."
+                    class="w-full outline-none text-gray-700 placeholder-gray-400 text-sm sm:text-base search-input">
+            </div>
+            <button data-modal-target="add-assessor-modal" data-modal-toggle="add-assessor-modal" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors duration-200 flex items-center gap-2 whitespace-nowrap" type="button">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+                Tambah Assessor
+            </button>
         </div>
     </div>
 
@@ -135,6 +143,69 @@
                         </svg>
                     </button>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Add Assessor -->
+<div id="add-assessor-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative p-4 w-full max-w-md max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-900">
+                    Tambah Assessor Baru
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="add-assessor-modal">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="p-4 md:p-5">
+                <form id="add-assessor-form" class="space-y-4" enctype="multipart/form-data">
+                    @csrf
+                    <div>
+                        <label for="user_name" class="block mb-2 text-sm font-medium text-gray-900">Username</label>
+                        <input type="text" id="user_name" name="user_name" required
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Masukkan username">
+                        <span class="text-red-500 text-sm hidden" id="error-user_name"></span>
+                    </div>
+
+                    <div>
+                        <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email</label>
+                        <input type="email" id="email" name="email" required
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="name@company.com">
+                        <span class="text-red-500 text-sm hidden" id="error-email"></span>
+                    </div>
+
+                    <div>
+                        <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Password</label>
+                        <input type="password" id="password" name="password" required
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="••••••••">
+                        <span class="text-red-500 text-sm hidden" id="error-password"></span>
+                    </div>
+
+                    <!-- Hidden field untuk role default sebagai Assessor -->
+                    <input type="hidden" name="role_id" value="2">
+
+                    <div class="flex justify-end space-x-3">
+                        <button data-modal-hide="add-assessor-modal" type="button" class="py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">
+                            Batal
+                        </button>
+                        <button type="submit" id="submit-btn" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                            <svg id="loading-spinner" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            <span id="submit-text">Simpan</span>
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -192,7 +263,7 @@
             tbody.innerHTML += `
                 <tr class="hover:bg-gray-50 transition-colors duration-200">
                     <td class="py-3 sm:py-4 px-3 sm:px-6">
-                        <img src="${user.foto ?? '/assets/default-avatar.png'}" 
+                        <img src="${user.foto ?? '/assets/User.svg'}" 
                              alt="Foto" 
                              class="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover border-2 border-gray-200">
                     </td>
@@ -229,7 +300,7 @@
                 <div class="mobile-card p-4 border-b border-gray-100 hover:bg-gray-50 transition-colors duration-200">
                     <div class="mobile-card-content">
                         <div class="flex items-center space-x-3 user-info">
-                            <img src="${user.foto ?? '/assets/default-avatar.png'}" 
+                            <img src="${user.foto ?? '/assets/User.svg'}" 
                                  alt="Foto" 
                                  class="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover border-2 border-gray-200 flex-shrink-0">
                             <div class="flex-1 min-w-0">
@@ -291,6 +362,34 @@
     document.addEventListener('DOMContentLoaded', function() {
         // Initialize the page
         loadUserTable();
+
+        // Modal and form elements
+        const form = document.getElementById('add-assessor-form');
+
+        // Listen for button clicks that open the modal to reset form
+        document.querySelector('[data-modal-toggle="add-assessor-modal"]').addEventListener('click', function() {
+            // Small delay to ensure modal is ready
+            setTimeout(() => {
+                form.reset();
+                clearErrors();
+            }, 100);
+        });
+
+        // Listen for modal hide buttons to reset form
+        document.querySelectorAll('[data-modal-hide="add-assessor-modal"]').forEach(button => {
+            button.addEventListener('click', function() {
+                setTimeout(() => {
+                    form.reset();
+                    clearErrors();
+                }, 100);
+            });
+        });
+
+        // Form submission
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            submitForm();
+        });
 
         // Search functionality with debounce
         let searchTimeout;
@@ -360,6 +459,100 @@
             }, 150);
         });
     });
+
+    function submitForm() {
+        const submitBtn = document.getElementById('submit-btn');
+        const submitText = document.getElementById('submit-text');
+        const loadingSpinner = document.getElementById('loading-spinner');
+
+        // Show loading state
+        submitBtn.disabled = true;
+        submitText.textContent = 'Menyimpan...';
+        loadingSpinner.classList.remove('hidden');
+
+        // Clear previous errors
+        clearErrors();
+
+        const formData = new FormData(document.getElementById('add-assessor-form'));
+
+        fetch('/admin/user/assessor', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire('Berhasil!', data.message, 'success');
+
+                    // Hide modal by triggering the hide button
+                    const hideButton = document.querySelector('[data-modal-hide="add-assessor-modal"]');
+                    if (hideButton) {
+                        hideButton.click();
+                    }
+
+                    document.getElementById('add-assessor-form').reset();
+                    clearErrors();
+                    loadUserTable(); // Reload table
+                } else {
+                    if (data.message.includes('Data tidak valid:')) {
+                        // Handle validation errors
+                        const errors = data.message.replace('Data tidak valid: ', '').split(', ');
+                        errors.forEach(error => {
+                            if (error.includes('user_name')) {
+                                showError('user_name', 'Username sudah digunakan');
+                            } else if (error.includes('email')) {
+                                showError('email', 'Email sudah digunakan');
+                            } else if (error.includes('password')) {
+                                showError('password', 'Password minimal 8 karakter');
+                            }
+                        });
+                    } else {
+                        Swal.fire('Gagal!', data.message, 'error');
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire('Gagal!', 'Terjadi kesalahan pada server', 'error');
+            })
+            .finally(() => {
+                // Reset loading state
+                submitBtn.disabled = false;
+                submitText.textContent = 'Simpan';
+                loadingSpinner.classList.add('hidden');
+            });
+    }
+
+    function showError(field, message) {
+        const errorElement = document.getElementById(`error-${field}`);
+        const inputElement = document.getElementById(field);
+
+        if (errorElement && inputElement) {
+            errorElement.textContent = message;
+            errorElement.classList.remove('hidden');
+            inputElement.classList.remove('border-gray-300', 'focus:border-blue-500');
+            inputElement.classList.add('border-red-500', 'focus:border-red-500');
+        }
+    }
+
+    function clearErrors() {
+        const errorElements = document.querySelectorAll('[id^="error-"]');
+        const inputElements = document.querySelectorAll('input, select');
+
+        errorElements.forEach(element => {
+            element.classList.add('hidden');
+            element.textContent = '';
+        });
+
+        inputElements.forEach(element => {
+            element.classList.remove('border-red-500', 'focus:border-red-500');
+            element.classList.add('border-gray-300', 'focus:border-blue-500');
+        });
+    }
     document.addEventListener('click', function(e) {
         if (e.target.closest('.block-user-btn')) {
             const btn = e.target.closest('.block-user-btn');

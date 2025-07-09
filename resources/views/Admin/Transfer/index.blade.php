@@ -6,7 +6,15 @@
     @media (max-width: 768px) {
         .table-responsive {
             overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
+            -we                        <div class="flex-shrink-0">
+                            <a href="/admin/transfer-hasil/${item.id}" class="inline-flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-blue-300 text-blue-500 hover:bg-blue-50 transition-colors duration-200" 
+                               title="Lihat Detail">
+                                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                </svg>
+                            </a>
+                        </div>flow-scrolling: touch;
         }
 
         .mobile-card {
@@ -49,70 +57,12 @@
             font-size: 0.875rem;
         }
     }
-
-    /* Modal Background Blur Effect */
-    .modal-backdrop {
-        background: rgba(0, 0, 0, 0.6);
-        backdrop-filter: blur(5px);
-        -webkit-backdrop-filter: blur(5px);
-    }
-
-    .modal-content {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    }
-
-    /* Loading animation */
-    .loading-spinner {
-        border: 2px solid #f3f3f3;
-        border-top: 2px solid #667eea;
-        border-radius: 50%;
-        width: 20px;
-        height: 20px;
-        animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-        0% {
-            transform: rotate(0deg);
-        }
-
-        100% {
-            transform: rotate(360deg);
-        }
-    }
-
-    /* Detail table styles */
-    .detail-table {
-        max-height: 400px;
-        overflow-y: auto;
-    }
-
-    .detail-table::-webkit-scrollbar {
-        width: 6px;
-    }
-
-    .detail-table::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        border-radius: 3px;
-    }
-
-    .detail-table::-webkit-scrollbar-thumb {
-        background: #888;
-        border-radius: 3px;
-    }
-
-    .detail-table::-webkit-scrollbar-thumb:hover {
-        background: #555;
-    }
 </style>
 
 <div class="container-mobile p-3 sm:p-4 md:p-6 lg:p-8">
     <!-- Header dengan Search -->
     <div class="header-mobile flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-4">
-        <h1 class="header-title text-xl sm:text-2xl font-bold text-gray-800">Transcript Results</h1>
+        <h1 class="header-title text-xl sm:text-2xl font-bold text-gray-800">Transfer Results</h1>
         <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
             <div class="mobile-search flex items-center bg-white border border-gray-300 rounded-lg px-3 sm:px-4 py-2 w-full sm:w-80">
                 <svg class="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 mr-2 sm:mr-3 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -164,71 +114,7 @@
     </div>
 </div>
 
-<!-- Detail Transfer Modal -->
-<div id="detail-modal" class="fixed inset-0 modal-backdrop hidden overflow-y-auto h-full w-full z-50">
-    <div class="relative top-10 mx-auto p-5 border w-11/12 md:w-4/5 lg:w-3/4 xl:w-4/5 shadow-2xl rounded-lg bg-white">
-        <div class="modal-content">
-            <!-- Modal Header -->
-            <div class="flex justify-between items-center pb-4 mb-4 border-b border-gray-200">
-                <h3 id="modal-title" class="text-lg font-semibold text-gray-900">Detail Transfer Nilai</h3>
-                <button id="close-modal" class="text-gray-400 hover:text-gray-600 transition-colors duration-200 p-1 rounded-full hover:bg-gray-100">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
-            </div>
 
-            <!-- Loading State -->
-            <div id="modal-loading" class="hidden text-center py-8">
-                <div class="loading-spinner mx-auto mb-4"></div>
-                <p class="text-gray-500">Memuat data...</p>
-            </div>
-
-            <!-- Modal Content -->
-            <div id="modal-content" class="hidden">
-                <!-- Student Info -->
-                <div id="student-info" class="mb-6 p-4 bg-gray-50 rounded-lg">
-                    <!-- Student info akan dimuat melalui JavaScript -->
-                </div>
-
-                <!-- Transfer Details Table -->
-                <div class="detail-table">
-                    <table class="w-full table-auto border border-gray-200">
-                        <thead class="bg-gray-100">
-                            <tr>
-                                <th class="text-left py-2 px-3 text-xs font-semibold text-gray-600 uppercase border-b">No</th>
-                                <th class="text-left py-2 px-3 text-xs font-semibold text-gray-600 uppercase border-b">Mata Kuliah TRPL</th>
-                                <th class="text-center py-2 px-3 text-xs font-semibold text-gray-600 uppercase border-b">SKS TRPL</th>
-                                <th class="text-left py-2 px-3 text-xs font-semibold text-gray-600 uppercase border-b">Mata Kuliah Asal</th>
-                                <th class="text-center py-2 px-3 text-xs font-semibold text-gray-600 uppercase border-b">Nilai Asal</th>
-                                <th class="text-center py-2 px-3 text-xs font-semibold text-gray-600 uppercase border-b">Nilai Transfer</th>
-                                <th class="text-left py-2 px-3 text-xs font-semibold text-gray-600 uppercase border-b">Asesor</th>
-                            </tr>
-                        </thead>
-                        <tbody id="detail-table-body">
-                            <!-- Detail transfer akan dimuat melalui JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Summary -->
-                <div class="mt-4 p-4 bg-blue-50 rounded-lg">
-                    <div class="flex justify-between items-center">
-                        <span class="font-semibold text-gray-700">Total SKS Ditransfer:</span>
-                        <span id="total-sks-transfer" class="text-xl font-bold text-blue-600">0 SKS</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Modal Footer -->
-            <div class="flex justify-end mt-6">
-                <button id="close-modal-btn" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-200">
-                    Tutup
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <script>
     // Global variables
@@ -299,14 +185,13 @@
                         </span>
                     </td>
                     <td class="py-3 sm:py-4 px-3 sm:px-6 text-center">
-                        <button class="inline-flex items-center justify-center w-8 h-8 rounded-full border border-blue-300 text-blue-500 hover:bg-blue-50 transition-colors duration-200 detail-btn" 
-                                data-id="${item.id}" 
-                                title="Lihat Detail">
+                        <a href="/admin/transfer-hasil/${item.id}" class="inline-flex items-center justify-center w-8 h-8 rounded-full border border-blue-300 text-blue-500 hover:bg-blue-50 transition-colors duration-200" 
+                           title="Lihat Detail">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                             </svg>
-                        </button>
+                        </a>
                     </td>
                 </tr>
             `;
@@ -337,14 +222,13 @@
                             </div>
                         </div>
                         <div class="flex-shrink-0">
-                            <button class="inline-flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-blue-300 text-blue-500 hover:bg-blue-50 transition-colors duration-200 detail-btn" 
-                                    data-id="${item.id}" 
-                                    title="Lihat Detail">
+                            <a href="/admin/transfer/${item.id}" class="inline-flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-blue-300 text-blue-500 hover:bg-blue-50 transition-colors duration-200" 
+                               title="Lihat Detail">
                                 <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                                 </svg>
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -357,10 +241,7 @@
     }
 
     function addActionListeners() {
-        // Detail buttons
-        document.querySelectorAll('.detail-btn').forEach(btn => {
-            btn.addEventListener('click', () => showDetailModal(btn.dataset.id));
-        });
+        // No action buttons needed anymore since we're using direct links
     }
 
     // Search functionality
@@ -447,101 +328,6 @@
         document.getElementById('showing-total').textContent = totalItems;
     }
 
-    // Modal functions
-    function showDetailModal(userId) {
-        const modal = document.getElementById('detail-modal');
-        const loading = document.getElementById('modal-loading');
-        const content = document.getElementById('modal-content');
-
-        modal.classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
-
-        loading.classList.remove('hidden');
-        content.classList.add('hidden');
-
-        // Find user data for title
-        const userData = allData.find(item => item.id == userId);
-        if (userData) {
-            document.getElementById('modal-title').textContent = `Detail Transfer Nilai - ${userData.name}`;
-        }
-
-        // Load transfer details
-        fetch(`/admin/transfer-hasil/${userId}/detail`)
-            .then(res => res.json())
-            .then(response => {
-                loading.classList.add('hidden');
-                if (response.success) {
-                    renderDetailModal(response.data, userData);
-                    content.classList.remove('hidden');
-                } else {
-                    hideDetailModal();
-                    alert('Gagal memuat detail transfer');
-                }
-            })
-            .catch(() => {
-                loading.classList.add('hidden');
-                hideDetailModal();
-                alert('Terjadi kesalahan saat memuat data');
-            });
-    }
-
-    function renderDetailModal(transferData, userData) {
-        // Render student info
-        const studentInfo = document.getElementById('student-info');
-        studentInfo.innerHTML = `
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                    <p class="text-sm text-gray-600">Nama Mahasiswa</p>
-                    <p class="font-semibold text-gray-900">${userData.name}</p>
-                </div>
-                <div>
-                    <p class="text-sm text-gray-600">Jurusan Asal</p>
-                    <p class="font-semibold text-gray-900">${userData.major}</p>
-                </div>
-               
-            </div>
-        `;
-
-        // Render transfer details table
-        const tableBody = document.getElementById('detail-table-body');
-        let totalSks = 0;
-
-        tableBody.innerHTML = '';
-        transferData.forEach((item, index) => {
-            totalSks += parseInt(item.sks_kurikulum);
-            // Menentukan nilai asal yang akan ditampilkan
-            const nilaiAsal = item.nilai_huruf_asal || item.nilai_angka_asal || '-';
-
-            tableBody.innerHTML += `
-                <tr class="hover:bg-gray-50">
-                    <td class="py-2 px-3 text-sm border-b">${index + 1}</td>
-                    <td class="py-2 px-3 text-sm border-b">${item.mata_kuliah_trpl}</td>
-                    <td class="py-2 px-3 text-sm text-center border-b">${item.sks_kurikulum}</td>
-                    <td class="py-2 px-3 text-sm border-b">${item.mata_kuliah_asal} (${item.sks_asal} SKS)</td>
-                    <td class="py-2 px-3 text-sm text-center border-b">
-                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                            ${nilaiAsal}
-                        </span>
-                    </td>
-                    <td class="py-2 px-3 text-sm text-center border-b">
-                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                            ${item.nilai}
-                        </span>
-                    </td>
-                    <td class="py-2 px-3 text-sm border-b">${item.asesor_name}</td>
-                </tr>
-            `;
-        });
-
-        // Update total SKS
-        document.getElementById('total-sks-transfer').textContent = `${totalSks} SKS`;
-    }
-
-    function hideDetailModal() {
-        document.getElementById('detail-modal').classList.add('hidden');
-        document.body.style.overflow = 'auto';
-    }
-
     // Event Listeners
     document.addEventListener('DOMContentLoaded', function() {
         loadTransferTable();
@@ -553,24 +339,6 @@
             searchTimeout = setTimeout(() => {
                 filterData(e.target.value);
             }, 300);
-        });
-
-        // Modal close buttons
-        document.getElementById('close-modal').addEventListener('click', hideDetailModal);
-        document.getElementById('close-modal-btn').addEventListener('click', hideDetailModal);
-
-        // Modal backdrop click
-        document.getElementById('detail-modal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                hideDetailModal();
-            }
-        });
-
-        // ESC key to close modal
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                hideDetailModal();
-            }
         });
     });
 </script>
