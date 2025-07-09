@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\DataDiri;
 use App\Models\Pendidikan;
+use App\Models\PengalamanKerja;
 use App\Models\TranskripNilai;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -20,7 +21,8 @@ class RplController extends Controller
                 'konfirmasi' => $this->check(),
                 'datadiri' => DataDiri::where('user_id', Auth::id())->exists(),
                 'pendidikan' => Pendidikan::where('user_id', Auth::id())->exists(),
-                'asesment' => TranskripNilai::where('user_id', Auth::id())->exists()
+                'asesment' => TranskripNilai::where('user_id', Auth::id())->exists(),
+                'pengalamankerja' => PengalamanKerja::where('user_id', Auth::id())->get(),
             ]
         );
     }
@@ -38,7 +40,6 @@ class RplController extends Controller
     public function datadiri(Request $request)
     {
         if ($request->isMethod('get')) {
-            // dd(DataDiri::where('user_id',Auth::id())->get());
             return view(
                 'user.form-datadiri',
                 [
@@ -209,16 +210,61 @@ class RplController extends Controller
             ]);
             $data['user_id'] = Auth::id();
             TranskripNilai::create($data);
-            return back()->with('sukses','Data berhasil ditambahkan');
+            return back()->with('sukses', 'Data berhasil ditambahkan');
         }
 
         if ($request->isMethod('delete')) {
             $data = TranskripNilai::find($request->input('id'));
             if (!$data || $data->user_id != Auth::id()) {
-                return back()->with('gagal','Data gagal dihapus');
+                return back()->with('gagal', 'Data gagal dihapus');
             }
             TranskripNilai::destroy($request->input('id'));
-            return back()->with('sukses','Data berhasil dihapus');
+            return back()->with('sukses', 'Data berhasil dihapus');
         }
+    }
+
+    public function pengalamanKerja(Request $request, $id = 0)
+    {
+        if ($request->isMethod('get')) {
+            return view(
+                'user.form-pekerjaan',
+                [
+                    'data' => PengalamanKerja::where('user_id', Auth::id())->find($id)
+                ]
+            );
+        }
+        if ($request->isMethod('delete')) {
+            PengalamanKerja::destroy($request->input('id'));
+            return redirect()->to('/rpl')->with('sukses', 'Pengalaman Kerja berhasil dihapus');
+        }
+
+
+        $data = $request->validate([
+            'nama_perusahaan' => 'required|string|max:255',
+            'alamat_perusahaan' => 'required|string|max:255',
+            'negara_perusahaan' => 'required|string|max:255',
+            'provinsi_perusahaan' => 'required|string|max:255',
+            'kota_kab_perusahaan' => 'required|string|max:255',
+            'sejak' => 'required',
+            'sampai' => '',
+            'nama_staf' => 'string|max:255',
+            'tlp_staf' => 'string|max:255',
+            'posisi_staf' => 'string|max:255',
+            'email_staf' => 'max:255|email',
+            'posisi' => 'required|string|max:255',
+            'durasi' => 'numeric',
+            'prestasi' => 'required|string|max:255',
+        ]);
+        $data['user_id'] = Auth::id();
+
+        if ($request->isMethod('post')) {
+            PengalamanKerja::create($data);
+        }
+
+        if ($request->isMethod('put')) {
+            PengalamanKerja::where('id',$request->input('id'))->update($data);
+        }
+
+        return redirect()->to('/rpl')->with('sukses', 'Pengalaman Kerja berhasil disimpan');
     }
 }

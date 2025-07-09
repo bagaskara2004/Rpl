@@ -11,12 +11,19 @@ class PengalamanKerja extends Model
     protected $fillable = [
         'user_id',
         'nama_perusahaan',
+        'alamat_perusahaan',
+        'kota_kab_perusahaan',
+        'provinsi_perusahaan',
+        'negara_perusahaan',
+        'sejak',
+        'sampai',
+        'nama_staf',
+        'posisi_staf',
+        'tlp_staf',
+        'email_staf',
         'posisi',
-        'tahun_mulai',
-        'tahun_selesai',
-        'deskripsi_kerja',
-        'gaji',
-        'status_kerja'
+        'prestasi',
+        'durasi',
     ];
 
     public function user()
