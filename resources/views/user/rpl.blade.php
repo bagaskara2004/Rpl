@@ -38,22 +38,38 @@
                             <label class="block text-text font-semibold mb-2" for="q1">
                                 Apakah kamu sudah pernah membuat aplikasi dengan laravel ?
                             </label>
-                            <input
-                                class="shadow appearance-none border-2 rounded w-full py-3 px-3 text-gray-500 leading-tight focus:outline-none focus:shadow-outline"
-                                id="q1" type="text" name="q1">
+                            <div class="flex items-center gap-4">
+                                <label class="flex items-center gap-2">
+                                    <input type="radio" name="jawaban" value="male" class="accent-blue-600" />
+                                    <span class="text-gray-700">Ya</span>
+                                </label>
+
+                                <label class="flex items-center gap-2">
+                                    <input type="radio" name="jawaban" value="female" class="accent-pink-600" />
+                                    <span class="text-gray-700">Tidak</span>
+                                </label>
+                            </div>
                         </div>
                         <div class="mb-4">
                             <label class="block text-text font-semibold mb-2" for="q2">
                                 Apakah kamu menguasai laravel ?
                             </label>
-                            <input
-                                class="shadow appearance-none border-2 rounded w-full py-3 px-3 text-gray-500 leading-tight focus:outline-none focus:shadow-outline"
-                                id="q2" type="text" name="q2">
+                            <div class="flex items-center gap-4">
+                                <label class="flex items-center gap-2">
+                                    <input type="radio" name="laravel" value="male" class="accent-blue-600" />
+                                    <span class="text-gray-700">Ya</span>
+                                </label>
+
+                                <label class="flex items-center gap-2">
+                                    <input type="radio" name="laravel" value="female" class="accent-pink-600" />
+                                    <span class="text-gray-700">Tidak</span>
+                                </label>
+                            </div>
                         </div>
 
                     </div>
                 </div>
-                <div class="flex items-start gap-3 mb-5">
+                <div class="flex items-start gap-3 mb-5 border-t-2 border-gray-400 pt-10 mt-10">
                     <input type="checkbox" name="konformasi" class="size-5">
                     <div>
                         <p class="block text-text font-semibold  text-xs">
@@ -161,7 +177,8 @@
                             </thead>
                             <tbody>
                                 @foreach ($pengalamankerja as $data)
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                                    <tr
+                                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
                                         <th scope="row"
                                             class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             {{ $loop->iteration }}

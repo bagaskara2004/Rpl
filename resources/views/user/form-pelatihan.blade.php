@@ -1,6 +1,6 @@
 <x-layout-formulir>
     <section class="bg-primary grid grid-cols-1">
-        <form class="bg-white m-5 rounded p-5 flex flex-col justify-between md:m-15 md:p-10" action="#" method="POST">
+        <form class="bg-white m-5 rounded p-5 flex flex-col justify-between md:m-15 md:p-10" action="{{ route('user.form.pelatihan') }}" method="POST">
             <div>
                 <div>
                     <div class="text-2xl inline-block font-semibold text-text mb-3">Form <span

@@ -53,11 +53,11 @@ Route::middleware([UserOnly::class])->group(function () {
     Route::match(['get', 'post', 'put', 'delete'], '/form/asesment', [RplController::class, 'asesment'])->name('user.form.asesment');
     Route::match(['get', 'post', 'put', 'delete'], '/form/pekerjaan', [RplController::class, 'pengalamanKerja'])->name('user.form.pekerjaan');
     Route::get('/form/pekerjaan/{id}', [RplController::class, 'pengalamanKerja']);
+    Route::match(['get', 'post', 'put', 'delete'], '/form/pelatihan', [RplController::class, 'pelatihan'])->name('user.form.pelatihan');
 
     Route::view('/rpl/diproses', 'user/diproses');
     Route::view('/rpl/diterima', 'user/diterima');
     Route::view('/rpl/ditolak', 'user/ditolak');
-    Route::view('/form/pelatihan', 'user/form-pelatihan')->name('user.form.pelatihan');
 });
 
 Route::post('/logout', [LoginController::class, 'logout'])->name('auth.logout');

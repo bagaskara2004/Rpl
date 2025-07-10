@@ -5,6 +5,7 @@ namespace App\Http\Controllers\user;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\DataDiri;
+use App\Models\Pelatihan;
 use App\Models\Pendidikan;
 use App\Models\PengalamanKerja;
 use App\Models\TranskripNilai;
@@ -266,5 +267,17 @@ class RplController extends Controller
         }
 
         return redirect()->to('/rpl')->with('sukses', 'Pengalaman Kerja berhasil disimpan');
+    }
+
+    public function pelatihan(Request $request,$id = 0) {
+        if ($request->isMethod('get')) {
+            return view(
+                'user.form-pelatihan',
+                [
+                    'data' => Pelatihan::where('user_id', Auth::id())->find($id)
+                ]
+            );
+        }
+        dd($request->all());
     }
 }
