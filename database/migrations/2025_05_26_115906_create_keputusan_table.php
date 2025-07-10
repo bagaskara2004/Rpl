@@ -18,6 +18,7 @@ return new class extends Migration
             $table->boolean('status');
             $table->string('catatan')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

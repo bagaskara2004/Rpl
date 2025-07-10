@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('ijasah')->nullable();
             $table->string('transkrip')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

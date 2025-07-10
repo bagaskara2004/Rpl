@@ -35,6 +35,7 @@ return new class extends Migration
             $table->string('pekerjaan_ayah', 100)->nullable();
             $table->enum('status', ['prosess', 'sukses','pending','gagal'])->default('prosess');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

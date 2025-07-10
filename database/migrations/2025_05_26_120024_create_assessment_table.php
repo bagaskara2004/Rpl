@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('pertanyaan_id')->constrained('pertanyaan');
-            $table->integer('jawaban')->nullable();
+            $table->boolean('jawaban');
             $table->enum('status', ['prosess', 'sukses','pending','gagal'])->default('prosess');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

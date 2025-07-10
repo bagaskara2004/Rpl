@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('nilai_huruf', 5)->nullable();
             $table->integer('nilai_angka')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
     /**
