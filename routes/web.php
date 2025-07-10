@@ -54,6 +54,7 @@ Route::middleware([UserOnly::class])->group(function () {
     Route::match(['get', 'post', 'put', 'delete'], '/form/pekerjaan', [RplController::class, 'pengalamanKerja'])->name('user.form.pekerjaan');
     Route::get('/form/pekerjaan/{id}', [RplController::class, 'pengalamanKerja']);
     Route::match(['get', 'post', 'put', 'delete'], '/form/pelatihan', [RplController::class, 'pelatihan'])->name('user.form.pelatihan');
+    Route::get('/form/pelatihan/{id}', [RplController::class, 'pelatihan']);
 
     Route::view('/rpl/diproses', 'user/diproses');
     Route::view('/rpl/diterima', 'user/diterima');

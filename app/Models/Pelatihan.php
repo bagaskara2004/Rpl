@@ -9,7 +9,8 @@ class Pelatihan extends Model
      protected $table = 'pelatihan';
      protected $fillable = [
         'user_id',
-        'penyelengara',
+        'nama_pelatihan',
+        'penyelenggara',
         'peran',
         'sertifikat',
         'durasi'

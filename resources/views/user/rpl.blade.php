@@ -230,71 +230,69 @@
                     class="text-sm/6 font-semibold text-background bg-primary rounded px-8 py-3 hover:opacity-80">Tambah
                     Pelatihan</a>
 
+                @if (!$pelatihan->isEmpty())
+                    <div class="relative overflow-x-auto mt-10">
+                        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                            <thead
+                                class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        No
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 w-full">
+                                        Pelatihan
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Aksi
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($pelatihan as $data)
+                                    <tr
+                                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                                        <th scope="row"
+                                            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            {{ $loop->iteration }}
+                                        </th>
+                                        <td class="px-6 py-4 break-all">
+                                            {{ $data->nama_pelatihan }}
+                                        </td>
+                                        <td class="px-6 py-4 flex gap-3">
+                                            <a href="/form/pelatihan/{{ $data->id }}"
+                                                class="text-sm/6 font-semibold text-amber-300 hover:opacity-80">Edit</a>
 
-                <div class="relative overflow-x-auto mt-10">
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                            <tr>
-                                <th scope="col" class="px-6 py-3">
-                                    No
-                                </th>
-                                <th scope="col" class="px-6 py-3 w-full">
-                                    Pelatihan
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Aksi
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                                <th scope="row"
-                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    1
-                                </th>
-                                <td class="px-6 py-4 break-all">
-                                    Web dev
-                                </td>
-                                <td class="px-6 py-4 flex gap-3">
-                                    <a href="#"
-                                        class="text-sm/6 font-semibold text-amber-300 hover:opacity-80">Edit</a>
-                                    <button
-                                        class="text-sm/6 font-semibold text-orange-600 hover:opacity-80">Hapus</button>
-                                </td>
-                            </tr>
-                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                                <th scope="row"
-                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    2
-                                </th>
-                                <td class="px-6 py-4 break-all">
-                                    Apps dev
-                                </td>
-                                <td class="px-6 py-4 flex gap-3">
-                                    <a href="#"
-                                        class="text-sm/6 font-semibold text-amber-300 hover:opacity-80">Edit</a>
-                                    <button
-                                        class="text-sm/6 font-semibold text-orange-600 hover:opacity-80">Hapus</button>
-                                </td>
-                            </tr>
-                            <tr class="bg-white dark:bg-gray-800">
-                                <th scope="row"
-                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    3
-                                </th>
-                                <td class="px-6 py-4 break-all">
-                                    UI UX
-                                </td>
-                                <td class="px-6 py-4 flex gap-3">
-                                    <a href="#"
-                                        class="text-sm/6 font-semibold text-amber-300 hover:opacity-80">Edit</a>
-                                    <button
-                                        class="text-sm/6 font-semibold text-orange-600 hover:opacity-80">Hapus</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                                            <form action="{{ route('user.form.pelatihan') }}" method="post"
+                                                x-data="{ open: false }" @submit.prevent="open = true">
+                                                @csrf
+                                                @method('delete')
+                                                <input type="hidden" name="id" value="{{ $data->id }}">
+                                                <button type="submit"
+                                                    class="text-sm/6 font-semibold text-orange-600 hover:opacity-80">Hapus</button>
+
+                                                <div x-show="open"
+                                                    class="fixed inset-0 z-100 flex items-center justify-center">
+                                                    <div class="bg-white p-6 rounded shadow-lg text-center">
+                                                        <p class="text-lg mb-4">Yakin ingin hapus
+                                                            <strong>{{ $data->nama_pelatihan }}</strong>?
+                                                        </p>
+                                                        <div class="flex justify-center gap-4">
+                                                            <button type="button" @click="open = false"
+                                                                class="px-4 py-2 bg-gray-300 rounded">Batal</button>
+                                                            <button type="submit" @click="$root.submit()"
+                                                                class="px-4 py-2 bg-red-600 text-white rounded">Ya,
+                                                                Hapus</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @endif
 
             </div>
         </div>

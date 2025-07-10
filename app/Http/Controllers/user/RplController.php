@@ -24,6 +24,7 @@ class RplController extends Controller
                 'pendidikan' => Pendidikan::where('user_id', Auth::id())->exists(),
                 'asesment' => TranskripNilai::where('user_id', Auth::id())->exists(),
                 'pengalamankerja' => PengalamanKerja::where('user_id', Auth::id())->get(),
+                'pelatihan' => Pelatihan::where('user_id', Auth::id())->get(),
             ]
         );
     }
@@ -263,13 +264,14 @@ class RplController extends Controller
         }
 
         if ($request->isMethod('put')) {
-            PengalamanKerja::where('id',$request->input('id'))->update($data);
+            PengalamanKerja::where('id', $request->input('id'))->update($data);
         }
 
         return redirect()->to('/rpl')->with('sukses', 'Pengalaman Kerja berhasil disimpan');
     }
 
-    public function pelatihan(Request $request,$id = 0) {
+    public function pelatihan(Request $request, $id = 0)
+    {
         if ($request->isMethod('get')) {
             return view(
                 'user.form-pelatihan',
@@ -278,6 +280,54 @@ class RplController extends Controller
                 ]
             );
         }
-        dd($request->all());
+
+        if ($request->isMethod('delete')) {
+            $dokumen = Pelatihan::find($request->input('id'));
+            Storage::disk('public')->delete($dokumen->sertifikat);
+
+            Pelatihan::destroy($request->input('id'));
+            return redirect()->to('/rpl')->with('sukses', 'Pelatihan berhasil dihapus');
+        }
+
+        if ($request->isMethod('post')) {
+            $data = $request->validate([
+                'nama_pelatihan' => 'required|string|max:255',
+                'penyelenggara' => 'required|string|max:255',
+                'peran' => 'required|string|max:255',
+                'sertifikat' => 'required|mimes:pdf',
+                'durasi' => 'required|numeric',
+            ]);
+            $data['user_id'] = Auth::id();
+            $sertifikat = $request->file('sertifikat');
+            $pathSertifikat = $sertifikat->store('pelatihan', 'public');
+            $data['sertifikat'] = $pathSertifikat;
+            Pelatihan::create($data);
+        }
+
+        if ($request->isMethod('put')) {
+            $data = $request->validate([
+                'nama_pelatihan' => 'required|string|max:255',
+                'penyelenggara' => 'required|string|max:255',
+                'peran' => 'required|string|max:255',
+                'sertifikat' => 'mimes:pdf',
+                'durasi' => 'required|numeric',
+            ]);
+            $data['user_id'] = Auth::id();
+
+            if ($request->file('sertifikat')) {
+                $pathSertifikat = Pelatihan::where('user_id', Auth::id())->value('sertifikat');
+                Storage::disk('public')->delete($pathSertifikat);
+
+                $sertifikat = $request->file('sertifikat');
+                $pathSertifikatNew = $sertifikat->store('pelatihan', 'public');
+                $data['sertifikat'] = $pathSertifikatNew;
+            }
+
+            Pelatihan::where('id', $request->input('id'))->update($data);
+        }
+
+
+
+        return redirect()->to('/rpl')->with('sukses', 'Pelatihan berhasil disimpan');
     }
 }
