@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('pendidikan', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->unique()->constrained('users')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('nama_perguruan')->nullable();
-            $table->string('nim', 20)->unique()->nullable();
+            $table->string('nim', 20)->nullable();
             $table->string('jenjang_pendidikan', 50)->nullable();
             $table->string('jurusan', 100)->nullable();
             $table->string('prodi', 100)->nullable();

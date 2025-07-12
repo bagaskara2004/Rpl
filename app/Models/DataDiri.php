@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class DataDiri extends Model
 {
     protected $table = 'data_diri';
+    use SoftDeletes;
     protected $fillable = ['user_id','nama_lengkap','tgl_lahir','tempat_lahir','jenis_kelamin','email','hp','tlp','alamat','kab_kota','provinsi','kode_pos','foto','cv','sumber_biaya_pendidikan','nama_ibu','pekerjaan_ibu','nama_ayah','pekerjaan_ayah','status'];
 
     public function user()

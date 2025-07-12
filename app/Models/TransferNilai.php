@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TransferNilai extends Model
 {
     protected $table = 'transfer_nilai';
+    use SoftDeletes;
     protected $fillable = [
         'asesor_id',
         'kurikulum_id',

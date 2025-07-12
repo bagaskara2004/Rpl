@@ -14,10 +14,12 @@ use App\Http\Controllers\Admin\transkrip\TranskripControler;
 use App\Http\Controllers\Admin\datadiri\DataDiriController;
 use App\Http\Controllers\Assessor\DataDiriController as AssessorDataDiriController;
 use App\Http\Controllers\user\RplController;
+use App\Http\Controllers\user\StatusController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Middleware\UserOnly;
 use App\Http\Middleware\AdminOnly;
 use App\Http\Middleware\AssessorOnly;
+use App\Http\Middleware\Konfirm;
 
 Route::get('/', [BerandaController::class, 'index'])->name('user.beranda');
 
@@ -55,10 +57,10 @@ Route::middleware([UserOnly::class])->group(function () {
     Route::get('/form/pekerjaan/{id}', [RplController::class, 'pengalamanKerja']);
     Route::match(['get', 'post', 'put', 'delete'], '/form/pelatihan', [RplController::class, 'pelatihan'])->name('user.form.pelatihan');
     Route::get('/form/pelatihan/{id}', [RplController::class, 'pelatihan']);
-
-    Route::view('/rpl/diproses', 'user/diproses');
-    Route::view('/rpl/diterima', 'user/diterima');
-    Route::view('/rpl/ditolak', 'user/ditolak');
+    Route::match(['post', 'put', 'delete'], '/rpl/konfirmasi', [RplController::class, 'konfirmasi'])->name('user.konfirmasi');
+    
+    Route::get('/detailFormulir', [RplController::class, 'detailFormulir'])->name('user.rpl.detail');
+    Route::get('/ajukanUlang', [RplController::class, 'ajukanUlang'])->name('user.rpl.ulang');
 });
 
 Route::post('/logout', [LoginController::class, 'logout'])->name('auth.logout');

@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('data_diri', function (Blueprint $table) {
             $table->id();
             // onDelete('cascade') akan menghapus data_diri jika user dihapus
-            $table->foreignId('user_id')->unique()->constrained('users')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('nama_lengkap');
             $table->date('tgl_lahir')->nullable();
             $table->string('tempat_lahir')->nullable();
             $table->enum('jenis_kelamin', ['laki-laki', 'perempuan'])->default('laki-laki');
-            $table->string('email', 100)->unique();
+            $table->string('email', 100);
             $table->string('hp', 20)->nullable();
             $table->string('tlp', 20)->nullable();
             $table->text('alamat')->nullable();

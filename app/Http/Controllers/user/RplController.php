@@ -4,10 +4,14 @@ namespace App\Http\Controllers\user;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Assessment;
 use App\Models\DataDiri;
+use App\Models\Keputusan;
 use App\Models\Pelatihan;
 use App\Models\Pendidikan;
 use App\Models\PengalamanKerja;
+use App\Models\Pertanyaan;
+use App\Models\TransferNilai;
 use App\Models\TranskripNilai;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -16,6 +20,17 @@ class RplController extends Controller
 {
     public function index()
     {
+        if ($keputusan = Keputusan::where('user_id', Auth::id())->first()) {
+            if ($keputusan->status) {
+                return view('user.diterima');
+            }
+            return view('user.ditolak', [
+                'message' => $keputusan->catatan
+            ]);
+        }
+        if (Assessment::where('user_id', Auth::id())->exists()) {
+            return view('user.diproses');
+        }
         return view(
             'user.rpl',
             [
@@ -24,6 +39,56 @@ class RplController extends Controller
                 'pendidikan' => Pendidikan::where('user_id', Auth::id())->exists(),
                 'asesment' => TranskripNilai::where('user_id', Auth::id())->exists(),
                 'pengalamankerja' => PengalamanKerja::where('user_id', Auth::id())->get(),
+                'pelatihan' => Pelatihan::where('user_id', Auth::id())->get(),
+                'pertanyaan' => Pertanyaan::all()
+            ]
+        );
+    }
+
+    public function ajukanUlang()
+    {
+        $datadiri = DataDiri::select('user_id', 'nama_lengkap', 'tgl_lahir', 'tempat_lahir', 'jenis_kelamin', 'email', 'hp', 'tlp', 'alamat', 'kab_kota', 'provinsi', 'kode_pos', 'foto', 'cv', 'sumber_biaya_pendidikan', 'nama_ibu', 'pekerjaan_ibu', 'nama_ayah', 'pekerjaan_ayah', 'status')->where('user_id', Auth::id())->first();
+        $pendidikan = Pendidikan::select('user_id', 'nama_perguruan', 'pembimbing1', 'prodi', 'judul_ta', 'tahun_lulus', 'tahun_masuk', 'ipk', 'nim', 'jurusan', 'jenjang_pendidikan', 'ijasah', 'transkrip')->where('user_id', Auth::id())->first();
+        $transkrip = TranskripNilai::select('user_id','mata_kuliah','sks','nilai_huruf','nilai_angka')->where('user_id', Auth::id())->get();
+
+        $datadiri['status'] = 'pending';
+
+        DataDiri::where('user_id',Auth::id())->delete();
+        Pendidikan::where('user_id',Auth::id())->delete();
+        TranskripNilai::where('user_id',Auth::id())->delete();
+
+        Keputusan::where('user_id',Auth::id())->delete();
+        Assessment::where('user_id',Auth::id())->delete();
+
+        DataDiri::create($datadiri->toArray());
+        Pendidikan::create($pendidikan->toArray());
+
+        foreach ($transkrip as $data) {
+            TranskripNilai::create([
+                'user_id' => $data['user_id'],
+                'mata_kuliah' => $data['mata_kuliah'],
+                'sks' => $data['sks'],
+                'nilai_huruf' => $data['nilai_huruf'],
+                'nilai_angka' => $data['nilai_angka'],
+            ]);
+        }
+        return redirect()->route('user.rpl')->with('sukses','Pengajuan RPL berhasil Diulang');
+    }
+
+    public function detailFormulir()
+    {
+
+        return view(
+            'user.detail-formulir',
+            [
+                'datadiri' => DataDiri::select('nama_lengkap', 'tgl_lahir', 'tempat_lahir', 'jenis_kelamin', 'email', 'hp', 'tlp', 'alamat', 'kab_kota', 'provinsi', 'kode_pos', 'foto', 'cv', 'sumber_biaya_pendidikan', 'nama_ibu', 'pekerjaan_ibu', 'nama_ayah', 'pekerjaan_ayah', 'status')
+                    ->where('user_id', Auth::id())
+                    ->first(),
+                'pendidikan' => Pendidikan::select('nama_perguruan', 'pembimbing1', 'prodi', 'judul_ta', 'tahun_lulus', 'tahun_masuk', 'ipk', 'nim', 'jurusan', 'jenjang_pendidikan', 'ijasah', 'transkrip')
+                    ->where('user_id', Auth::id())
+                    ->first(),
+                'transkrip' => TranskripNilai::where('user_id', Auth::id())->get(),
+                'pekerjaan' => PengalamanKerja::where('user_id', Auth::id())->get(),
                 'pelatihan' => Pelatihan::where('user_id', Auth::id())->get(),
             ]
         );
@@ -325,9 +390,30 @@ class RplController extends Controller
 
             Pelatihan::where('id', $request->input('id'))->update($data);
         }
-
-
-
         return redirect()->to('/rpl')->with('sukses', 'Pelatihan berhasil disimpan');
+    }
+
+    public function konfirmasi(Request $request)
+    {
+        if ($request->method('post')) {
+            if (!$request->has('konfirmasi')) {
+                return back()->with('gagal', 'Harap checklist " SAYA TELAH MEMBACA DAN MENGISI FORMULIR PENDAFTARAN UNTUK MENGIKUTI PERKULIAHAN MELALUI PROGRAM RPL DI POLITEKNIK NEGERI BALI DENGAN BAIK "');
+            }
+
+            $jawabans = $request->input('jawaban');
+
+            foreach ($jawabans as $pertanyaanId => $jawaban) {
+                Assessment::updateOrCreate(
+                    [
+                        'user_id' => Auth::id(),
+                        'pertanyaan_id' => $pertanyaanId
+                    ],
+                    [
+                        'jawaban' => $jawaban
+                    ]
+                );
+            }
+            return back()->with('sukses', 'Terimaksih jawaban anda sudah terkirim');
+        }
     }
 }

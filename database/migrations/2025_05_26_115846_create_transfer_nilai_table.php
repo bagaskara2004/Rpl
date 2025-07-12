@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('catatan')->nullable();
             $table->enum('status', ['prosess', 'sukses','pending','gagal'])->default('prosess');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
