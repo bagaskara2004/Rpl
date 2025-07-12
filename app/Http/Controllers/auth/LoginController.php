@@ -41,7 +41,7 @@ class LoginController extends Controller
                 return redirect()->to('/admin/dashboard')->with('sukses', 'Selamat datang Admin!');
             }
             if ($user->role_id == 4) {
-                return redirect()->to('/dosen');
+                return redirect()->route('dosen.dashboard')->with('sukses', 'Selamat datang Dosen!');
             }
             if ($user->role_id == 5) {
                 return redirect()->to('admin/dashboard');
