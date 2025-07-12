@@ -85,7 +85,7 @@ class AssessmentControler extends Controller
         $pertanyaan = Pertanyaan::all();
 
         // Ambil assessment yang sudah dijawab user
-        $assessment = Assessment::where('user_id', $id)->get();
+        $assessment = Assessment::where('user_id', $dataDiri->user_id)->get();
 
         return view('Assessor.pendaftar.asesment', compact('dataDiri', 'pertanyaan', 'assessment'));
     }

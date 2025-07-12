@@ -4,16 +4,16 @@
     </div>
     <div class="modal-body p-6">
         @if($assessment)
-            <div class="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                <p class="text-sm text-blue-700">
-                    <strong>Status:</strong> 
-                    @if($assessment->status == 1)
-                        <span class="text-green-600 font-semibold">Lulus</span>
-                    @else
-                        <span class="text-red-600 font-semibold">Tidak Lulus</span>
-                    @endif
-                </p>
-            </div>
+        <div class="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <p class="text-sm text-blue-700">
+                <strong>Status:</strong>
+                @if($assessment->status == 1)
+                <span class="text-green-600 font-semibold">Lulus</span>
+                @else
+                <span class="text-red-600 font-semibold">Tidak Lulus</span>
+                @endif
+            </p>
+        </div>
         @endif
 
         <form id="assessmentForm" action="{{ route('admin.assessment.update-status', $user->id) }}" method="POST">
@@ -24,8 +24,8 @@
                     <label class="block text-sm font-medium text-gray-700 mb-2">
                         {{ $index + 1 }}. {{ $question->pertanyaan }}
                     </label>
-                    <textarea 
-                        name="jawaban[{{ $question->id }}]" 
+                    <textarea
+                        name="jawaban[{{ $question->id }}]"
                         class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         rows="3"
                         placeholder="Masukkan jawaban..."
@@ -56,52 +56,52 @@
 </div>
 
 <script>
-document.getElementById('assessmentForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const formData = new FormData(this);
-    const actionUrl = this.action;
-    
-    fetch(actionUrl, {
-        method: 'POST',
-        body: formData,
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-            'Accept': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil!',
-                text: data.message,
-                confirmButtonColor: '#3b82f6'
-            }).then(() => {
-                closeModal();
-                // Refresh the data table if it exists
-                if (typeof table !== 'undefined' && table.ajax) {
-                    table.ajax.reload();
+    document.getElementById('assessmentForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        const actionUrl = this.action;
+
+        fetch(actionUrl, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Accept': 'application/json'
                 }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: data.message,
+                        confirmButtonColor: '#3b82f6'
+                    }).then(() => {
+                        closeModal();
+                        // Refresh the data table if it exists
+                        if (typeof table !== 'undefined' && table.ajax) {
+                            table.ajax.reload();
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal!',
+                        text: data.message || 'Terjadi kesalahan',
+                        confirmButtonColor: '#ef4444'
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'Terjadi kesalahan saat memproses data',
+                    confirmButtonColor: '#ef4444'
+                });
             });
-        } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Gagal!',
-                text: data.message || 'Terjadi kesalahan',
-                confirmButtonColor: '#ef4444'
-            });
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        Swal.fire({
-            icon: 'error',
-            title: 'Error!',
-            text: 'Terjadi kesalahan saat memproses data',
-            confirmButtonColor: '#ef4444'
-        });
     });
-});
 </script>

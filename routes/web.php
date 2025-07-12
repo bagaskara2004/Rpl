@@ -8,6 +8,7 @@ use App\Http\Controllers\user\BerandaController;
 use App\Http\Controllers\user\BeritaController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\user\UserControler;
+use App\Http\Controllers\Admin\user\AdminUserController;
 use App\Http\Controllers\Admin\user\DosenController;
 use App\Http\Controllers\Admin\berita\BeritaController as AdminBeritaController;
 use App\Http\Controllers\Admin\transkrip\TranskripControler;
@@ -59,6 +60,8 @@ Route::middleware([UserOnly::class])->group(function () {
     Route::view('/rpl/diproses', 'user/diproses');
     Route::view('/rpl/diterima', 'user/diterima');
     Route::view('/rpl/ditolak', 'user/ditolak');
+    Route::view('/form/pekerjaan', 'user/form-pekerjaan')->name('user.form.pekerjaan');
+    Route::view('/form/pelatihan', 'user/form-pelatihan')->name('user.form.pelatihan');
 });
 
 Route::post('/logout', [LoginController::class, 'logout'])->name('auth.logout');
@@ -118,6 +121,17 @@ Route::prefix('admin')->middleware('admin.only')->group(function () {
     Route::post('/user/block', [UserControler::class, 'block'])->name('admin.user.block');
     Route::post('/user', [UserControler::class, 'store'])->name('admin.user.store');
     Route::post('/user/assessor', [UserControler::class, 'storeAssessor'])->name('admin.user.store.assessor');
+
+    // Admin User Management Routes
+    Route::get('/admin-user', [AdminUserController::class, 'index'])->name('admin.admin-user.index');
+    Route::get('/admin-user/data', [AdminUserController::class, 'data'])->name('admin.admin-user.data');
+    Route::post('/admin-user', [AdminUserController::class, 'store'])->name('admin.admin-user.store');
+    Route::get('/admin-user/{id}', [AdminUserController::class, 'show'])->name('admin.admin-user.show');
+    Route::post('/admin-user/{id}', [AdminUserController::class, 'update'])->name('admin.admin-user.update');
+    Route::delete('/admin-user/{id}', [AdminUserController::class, 'destroy'])->name('admin.admin-user.destroy');
+    Route::post('/admin-user/block', [AdminUserController::class, 'block'])->name('admin.admin-user.block');
+    Route::post('/admin-user/unblock', [AdminUserController::class, 'unblock'])->name('admin.admin-user.unblock');
+    Route::get('/admin-user/roles', [AdminUserController::class, 'getRoles'])->name('admin.admin-user.roles');
 
     // Dosen Routes
     Route::get('/dosen', [DosenController::class, 'index'])->name('admin.dosen.index');

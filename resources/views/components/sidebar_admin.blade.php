@@ -221,6 +221,18 @@
             </svg>
             <span class="sidebar-label">Pendaftar</span>
         </a>
+        <a href="/admin/admin-user"
+            id="admin-admin-user-link"
+            class="group flex items-center gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg transition-all duration-200 font-semibold text-sm text-gray-700 hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 hover:text-purple-700 active:scale-95">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" class="flex-shrink-0 transition-colors duration-200 group-hover:text-purple-600" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2c2.21 0 4 1.79 4 4s-1.79 4-4 4-4-1.79-4-4 1.79-4 4-4z" />
+                <path d="M16 12h3a1 1 0 0 1 1 1v7h-2v-6h-1" />
+                <path d="M8 12H5a1 1 0 0 0-1 1v7h2v-6h1" />
+                <path d="M12 12v8" />
+                <circle cx="12" cy="6" r="4" />
+            </svg>
+            <span class="sidebar-label">Admin Management</span>
+        </a>
         @endif
 
         @if(Auth::user()->role_id == 3 || Auth::user()->role_id == 5)
@@ -238,6 +250,9 @@
             </svg>
             <span class="sidebar-label">User Management</span>
         </a>
+
+        <!-- Admin Management -->
+        
 
         <!-- Academic Records Section -->
         <div class="space-y-1 mt-2">
@@ -441,6 +456,7 @@
         // Active link management
         const dashboardLink = document.getElementById('admin-dashboard-link');
         const userLink = document.getElementById('admin-user-link');
+        const adminUserLink = document.getElementById('admin-admin-user-link');
         const transkripLink = document.getElementById('admin-transkrip-link');
         const datadiriLink = document.getElementById('admin-datadiri-link');
         const sisaMkLink = document.getElementById('admin-sisamk-link');
@@ -456,7 +472,7 @@
 
         // Function to remove active classes
         function removeActiveClasses() {
-            const links = [dashboardLink, userLink, transkripLink, datadiriLink, sisaMkLink, assessorLink, questionLink, kurikulumLink, transferLink, keputusanLink, dosenLink, matakuliahLink, kelasLink, beritaLink];
+            const links = [dashboardLink, userLink, adminUserLink, transkripLink, datadiriLink, sisaMkLink, assessorLink, questionLink, kurikulumLink, transferLink, keputusanLink, dosenLink, matakuliahLink, kelasLink, beritaLink];
             links.forEach(link => {
                 if (link) {
                     link.classList.remove('bg-indigo-100', 'text-indigo-700');
@@ -475,7 +491,9 @@
         }
 
         const currentPath = window.location.pathname;
-        if (currentPath.includes('/admin/user') && !currentPath.includes('/admin/user/assessor')) {
+        if (currentPath.includes('/admin/admin-user')) {
+            setActiveLink(adminUserLink);
+        } else if (currentPath.includes('/admin/user') && !currentPath.includes('/admin/user/assessor')) {
             setActiveLink(userLink);
         } else if (currentPath.includes('/admin/user/assessor')) {
             setActiveLink(assessorLink);
