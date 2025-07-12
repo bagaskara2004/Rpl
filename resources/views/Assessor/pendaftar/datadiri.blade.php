@@ -246,6 +246,48 @@
         </div>
         @endif
 
+        <!-- Data Pelatihan -->
+        @if($dataDiri->pelatihan)
+        <div class="mb-8">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Data Pelatihan</h3>
+            <div class="bg-gray-50 rounded-lg p-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600">Penyelenggara</label>
+                        <p class="text-gray-800">{{ $dataDiri->pelatihan->penyelengara ?? '-' }}</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600">Peran</label>
+                        <p class="text-gray-800">{{ $dataDiri->pelatihan->peran ?? '-' }}</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600">Durasi</label>
+                        <p class="text-gray-800">{{ $dataDiri->pelatihan->durasi ?? '-' }}</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600">Sertifikat</label>
+                        @if($dataDiri->pelatihan->sertifikat)
+                        <a href="{{ asset('assets/' . $dataDiri->pelatihan->sertifikat) }}" target="_blank"
+                            class="inline-flex items-center text-blue-600 hover:text-blue-800">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                            </svg>
+                            Lihat Sertifikat
+                        </a>
+                        @else
+                        <span class="text-gray-400">-</span>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+        @else
+        <div class="mb-8">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Data Pelatihan</h3>
+            <p class="text-gray-500 italic">Tidak ada data pelatihan</p>
+        </div>
+        @endif
+
         <!-- Status dan Tombol -->
         <div class="border-t border-gray-200 pt-6">
             <form action="{{ route('assesor.pendaftar.update-status', $dataDiri->id) }}" method="POST" class="flex flex-col md:flex-row gap-4 items-end justify-between">
@@ -292,13 +334,7 @@
                         Simpan Status
                     </button>
 
-                    <a href="{{ route('assesor.pendaftar') }}"
-                        class="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition duration-200 flex items-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                        </svg>
-                        Kembali ke Daftar Pendaftar
-                    </a>
+
                 </div>
             </form>
         </div>

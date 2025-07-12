@@ -1,18 +1,27 @@
 <x-layout-user>
-    <section id="diproses" class="bg-background pb-20 pt-30 px-5 lg:px-8">
-        <div class="flex justify-center items-center mb-10">
-            <div class="text-2xl p-4 inline-block font-semibold text-text ">DIPROSES</div>
-        </div>
-        <div class="flex justify-center items-center mb-20">
-            <div class="font-semibold text-text text-center">Pengajuan sedang diproses harap menunggu</div>
-        </div>
-        <div class="flex justify-center items-center mb-20">
-            <img src="{{ asset('assets/ilustrasi/ilustrasi8.png') }}" class="h-80 md:h-100 w-auto object-contain">
-        </div>
-        <div class="flex justify-center items-center mb-10">
-            <a href="#"
-                class="text-sm/6 font-semibold text-background bg-red-500 rounded px-8 py-3 hover:opacity-80">Batalkan Pengjuan</a>
-        </div>
+    <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-5">
+        <div class="bg-white p-8 rounded-2xl shadow-lg max-w-md text-center">
 
-    </section>
+            <div
+                class="bg-yellow-100 text-yellow-600 w-20 h-20 flex items-center justify-center rounded-full mx-auto mb-5 animate-pulse">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+
+            <h2 class="text-2xl font-semibold mb-3 text-gray-800">Formulir Masih Diproses</h2>
+
+            <p class="text-gray-600 mb-6">
+                Terima kasih telah mengisi formulir Rekognisi Pembelajaran Lampau.<br>
+                Saat ini status Anda: <span class="font-semibold text-yellow-600">Menunggu Verifikasi</span>.
+            </p>
+
+            <a href="{{ route('user.rpl.detail') }}" class="bg-yellow-500 text-white px-5 py-2 rounded-lg hover:bg-yellow-600 transition">
+                Periksa Formulir
+            </a>
+
+        </div>
+    </div>
 </x-layout-user>

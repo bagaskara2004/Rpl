@@ -11,67 +11,34 @@
 
 
     <div class="mb-6">
-        <h1 class="text-3xl font-bold text-gray-800 mb-4">Pendaftar</h1>
-        <div class="bg-white rounded-2xl shadow flex items-center px-2 py-1 mb-6 overflow-x-auto w-full max-w-3xl">
-            <div class="flex items-center justify-center w-10 h-10">
-                <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path d="M3 4a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v2a1 1 0 0 1-.293.707l-6.414 6.414A1 1 0 0 0 13 14.414V19a1 1 0 0 1-1.447.894l-2-1A1 1 0 0 1 9 18v-3.586a1 1 0 0 0-.293-.707L2.293 6.707A1 1 0 0 1 2 6V4z" />
-                </svg>
-            </div>
-            <div class="flex-1 grid grid-cols-4 gap-0">
-                <div class="flex items-center border-l border-gray-200 px-2 h-10">
-                    <span class="text-gray-800 font-medium text-sm">Filter By</span>
-                </div>
-                <div class="flex items-center border-l border-gray-200 px-2 h-10">
-                    <select class="w-full bg-transparent focus:outline-none text-gray-800 font-medium text-sm py-1">
-                        <option>Date</option>
-                    </select>
-                </div>
-                <div class="flex items-center border-l border-gray-200 px-2 h-10">
-                    <select class="w-full bg-transparent focus:outline-none text-gray-800 font-medium text-sm py-1">
-                        <option>Major Type</option>
-                    </select>
-                </div>
-                <div class="flex items-center border-l border-gray-200 px-2 h-10">
-                    <select class="w-full bg-transparent focus:outline-none text-gray-800 font-medium text-sm py-1">
-                        <option>Status</option>
-                    </select>
-                </div>
-            </div>
-            <div class="flex items-center border-l border-gray-200 px-2 h-10">
-                <button class="flex items-center text-pink-600 hover:text-pink-700 font-medium text-sm">
-                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
-                        <path d="M12 8v4l3 3" />
-                    </svg>
-                    Reset Filter
-                </button>
-            </div>
-        </div>
+        <h1 class="text-3xl font-bold text-gray-800 mb-4">Pendaftar Siap Evaluasi</h1>
+        <p class="text-gray-600">Daftar pendaftar yang telah menyelesaikan data diri, assessment, dan transkrip nilai</p>
     </div>
 
     <div class="bg-white rounded-2xl shadow-xl p-6 overflow-hidden">
-        <table class="min-w-full text-sm border-separate border-spacing-0 rounded-2xl overflow-hidden" id="pendaftar-table">
-            <thead>
-                <tr class="bg-gradient-to-r from-gray-50 to-gray-100">
-                    <th class="py-4 px-6 text-left font-bold text-gray-700 border-b-2 border-gray-200 rounded-tl-lg">No</th>
-                    <th class="py-4 px-6 text-left font-bold text-gray-700 border-b-2 border-gray-200">NAMA</th>
-                    <th class="py-4 px-6 text-left font-bold text-gray-700 border-b-2 border-gray-200">PENDIDIKAN</th>
-                    <th class="py-4 px-6 text-center font-bold text-gray-700 border-b-2 border-gray-200">EVALUASI</th>
-                    <th class="py-4 px-6 text-center font-bold text-gray-700 border-b-2 border-gray-200 rounded-tr-lg">AKSI</th>
-                </tr>
-            </thead>
-            <tbody id="pendaftar-tbody">
-                <tr>
-                    <td colspan="5" class="text-center py-8">
-                        <div class="flex items-center justify-center">
-                            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
-                            <span class="ml-2 text-gray-500">Loading...</span>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-container">
+            <table class="min-w-full text-sm border-separate border-spacing-0 rounded-2xl overflow-hidden" id="pendaftar-table">
+                <thead>
+                    <tr class="bg-gradient-to-r from-gray-50 to-gray-100">
+                        <th class="py-4 px-6 text-left font-bold text-gray-700 border-b-2 border-gray-200 rounded-tl-lg">No</th>
+                        <th class="py-4 px-6 text-left font-bold text-gray-700 border-b-2 border-gray-200">NAMA</th>
+                        <th class="py-4 px-6 text-left font-bold text-gray-700 border-b-2 border-gray-200">PENDIDIKAN</th>
+                        <th class="py-4 px-6 text-center font-bold text-gray-700 border-b-2 border-gray-200">EVALUASI</th>
+                        <th class="py-4 px-6 text-center font-bold text-gray-700 border-b-2 border-gray-200 rounded-tr-lg">AKSI</th>
+                    </tr>
+                </thead>
+                <tbody id="pendaftar-tbody">
+                    <tr>
+                        <td colspan="5" class="text-center py-8">
+                            <div class="flex items-center justify-center">
+                                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+                                <span class="ml-2 text-gray-500">Loading...</span>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <div id="modal-container"></div>
@@ -156,6 +123,47 @@
         .modern-btn:hover::before {
             left: 100%;
         }
+
+        /* Pastikan elemen tetap berada dalam viewport */
+        body {
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            width: 100%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                display: block;
+            }
+
+            .grid>div {
+                margin-bottom: 1rem;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+        }
     </style>
     <input type="text" id="search-input" class="hidden-search">
     <select id="filter-status" class="hidden-search">
@@ -201,7 +209,7 @@
                             <div class="animate-spin rounded-full h-12 w-12 border-4 border-purple-600 border-t-transparent absolute top-0 left-0"></div>
                         </div>
                         <div class="text-center">
-                            <p class="text-lg font-medium text-gray-700">Memuat data pendaftar...</p>
+                            <p class="text-lg font-medium text-gray-700">Memuat data pendaftar siap evaluasi...</p>
                             <p class="text-sm text-gray-500">Mohon tunggu sebentar</p>
                         </div>
                     </div>
@@ -322,12 +330,12 @@
                         <div class="flex flex-col items-center justify-center space-y-4">
                             <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
                                 <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                    <path d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
                                 </svg>
                             </div>
                             <div class="text-center">
-                                <p class="text-lg font-medium text-gray-700">Tidak ada data pendaftar</p>
-                                <p class="text-sm text-gray-500">Belum ada pendaftar yang terdaftar dalam sistem</p>
+                                <p class="text-lg font-medium text-gray-700">Tidak ada pendaftar yang siap dievaluasi</p>
+                                <p class="text-sm text-gray-500">Hanya menampilkan pendaftar yang sudah mengisi data diri, assessment, dan transkrip nilai</p>
                             </div>
                         </div>
                     </td></tr>`;
@@ -424,7 +432,7 @@
                                     </svg>
                                     Data
                                 </a>
-                                <a href="/assesor/asesmen/${diri.user_id}" 
+                                <a href="/assesor/asesmen/${diri.id}" 
                                    class="inline-flex items-center px-4 py-2 ${assessmentStatusColor.bg} ${assessmentStatusColor.text} rounded-lg text-sm font-medium ${assessmentStatusColor.hover} ${assessmentStatusColor.shadow} ${assessmentStatusColor.ring} transition-all duration-200 transform hover:scale-105 focus:outline-none modern-btn btn-hover-effect">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                         <path d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>

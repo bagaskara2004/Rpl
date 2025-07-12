@@ -1,30 +1,26 @@
     <?php
 
-    use Illuminate\Support\Facades\Route;
-    use App\Http\Controllers\Assessor\AssessorController;
-    use App\Http\Controllers\assessor\assessment\AssessmentControler;
-    use App\Http\Controllers\auth\LoginController;
-    use App\Http\Controllers\user\BerandaController;
-    use App\Http\Controllers\user\BeritaController;
-    use App\Http\Controllers\Admin\AdminController;
-    use App\Http\Controllers\Admin\user\UserControler;
-    use App\Http\Controllers\Admin\user\DosenController;
-    use App\Http\Controllers\Admin\berita\BeritaController as AdminBeritaController;
-    use App\Http\Controllers\Admin\transkrip\TranskripControler;
-    use App\Http\Controllers\Admin\datadiri\DataDiriController;
-    use App\Http\Controllers\Assessor\DataDiriController as AssessorDataDiriController;
-    use App\Http\Controllers\user\RplController;
-    use Illuminate\Support\Facades\Auth;
-    use App\Http\Middleware\UserOnly;
-    use App\Http\Middleware\AdminOnly;
-    use App\Http\Middleware\AssessorOnly;
-    use App\Http\Controllers\Dosen\DashboardController;
-    use App\Http\Controllers\Dosen\DosenHomeController;
-    use App\Http\Controllers\Dosen\KelasController;
-    use App\Http\Controllers\Dosen\PertemuanController;
-    use App\Http\Controllers\Dosen\AbsensiController;
-    use App\Http\Controllers\Dosen\ProfileController;
-
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Assessor\AssessorController;
+use App\Http\Controllers\assessor\assessment\AssessmentControler;
+use App\Http\Controllers\auth\LoginController;
+use App\Http\Controllers\user\BerandaController;
+use App\Http\Controllers\user\BeritaController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\user\UserControler;
+use App\Http\Controllers\Admin\user\AdminUserController;
+use App\Http\Controllers\Admin\user\DosenController;
+use App\Http\Controllers\Admin\berita\BeritaController as AdminBeritaController;
+use App\Http\Controllers\Admin\transkrip\TranskripControler;
+use App\Http\Controllers\Admin\datadiri\DataDiriController;
+use App\Http\Controllers\Assessor\DataDiriController as AssessorDataDiriController;
+use App\Http\Controllers\user\RplController;
+use App\Http\Controllers\user\StatusController;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Middleware\UserOnly;
+use App\Http\Middleware\AdminOnly;
+use App\Http\Middleware\AssessorOnly;
+use App\Http\Middleware\Konfirm;
 
     Route::get('/', [BerandaController::class, 'index'])->name('user.beranda');
 
@@ -67,6 +63,24 @@
         Route::view('/rpl/diterima', 'user/diterima');
         Route::view('/rpl/ditolak', 'user/ditolak');
     });
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [LoginController::class, 'index'])->name('auth.index');
+    Route::post('/login', [LoginController::class, 'login'])->name('auth.login');
+});
+Route::middleware([UserOnly::class])->group(function () {
+    Route::get('/rpl', [RplController::class, 'index'])->name('user.rpl');
+    Route::match(['get', 'post', 'put'], '/form/datadiri', [RplController::class, 'datadiri'])->name('user.form.datadiri');
+    Route::match(['get', 'post', 'put'], '/form/pendidikan', [RplController::class, 'pendidikan'])->name('user.form.pendidikan');
+    Route::match(['get', 'post', 'put', 'delete'], '/form/asesment', [RplController::class, 'asesment'])->name('user.form.asesment');
+    Route::match(['get', 'post', 'put', 'delete'], '/form/pekerjaan', [RplController::class, 'pengalamanKerja'])->name('user.form.pekerjaan');
+    Route::get('/form/pekerjaan/{id}', [RplController::class, 'pengalamanKerja']);
+    Route::match(['get', 'post', 'put', 'delete'], '/form/pelatihan', [RplController::class, 'pelatihan'])->name('user.form.pelatihan');
+    Route::get('/form/pelatihan/{id}', [RplController::class, 'pelatihan']);
+    Route::match(['post', 'put', 'delete'], '/rpl/konfirmasi', [RplController::class, 'konfirmasi'])->name('user.konfirmasi');
+    
+    Route::get('/detailFormulir', [RplController::class, 'detailFormulir'])->name('user.rpl.detail');
+    Route::get('/ajukanUlang', [RplController::class, 'ajukanUlang'])->name('user.rpl.ulang');
+});
 
     Route::post('/logout', [LoginController::class, 'logout'])->name('auth.logout');
     Route::get('/logout', [LoginController::class, 'logout'])->name('auth.logout');
@@ -117,14 +131,25 @@
         Route::get('/export/transkrip', [AdminController::class, 'exportTranskrip'])->name('admin.export.transkrip');
         Route::get('/export/assessment', [AdminController::class, 'exportAssessment'])->name('admin.export.assessment');
 
-        // User Routes
-        Route::get('/user', [UserControler::class, 'index'])->name('admin.user.index');
-        Route::get('/user/assessor', [UserControler::class, 'assessor'])->name('admin.user.assessor');
-        Route::get('/user/data/assessor', [UserControler::class, 'dataAssessor'])->name('admin.user.data.assessor');
-        Route::get('/user/data', [UserControler::class, 'data'])->name('admin.user.data');
-        Route::post('/user/block', [UserControler::class, 'block'])->name('admin.user.block');
-        Route::post('/user', [UserControler::class, 'store'])->name('admin.user.store');
-        Route::post('/user/assessor', [UserControler::class, 'storeAssessor'])->name('admin.user.store.assessor');
+    // User Routes
+    Route::get('/user', [UserControler::class, 'index'])->name('admin.user.index');
+    Route::get('/user/assessor', [UserControler::class, 'assessor'])->name('admin.user.assessor');
+    Route::get('/user/data/assessor', [UserControler::class, 'dataAssessor'])->name('admin.user.data.assessor');
+    Route::get('/user/data', [UserControler::class, 'data'])->name('admin.user.data');
+    Route::post('/user/block', [UserControler::class, 'block'])->name('admin.user.block');
+    Route::post('/user', [UserControler::class, 'store'])->name('admin.user.store');
+    Route::post('/user/assessor', [UserControler::class, 'storeAssessor'])->name('admin.user.store.assessor');
+
+    // Admin User Management Routes
+    Route::get('/admin-user', [AdminUserController::class, 'index'])->name('admin.admin-user.index');
+    Route::get('/admin-user/data', [AdminUserController::class, 'data'])->name('admin.admin-user.data');
+    Route::post('/admin-user', [AdminUserController::class, 'store'])->name('admin.admin-user.store');
+    Route::get('/admin-user/{id}', [AdminUserController::class, 'show'])->name('admin.admin-user.show');
+    Route::post('/admin-user/{id}', [AdminUserController::class, 'update'])->name('admin.admin-user.update');
+    Route::delete('/admin-user/{id}', [AdminUserController::class, 'destroy'])->name('admin.admin-user.destroy');
+    Route::post('/admin-user/block', [AdminUserController::class, 'block'])->name('admin.admin-user.block');
+    Route::post('/admin-user/unblock', [AdminUserController::class, 'unblock'])->name('admin.admin-user.unblock');
+    Route::get('/admin-user/roles', [AdminUserController::class, 'getRoles'])->name('admin.admin-user.roles');
 
         // Dosen Routes
         Route::get('/dosen', [DosenController::class, 'index'])->name('admin.dosen.index');

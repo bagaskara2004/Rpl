@@ -28,49 +28,38 @@
                 <div class="text-2xl p-4 inline-block font-semibold text-text border-b-5 border-secondary"><span
                         class="text-primary">Konfirmasi</span> RPL</div>
             </div>
-            <form class="flex flex-col justify-between px-5" action="#" method="POST">
+            <form class="flex flex-col justify-between px-5" action="{{ route('user.konfirmasi') }}" method="POST">
+                @csrf
                 <div>
                     <div>
                         <label class="block text-text font-semibold mb-5">
                             Pertanyaan
                         </label>
-                        <div class="mb-4">
-                            <label class="block text-text font-semibold mb-2" for="q1">
-                                Apakah kamu sudah pernah membuat aplikasi dengan laravel ?
-                            </label>
-                            <div class="flex items-center gap-4">
-                                <label class="flex items-center gap-2">
-                                    <input type="radio" name="jawaban" value="male" class="accent-blue-600" />
-                                    <span class="text-gray-700">Ya</span>
+                        @foreach ($pertanyaan as $data)
+                            <div class="mb-4">
+                                <label class="block text-text font-semibold mb-2" for="q1">
+                                    {{ $data->pertanyaan }}
                                 </label>
+                                <div class="flex items-center gap-4">
+                                    <label class="flex items-center gap-2">
+                                        <input type="radio" name="jawaban[{{ $data->id }}]" value="1"
+                                            class="accent-blue-600" />
+                                        <span class="text-gray-700">Ya</span>
+                                    </label>
 
-                                <label class="flex items-center gap-2">
-                                    <input type="radio" name="jawaban" value="female" class="accent-pink-600" />
-                                    <span class="text-gray-700">Tidak</span>
-                                </label>
+                                    <label class="flex items-center gap-2">
+                                        <input type="radio" name="jawaban[{{ $data->id }}]" value="0"
+                                            class="accent-pink-600" checked />
+                                        <span class="text-gray-700">Tidak</span>
+                                    </label>
+                                </div>
                             </div>
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-text font-semibold mb-2" for="q2">
-                                Apakah kamu menguasai laravel ?
-                            </label>
-                            <div class="flex items-center gap-4">
-                                <label class="flex items-center gap-2">
-                                    <input type="radio" name="laravel" value="male" class="accent-blue-600" />
-                                    <span class="text-gray-700">Ya</span>
-                                </label>
-
-                                <label class="flex items-center gap-2">
-                                    <input type="radio" name="laravel" value="female" class="accent-pink-600" />
-                                    <span class="text-gray-700">Tidak</span>
-                                </label>
-                            </div>
-                        </div>
+                        @endforeach
 
                     </div>
                 </div>
                 <div class="flex items-start gap-3 mb-5 border-t-2 border-gray-400 pt-10 mt-10">
-                    <input type="checkbox" name="konformasi" class="size-5">
+                    <input type="checkbox" name="konfirmasi" class="size-5">
                     <div>
                         <p class="block text-text font-semibold  text-xs">
                             SAYA TELAH MEMBACA DAN MENGISI FORMULIR PENDAFTARAN UNTUK MENGIKUTI PERKULIAHAN MELALUI
