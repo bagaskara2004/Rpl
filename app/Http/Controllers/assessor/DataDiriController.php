@@ -15,7 +15,7 @@ class DataDiriController extends Controller
     public function show($id)
     {
         try {
-            $dataDiri = DataDiri::with(['user', 'pendidikan', 'pengalamanKerja'])
+            $dataDiri = DataDiri::with(['user', 'pendidikan', 'pengalamanKerja', 'pelatihan'])
                 ->findOrFail($id);
 
             return view('Assessor.pendaftar.datadiri', compact('dataDiri'));

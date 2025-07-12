@@ -25,4 +25,9 @@ class DataDiri extends Model
     {
         return $this->hasMany(\App\Models\PengalamanKerja::class, 'user_id', 'user_id');
     }
+
+    public function pelatihan()
+    {
+        return $this->hasOne(\App\Models\Pelatihan::class, 'user_id', 'user_id');
+    }
 }

@@ -11,6 +11,7 @@ use App\Models\Kurikulum;
 use App\Models\TranskripNilai;
 use App\Models\Keputusan;
 use App\Models\TransferNilai;
+use App\Models\SisaMk;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -88,14 +89,17 @@ class AssessorController extends Controller
             ->whereNotIn('user_id', $userSudahDiputuskan)
             ->get();
 
-        // Add status information for each user
-        $dataDiri->each(function ($diri) {
+        // Filter hanya yang sudah memiliki assessment, data diri, dan transkrip nilai
+        $filteredDataDiri = $dataDiri->filter(function ($diri) {
             // Get DataDiri status
             $diri->data_diri_status = $diri->status;
 
             // Get Assessment status
             $assessment = \App\Models\Assessment::where('user_id', $diri->user_id)->first();
             $diri->assessment_status = $assessment ? $assessment->status : null;
+
+            // Check if user has transkrip nilai
+            $transkripNilai = \App\Models\TranskripNilai::where('user_id', $diri->user_id)->exists();
 
             // Get TransferNilai status - check if all transfer nilai for this user have 'sukses' status
             $transferNilai = \App\Models\TransferNilai::whereHas('transkripNilai', function ($query) use ($diri) {
@@ -116,9 +120,15 @@ class AssessorController extends Controller
             $diri->can_evaluate = ($diri->data_diri_status === 'sukses' &&
                 $diri->assessment_status === 'sukses' &&
                 $diri->transfer_nilai_status === 'sukses');
+
+            // Only return users who have completed all required data:
+            // 1. Data diri exists (already filtered by the query)
+            // 2. Assessment exists
+            // 3. Transkrip nilai exists
+            return $assessment !== null && $transkripNilai;
         });
 
-        return response()->json($dataDiri);
+        return response()->json($filteredDataDiri->values()); // values() to reset array indices
     }
 
     public function getModalData($id)
@@ -155,6 +165,8 @@ class AssessorController extends Controller
             $transkrip_ids = $request->input('transkrip_id', []);
 
             $savedCount = 0;
+            $transferredKurikulumIds = [];
+
             foreach ($kurikulum_ids as $i => $kurikulum_id) {
                 // Only save if kurikulum_id is not null or empty
                 if (!empty($kurikulum_id)) {
@@ -167,11 +179,27 @@ class AssessorController extends Controller
                         'status' => 1,
                     ]);
                     $savedCount++;
+                    $transferredKurikulumIds[] = $kurikulum_id;
                 }
             }
 
+            // Simpan mata kuliah yang tidak di-transfer ke tabel sisa_mk
+            $allKurikulumIds = $kurikulum->pluck('id')->toArray();
+            $remainingKurikulumIds = array_diff($allKurikulumIds, $transferredKurikulumIds);
+
+            // Hapus data sisa_mk lama untuk user ini
+            SisaMk::where('user_id', $id)->delete();
+
+            // Simpan mata kuliah yang tersisa
+            foreach ($remainingKurikulumIds as $kurikulum_id) {
+                SisaMk::create([
+                    'user_id' => $id,
+                    'kurikulum_id' => $kurikulum_id
+                ]);
+            }
+
             $message = $savedCount > 0
-                ? "Data transfer nilai berhasil disimpan! ($savedCount mata kuliah ditransfer)"
+                ? "Data transfer nilai berhasil disimpan! ($savedCount mata kuliah ditransfer, " . count($remainingKurikulumIds) . " mata kuliah tersisa)"
                 : "Tidak ada mata kuliah yang dipilih untuk ditransfer.";
 
             return redirect()->route('assesor.index')->with('success', $message);

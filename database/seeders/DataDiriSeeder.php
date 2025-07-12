@@ -15,7 +15,7 @@ class DataDiriSeeder extends Seeder
     {
         DB::table('data_diri')->insert([
             [
-                'user_id' => 1,
+                'user_id' => 2,
                 'nama_lengkap' => 'Bagas Pratama',
                 'tgl_lahir' => '2000-01-01',
                 'tempat_lahir' => 'Tabanan',
@@ -39,7 +39,7 @@ class DataDiriSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'user_id' => 2,
+                'user_id' => 1,
                 'nama_lengkap' => 'Christine Brooks',
                 'tgl_lahir' => '1999-05-15',
                 'tempat_lahir' => 'Jakarta',

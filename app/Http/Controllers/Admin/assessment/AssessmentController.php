@@ -24,7 +24,7 @@ class AssessmentController extends Controller
             $pertanyaan = Pertanyaan::all();
 
             $html = view('admin.pendaftar.assessment_modal', compact('user', 'assessment', 'pertanyaan'))->render();
-            
+
             return response()->json([
                 'html' => $html,
                 'assessment' => $assessment
@@ -59,7 +59,7 @@ class AssessmentController extends Controller
 
             // Check if assessment already exists
             $assessment = Assessment::where('user_id', $userId)->first();
-            
+
             if ($assessment) {
                 // Update existing assessment
                 $assessment->update([
@@ -76,7 +76,7 @@ class AssessmentController extends Controller
             }
 
             $statusText = $request->status == 1 ? 'Lulus' : 'Tidak Lulus';
-            
+
             return response()->json([
                 'success' => true,
                 'message' => "Status assessment berhasil diubah menjadi: {$statusText}"

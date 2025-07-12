@@ -5,6 +5,7 @@
 <link href="{{ asset('css/transfer-nilai.css') }}" rel="stylesheet" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="{{ asset('js/transfer-nilai.js') }}"></script>
 
 {{-- Cek apakah user sudah memiliki data transfer nilai --}}
 @if(isset($hasTransferNilai) && $hasTransferNilai)
@@ -16,6 +17,14 @@
 @if(request()->ajax())
 {{-- AJAX Request - Hanya tampilkan form --}}
 <div class="mb-8">
+    <div class="flex items-center gap-6 mb-6">
+        <a href="{{ route('assesor.pendaftar') }}" class="flex items-center text-gray-600 hover:text-blue-600 transition-all duration-300 bg-white rounded-xl px-4 py-2 shadow-md hover:shadow-lg">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+            Kembali ke Pendaftar
+        </a>
+    </div>
     <div class="text-center mb-6">
         <h1 class="header-title text-4xl font-bold mb-2">Transfer Nilai</h1>
         <p class="text-gray-600 text-lg">Kelola transfer nilai mata kuliah dengan mudah</p>
@@ -155,7 +164,7 @@
                                 <select class="kurikulum-select w-full" name="kurikulum[]" data-row="{{ $i }}">
                                     <option value="">Pilih Mata Kuliah TRPL</option>
                                     @foreach($kurikulum as $kuri)
-                                    <option value="{{ $kuri->id }}">{{ $kuri->mata_kuliah_trpl }}</option>
+                                    <option value="{{ $kuri->id }}" data-sks="{{ $kuri->sks }}">{{ $kuri->mata_kuliah_trpl }} ({{ $kuri->sks }} SKS)</option>
                                     @endforeach
                                 </select>
                             </td>
@@ -179,13 +188,13 @@
             </div>
         </div>
         <div class="flex justify-end mt-8 gap-4">
-            <button type="button" class="btn-secondary px-8 py-3 rounded-xl font-semibold transition-all duration-300">
+            <button type="button" id="btnBatalAjax" class="btn-secondary px-8 py-3 rounded-xl font-semibold transition-all duration-300 bg-red-500 text-white hover:bg-red-600">
                 <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path d="M6 18L18 6M6 6l12 12" />
                 </svg>
                 Batal
             </button>
-            <button type="submit" class="btn-primary px-8 py-3 text-white rounded-xl font-semibold transition-all duration-300 flex items-center gap-3">
+            <button type="submit" class="btn-primary px-8 py-3 text-white rounded-xl font-semibold transition-all duration-300 flex items-center gap-3 bg-blue-600 hover:bg-blue-700">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path d="M5 13l4 4L19 7" />
                 </svg>
@@ -347,7 +356,7 @@
                                 <select class="kurikulum-select w-full" name="kurikulum[]" data-row="{{ $i }}">
                                     <option value="">Pilih Mata Kuliah TRPL</option>
                                     @foreach($kurikulum as $kuri)
-                                    <option value="{{ $kuri->id }}">{{ $kuri->mata_kuliah_trpl }}</option>
+                                    <option value="{{ $kuri->id }}" data-sks="{{ $kuri->sks }}">{{ $kuri->mata_kuliah_trpl }} ({{ $kuri->sks }} SKS)</option>
                                     @endforeach
                                 </select>
                             </td>
@@ -371,13 +380,13 @@
             </div>
         </div>
         <div class="flex justify-end mt-8 gap-4">
-            <button type="button" class="btn-secondary px-8 py-3 rounded-xl font-semibold transition-all duration-300">
+            <button type="button" id="btnBatal" class="btn-secondary px-8 py-3 rounded-xl font-semibold transition-all duration-300 bg-red-500 text-white hover:bg-red-600">
                 <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path d="M6 18L18 6M6 6l12 12" />
                 </svg>
                 Batal
             </button>
-            <button type="submit" class="btn-primary px-8 py-3 text-white rounded-xl font-semibold transition-all duration-300 flex items-center gap-3">
+            <button type="submit" class="btn-primary px-8 py-3 text-white rounded-xl font-semibold transition-all duration-300 flex items-center gap-3 bg-blue-600 hover:bg-blue-700">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path d="M5 13l4 4L19 7" />
                 </svg>
@@ -391,270 +400,26 @@
 
 <script>
     $(document).ready(function() {
-        // Prevent multiple initialization
-        if (window.transferNilaiInitialized) {
-            return;
-        }
-        window.transferNilaiInitialized = true;
-
-        // Store all available options globally
-        const allOptions = [];
-        $('.kurikulum-select option').each(function() {
-            if ($(this).val() !== '') {
-                allOptions.push({
-                    id: $(this).val(),
-                    text: $(this).text()
-                });
-            }
-        });
-
-        // Master Select2 configuration with guaranteed search functionality
-        const select2Config = {
-            placeholder: 'Pilih Mata Kuliah TRPL',
-            allowClear: true,
-            width: '100%',
-            minimumInputLength: 0,
-            minimumResultsForSearch: 0, // Force search to always show
-            searchInputPlaceholder: 'Cari mata kuliah...',
-            language: {
-                noResults: function() {
-                    return "Tidak ada hasil ditemukan";
-                },
-                searching: function() {
-                    return "Mencari...";
+        // Create kurikulum SKS mapping for JavaScript
+        const kurikulumSksMap = {
+            @foreach($kurikulum as $kuri) {
+                {
+                    $kuri - > id
+                }
+            }: {
+                {
+                    $kuri - > sks
                 }
             },
-            dropdownCssClass: 'select2-dropdown-force-search',
-            escapeMarkup: function(markup) {
-                return markup;
-            }
+            @endforeach
         };
 
-        // Function to safely initialize/reinitialize Select2
-        function initializeSelect2Element($element) {
-            try {
-                // Destroy existing instance if exists
-                if ($element.hasClass('select2-hidden-accessible')) {
-                    $element.select2('destroy');
-                }
-
-                // Initialize with our config
-                $element.select2(select2Config);
-
-                // Force enable search after initialization
-                setTimeout(function() {
-                    var select2Instance = $element.data('select2');
-                    if (select2Instance && select2Instance.options && select2Instance.options.options) {
-                        select2Instance.options.options.minimumResultsForSearch = 0;
-                        select2Instance.options.options.minimumInputLength = 0;
-                    }
-                }, 50);
-
-            } catch (error) {
-                console.log('Select2 initialization error:', error);
-            }
+        // Initialize Transfer Nilai module
+        if (typeof TransferNilai !== 'undefined') {
+            TransferNilai.init(kurikulumSksMap);
+        } else {
+            console.error('TransferNilai module not loaded!');
         }
-
-        // Function to update dropdown options and maintain Select2 functionality
-        function updateDropdownOptions() {
-            const selectedValues = [];
-
-            // Collect all selected values
-            $('.kurikulum-select').each(function() {
-                const val = $(this).val();
-                if (val) {
-                    selectedValues.push(val);
-                }
-            });
-
-            // Update each dropdown
-            $('.kurikulum-select').each(function() {
-                const $currentSelect = $(this);
-                const currentValue = $currentSelect.val();
-
-                // Store reference to Select2 instance before destroying
-                let wasOpen = false;
-                if ($currentSelect.hasClass('select2-hidden-accessible')) {
-                    wasOpen = $currentSelect.data('select2')?.isOpen() || false;
-                    $currentSelect.select2('destroy');
-                }
-
-                // Rebuild options
-                $currentSelect.empty();
-                $currentSelect.append('<option value="">Pilih Mata Kuliah TRPL</option>');
-
-                allOptions.forEach(function(option) {
-                    // Show option if not selected elsewhere, or if it's current selection
-                    if (!selectedValues.includes(option.id) || option.id === currentValue) {
-                        $currentSelect.append('<option value="' + option.id + '">' + option.text + '</option>');
-                    }
-                });
-
-                // Restore current value
-                $currentSelect.val(currentValue);
-
-                // Reinitialize Select2
-                initializeSelect2Element($currentSelect);
-
-                // Reopen if it was open before
-                if (wasOpen) {
-                    setTimeout(function() {
-                        $currentSelect.select2('open');
-                    }, 100);
-                }
-            });
-        }
-
-        // Initialize all Select2 elements on page load
-        $('.kurikulum-select').each(function() {
-            initializeSelect2Element($(this));
-        });
-
-        // Remove existing event handlers before adding new ones
-        $(document).off('change', '.kurikulum-select');
-        $(document).off('select2:open', '.kurikulum-select');
-        $(document).off('select2:opening', '.kurikulum-select');
-
-        // Handle selection changes
-        $(document).on('change', '.kurikulum-select', function() {
-            const $this = $(this);
-
-            // Delay to allow Select2 to process the change
-            setTimeout(function() {
-                updateDropdownOptions();
-                calculateSKS();
-            }, 150);
-        });
-
-        // Force search functionality on dropdown open
-        $(document).on('select2:open', '.kurikulum-select', function(e) {
-            const $select = $(this);
-
-            // Multiple attempts to ensure search field is available
-            const forceSearchField = function(attempt = 0) {
-                if (attempt > 10) return; // Prevent infinite loop
-
-                setTimeout(function() {
-                    const $dropdown = $('.select2-dropdown');
-                    const $search = $('.select2-search--dropdown');
-                    const $searchField = $('.select2-search__field');
-
-                    if ($searchField.length > 0) {
-                        // Make search visible and functional
-                        $search.show().css('display', 'block !important');
-                        $searchField.show()
-                            .prop('disabled', false)
-                            .prop('readonly', false)
-                            .attr('readonly', false)
-                            .css({
-                                'display': 'block !important',
-                                'visibility': 'visible !important'
-                            });
-
-                        // Focus the search field
-                        $searchField.focus();
-
-                        // Add placeholder if missing
-                        if (!$searchField.attr('placeholder')) {
-                            $searchField.attr('placeholder', 'Cari mata kuliah...');
-                        }
-                    } else {
-                        // Try again if search field not found
-                        forceSearchField(attempt + 1);
-                    }
-                }, 10);
-            };
-
-            forceSearchField();
-        });
-
-        // Handle opening event to ensure search is enabled
-        $(document).on('select2:opening', '.kurikulum-select', function(e) {
-            const $select = $(this);
-            const select2Instance = $select.data('select2');
-
-            if (select2Instance && select2Instance.options && select2Instance.options.options) {
-                select2Instance.options.options.minimumResultsForSearch = 0;
-                select2Instance.options.options.minimumInputLength = 0;
-            }
-        });
-
-        // Fallback: Monitor and fix disabled search fields
-        const searchFieldMonitor = setInterval(function() {
-            $('.select2-search__field').each(function() {
-                const $field = $(this);
-                if ($field.prop('disabled') || $field.attr('readonly') === 'readonly') {
-                    $field.prop('disabled', false)
-                        .attr('readonly', false)
-                        .css('display', 'block');
-                }
-            });
-        }, 1000);
-
-        // Initial update after everything is loaded
-        setTimeout(function() {
-            updateDropdownOptions();
-        }, 500);
-
-        // Clean up interval on page unload
-        $(window).on('beforeunload', function() {
-            clearInterval(searchFieldMonitor);
-        });
-
-        // Search functionality
-        $('#searchInput').off('keyup').on('keyup', function() {
-            const searchValue = $(this).val().toLowerCase();
-            let visibleRows = 0;
-
-            $('.table-row').each(function() {
-                const mataKuliah = $(this).find('td:nth-child(2) .font-semibold').text().toLowerCase();
-
-                if (mataKuliah.includes(searchValue)) {
-                    $(this).show();
-                    visibleRows++;
-                } else {
-                    $(this).hide();
-                }
-            });
-
-            // Update row numbers for visible rows
-            updateRowNumbers();
-        });
-
-        // Function to update row numbers
-        function updateRowNumbers() {
-            let counter = 1;
-            $('.table-row:visible').each(function() {
-                $(this).find('td:first-child .bg-gradient-to-r').text(counter);
-                counter++;
-            });
-        }
-
-        // SKS calculation functionality
-        function calculateSKS() {
-            let convertedSKS = 0;
-            const totalSKS = parseInt($('#totalSks').text()) || 0;
-
-            $('.kurikulum-select').each(function() {
-                const selectedValue = $(this).val();
-                if (selectedValue) {
-                    // Assuming each converted subject has 2 SKS (you can adjust this based on your data)
-                    convertedSKS += 2;
-                }
-            });
-
-            $('#convertedSks').text(convertedSKS);
-
-            // Update progress bar
-            const percentage = totalSKS > 0 ? Math.round((convertedSKS / totalSKS) * 100) : 0;
-            $('#progressPercent').text(percentage + '%');
-            $('#progressBar').css('width', percentage + '%');
-        }
-
-        // Initial SKS calculation
-        setTimeout(function() {
-            calculateSKS();
-        }, 1000);
     });
 </script>
 
