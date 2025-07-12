@@ -13,41 +13,41 @@ use App\Models\Absensi;
 class PertemuanController extends Controller
 {
     public function index(Request $request, $kelasId, $mataKuliahId)
-{
-    $pertemuanList = Pertemuan::with('absensi')
-        ->where('kelas_id', $kelasId)
-        ->where('mata_kuliah_id', $mataKuliahId)
-        ->orderBy('tanggal')
-        ->get();
+    {
+        $pertemuanList = Pertemuan::with('absensi')
+            ->where('kelas_id', $kelasId)
+            ->where('mata_kuliah_id', $mataKuliahId)
+            ->orderBy('tanggal')
+            ->get();
 
-    $kelas = Kelas::findOrFail($kelasId);
-    $mataKuliah = MataKuliah::findOrFail($mataKuliahId);
+        $kelas = Kelas::findOrFail($kelasId);
+        $mataKuliah = MataKuliah::findOrFail($mataKuliahId);
 
-    $pertemuanTerpilih = null;
-    $muridList = collect();
-    $absensiList = collect(); // Tambahkan default kosong
+        $pertemuanTerpilih = null;
+        $muridList = collect();
 
-    if ($request->has('pertemuanId')) {
-        $pertemuanTerpilih = Pertemuan::with(['mataKuliah', 'kelas', 'absensi'])->findOrFail($request->pertemuanId);
-        $muridList = Murid::with('user')->where('kelas_id', $kelasId)->get();
-    
-        foreach ($muridList as $murid) {
-            $absen = $pertemuanTerpilih->absensi->firstWhere('user_id', $murid->user_id);
-            $murid->absensi_status = $absen?->status;
+        if ($request->has('pertemuanId')) {
+            $pertemuanTerpilih = Pertemuan::with(['mataKuliah', 'kelas', 'absensi'])->findOrFail($request->pertemuanId);
+        
+            $muridList = Murid::with(['user.dataDiri' => function ($query) {
+                $query->withTrashed(); // 👈 Tambahkan ini
+            }])->where('kelas_id', $kelasId)->get();
+        
+            foreach ($muridList as $murid) {
+                $absen = $pertemuanTerpilih->absensi->firstWhere('user_id', $murid->user_id);
+                $murid->absensi_status = $absen?->status;
+            }
         }
+        
+
+        return view('dosen.pertemuan.index', compact(
+            'pertemuanList',
+            'kelas',
+            'mataKuliah',
+            'pertemuanTerpilih',
+            'muridList'
+        ));
     }
-    
-
-    return view('dosen.pertemuan.index', compact(
-        'pertemuanList',
-        'kelas',
-        'mataKuliah',
-        'pertemuanTerpilih',
-        'muridList',
-        'absensiList'
-    ));
-}
-
 
     public function store(Request $request)
     {
@@ -72,35 +72,35 @@ class PertemuanController extends Controller
     }
 
     public function update(Request $request, $id)
-{
-    $request->validate([
-        'nama_pertemuan' => 'required|string|max:255',
-        'tanggal' => 'required|date',
-    ]);
+    {
+        $request->validate([
+            'nama_pertemuan' => 'required|string|max:255',
+            'tanggal' => 'required|date',
+        ]);
 
-    $pertemuan = Pertemuan::findOrFail($id);
-    $pertemuan->update([
-        'nama_pertemuan' => $request->nama_pertemuan,
-        'tanggal' => $request->tanggal,
-    ]);
+        $pertemuan = Pertemuan::findOrFail($id);
+        $pertemuan->update([
+            'nama_pertemuan' => $request->nama_pertemuan,
+            'tanggal' => $request->tanggal,
+        ]);
 
-    return redirect()->route('dosen.pertemuan.index', [
-        'kelasId' => $pertemuan->kelas_id,
-        'mataKuliahId' => $pertemuan->mata_kuliah_id
-    ])->with('success', 'Pertemuan berhasil diperbarui.');
-}
+        return redirect()->route('dosen.pertemuan.index', [
+            'kelasId' => $pertemuan->kelas_id,
+            'mataKuliahId' => $pertemuan->mata_kuliah_id
+        ])->with('success', 'Pertemuan berhasil diperbarui.');
+    }
 
-public function destroy($id)
-{
-    $pertemuan = Pertemuan::findOrFail($id);
-    $kelasId = $pertemuan->kelas_id;
-    $mataKuliahId = $pertemuan->mata_kuliah_id;
-    $pertemuan->delete();
+    public function destroy($id)
+    {
+        $pertemuan = Pertemuan::findOrFail($id);
+        $kelasId = $pertemuan->kelas_id;
+        $mataKuliahId = $pertemuan->mata_kuliah_id;
 
-    return redirect()->route('dosen.pertemuan.index', [
-        'kelasId' => $kelasId,
-        'mataKuliahId' => $mataKuliahId
-    ])->with('success', 'Pertemuan berhasil dihapus.');
-}
+        $pertemuan->delete();
 
+        return redirect()->route('dosen.pertemuan.index', [
+            'kelasId' => $kelasId,
+            'mataKuliahId' => $mataKuliahId
+        ])->with('success', 'Pertemuan berhasil dihapus.');
+    }
 }
