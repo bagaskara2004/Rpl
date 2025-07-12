@@ -41,27 +41,10 @@ class LoginController extends Controller
                 return redirect()->to('/admin/dashboard')->with('sukses', 'Selamat datang Admin!');
             }
             if ($user->role_id == 4) {
-                return redirect()->route('/dosen.dashboard')->with('sukses', 'Selamat datang Dosen!');
+                return redirect()->route('dosen.dashboard')->with('sukses', 'Selamat datang Dosen!');
             }
             if ($user->role_id == 5) {
-                return redirect()->to('/admin/dashboard')->with('sukses', 'Selamat datang MasterAdmin!');
-            }
-        }
-
-        $mahasiswa = $this->getMahasiswa($input['password']);
-
-        if ($mahasiswa['responseCode'] == 00) {
-            $data = $mahasiswa['profile'];
-            if ($data['email'] == $input['email'] && $data['prodi'] == 'Manajemen Informatika') {
-                User::create([
-                    'user_name' => $data['nama'],
-                    'name' => $data['nama'],
-                    'email' => $data['email'],
-                    'password' => $input['password'],
-                    'role_id' => 1,
-                    'block' => 0,
-                ]);
-                return redirect()->route('auth.login')->with('sukses', 'Akun Berhasil Terdaftar, coba inputkan ulang');
+                return redirect()->to('admin/dashboard');
             }
         }
 
@@ -91,12 +74,5 @@ class LoginController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/login')->with('sukses', 'Berhasil logout');
-    }
-
-    public function getMahasiswa($nim)
-    {
-        $hashCode = strtoupper(hash('SHA256', $nim . 'P0l1t3kn1k&N3g3r1%B4l1'));
-        $response = Http::get('https://webapi.pnb.ac.id/api/mahasiswa/' . $nim . '&' . $hashCode);
-        return $response->json();
     }
 }
