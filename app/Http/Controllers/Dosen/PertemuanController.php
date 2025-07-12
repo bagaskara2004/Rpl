@@ -28,13 +28,15 @@ class PertemuanController extends Controller
     $absensiList = collect(); // Tambahkan default kosong
 
     if ($request->has('pertemuanId')) {
-        $pertemuanTerpilih = Pertemuan::with(['mataKuliah', 'kelas'])->findOrFail($request->pertemuanId);
+        $pertemuanTerpilih = Pertemuan::with(['mataKuliah', 'kelas', 'absensi'])->findOrFail($request->pertemuanId);
         $muridList = Murid::with('user')->where('kelas_id', $kelasId)->get();
-
-        // Ambil data absensi jika pertemuan dipilih
-        $absensiList = Absensi::where('pertemuan_id', $request->pertemuanId)
-            ->pluck('status', 'user_id'); // hasil: [user_id => status]
+    
+        foreach ($muridList as $murid) {
+            $absen = $pertemuanTerpilih->absensi->firstWhere('user_id', $murid->user_id);
+            $murid->absensi_status = $absen?->status;
+        }
     }
+    
 
     return view('dosen.pertemuan.index', compact(
         'pertemuanList',
