@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Middleware\UserOnly;
 use App\Http\Middleware\AdminOnly;
 use App\Http\Middleware\AssessorOnly;
+use App\Http\Middleware\DosenOnly;
 use App\Http\Middleware\Konfirm;
 use App\Http\Controllers\Dosen\DashboardController;
 use App\Http\Controllers\Dosen\DosenHomeController;
@@ -284,29 +285,32 @@ Route::middleware([UserOnly::class])->group(function () {
     });
 
     Route::get('/login', [LoginController::class, 'index'])->name('login');
-    Route::middleware(['auth'])->prefix('dosen')->name('dosen.')->group(function () {
-        // Home / Dashboard
-        Route::get('/dashboard', [DosenHomeController::class, 'index'])->name('dashboard');
+    Route::middleware(['auth', DosenOnly::class])
+    ->prefix('dosen')
+    ->name('dosen.')
+    ->group(function () {
 
-        // Pertemuan
-        Route::get('/pertemuan/{kelasId}/{mataKuliahId}', [PertemuanController::class, 'index'])->name('pertemuan.index');
-        Route::post('/pertemuan', [PertemuanController::class, 'store'])->name('pertemuan.store');
-        Route::put('/pertemuan/{id}', [PertemuanController::class, 'update'])->name('pertemuan.update');
-        Route::delete('/pertemuan/{id}', [PertemuanController::class, 'destroy'])->name('pertemuan.delete');
+    // Home / Dashboard
+    Route::get('/dashboard', [DosenHomeController::class, 'index'])->name('dashboard');
 
+    // Pertemuan
+    Route::get('/pertemuan/{kelasId}/{mataKuliahId}', [PertemuanController::class, 'index'])->name('pertemuan.index');
+    Route::post('/pertemuan', [PertemuanController::class, 'store'])->name('pertemuan.store');
+    Route::put('/pertemuan/{id}', [PertemuanController::class, 'update'])->name('pertemuan.update');
+    Route::delete('/pertemuan/{id}', [PertemuanController::class, 'destroy'])->name('pertemuan.delete');
 
-        // Absensi
-        Route::get('/absensi/{pertemuanId}', [AbsensiController::class, 'index'])->name('absensi.index');
-        Route::post('/absensi/store', [AbsensiController::class, 'store'])->name('absensi.store');
-        
-        // Kelas
-        Route::get('/kelas', [KelasController::class, 'index'])->name('kelas.index');
-        Route::get('/kelas/create', [KelasController::class, 'create'])->name('kelas.create');
-        Route::post('/kelas/store', [KelasController::class, 'store'])->name('kelas.store');
+    // Absensi
+    Route::get('/absensi/{pertemuanId}', [AbsensiController::class, 'index'])->name('absensi.index');
+    Route::post('/absensi/store', [AbsensiController::class, 'store'])->name('absensi.store');
 
-        // Profil
-        Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
-        Route::post('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
-        Route::post('/profile/update', [ProfileController::class, 'updateProfile'])->name('profile.update');
-    });
+    // Kelas
+    Route::get('/kelas', [KelasController::class, 'index'])->name('kelas.index');
+    Route::get('/kelas/create', [KelasController::class, 'create'])->name('kelas.create');
+    Route::post('/kelas/store', [KelasController::class, 'store'])->name('kelas.store');
+
+    // Profil
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+    Route::post('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+    Route::post('/profile/update', [ProfileController::class, 'updateProfile'])->name('profile.update');
+});
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');

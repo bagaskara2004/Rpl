@@ -41,26 +41,47 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($muridList as $index => $murid)
-                        <tr class="align-middle text-center">
-                            <td>{{ $index + 1 }}.</td>
-                            <td class="text-start">{{ $murid->user->user_name }}</td>
-                            @foreach(['Hadir', 'Sakit', 'Izin', 'Alfa'] as $status)
-                                <td>
-                                    <input type="radio"
-                                        name="absensi[{{ $murid->user_id }}]"
-                                        value="{{ $status }}"
-                                        class="form-check-input"
-                                        {{ $murid->absensi_status === $status ? 'checked' : '' }}
-                                        required>
-                                </td>
-                            @endforeach
-                        </tr>
-                        @endforeach
+                      @foreach($muridList as $index => $murid)
+                      <tr>
+                          <td class="text-center align-middle">{{ $index + 1 }}</td>
+                          <td class="align-middle">{{ $murid->user->dataDiri->nama_lengkap ?? '-' }}</td>
+                          <td class="text-center align-middle">
+                              <input type="radio"
+                                  name="absensi[{{ $murid->user_id }}]"
+                                  id="hadir_{{ $murid->user_id }}"
+                                  value="Hadir"
+                                  {{ ($murid->absensi_status ?? '') === 'Hadir' ? 'checked' : '' }}
+                                  required>
+                          </td>
+                          <td class="text-center align-middle">
+                              <input type="radio"
+                                  name="absensi[{{ $murid->user_id }}]"
+                                  id="sakit_{{ $murid->user_id }}"
+                                  value="Sakit"
+                                  {{ ($murid->absensi_status ?? '') === 'Sakit' ? 'checked' : '' }}
+                                  required>
+                          </td>
+                          <td class="text-center align-middle">
+                              <input type="radio"
+                                  name="absensi[{{ $murid->user_id }}]"
+                                  id="izin_{{ $murid->user_id }}"
+                                  value="Izin"
+                                  {{ ($murid->absensi_status ?? '') === 'Izin' ? 'checked' : '' }}
+                                  required>
+                          </td>
+                          <td class="text-center align-middle">
+                              <input type="radio"
+                                  name="absensi[{{ $murid->user_id }}]"
+                                  id="alfa_{{ $murid->user_id }}"
+                                  value="Alfa"
+                                  {{ ($murid->absensi_status ?? '') === 'Alfa' ? 'checked' : '' }}
+                                  required>
+                          </td>
+                      </tr>
+                      @endforeach
                     </tbody>
                 </table>
             </div>
-
             <div class="d-flex justify-content-end mt-4">
                 <button type="submit" class="btn text-white px-4 py-2" style="background-color: #6a1b9a;">
                     Simpan
@@ -102,6 +123,4 @@
     </form>
   </div>
 </div>
-</div>
-
 @endsection
